@@ -1,0 +1,93 @@
+.contact-social ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.contact-area {
+    border-bottom: 1px solid #353C46;
+    padding: 30px 0;
+    background: #07081b;
+    color: #bbc3cf;
+}
+
+.contact-content p {
+    font-size: 15px;
+    margin: 20px 0 60px;
+    position: relative;
+}
+
+.contact-content p::after {
+    background: #353C46;
+    /* bottom: -30px; */
+    content: "";
+    height: 1px;
+    left: 50%;
+    position: absolute;
+    transform: translate(-50%);
+    width: 80%;
+}
+
+.contact-content h6 {
+    color: #bbc3cf;
+    font-size: 15px;
+    font-weight: 400;
+}
+
+.contact-content span {
+    color: #353c47;
+    margin: 0 10px;
+}
+
+.contact-social {
+    margin-top: 20px;
+}
+
+.contact-social>ul {
+    display: inline-flex;
+}
+
+.contact-social ul li a {
+    color: #bbc3cf;
+    display: inline-block;
+    height: 16px;
+    margin: 0 10px;
+    padding-top: 9px;
+    transition: all 0.4s ease 0s;
+    width: 40px;
+}
+
+.contact-social ul li a:hover {
+    color: #FAB702;
+}
+
+.social-icons {
+    font-size: 35px;
+}
+
+.contact-content img {
+    max-width: 210px;
+}
+
+footer {
+    background: #07081b;
+    color: #bbc3cf;
+}
+
+footer div {
+    padding: 40px 0;
+    text-align: center;
+}
+
+.footer-logo {
+    display: flex;
+    justify-content: center;
+}
+
+.footer-logo img {
+    max-width: 250px;
+}
+
+.margin-auto {
+    margin: auto;
+}
