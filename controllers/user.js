@@ -29,6 +29,14 @@ module.exports.userRegister = async (req, res) => {
                     contactNo
                 });
 
+                if (createdUser) {
+                    req.session.user = {
+                        fullName: createdUser.fullName,
+                        role: createdUser.role,
+                        isAuthenticated: true
+                    };
+                };
+
                 const token = jwt.sign(
                     { email: email, userid: createdUser._id },
                     process.env.JWT_SECRET,
@@ -50,6 +58,60 @@ module.exports.userRegister = async (req, res) => {
         res.status(500).json({ err: "Server error" });
     }
 };
+
+module.exports.userLogin = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        const userExists = await userModel.findOne({ email: email });
+
+        if (!userExists) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        bcrypt.compare(password, userExists.password, function (err, result) {
+            if (err) {
+                return res.status(500).json({ message: "Some error occured" });
+            } else {
+                if (result) {
+
+                    req.session.user = {
+                        fullName: userExists.fullName,
+                        role: userExists.role,
+                        isAuthenticated: true
+                    };
+
+                    const token = jwt.sign(
+                        { email: userExists.email, userid: userExists._id },
+                        process.env.JWT_SECRET,
+                    );
+                    if (token && userExists) {
+                        res.cookie("token", token, {
+                            httpOnly: false,
+                            secure: true,
+                        });
+                        return res.status(200).json({ message: "Login Successful" });
+                    } else {
+                        return res.status(500).json({ message: "Failed to login" });
+                    }
+                } else {
+                    return res.status(404).json({ message: "Wrong Password" });
+                }
+            }
+        });
+    } catch (err) {
+        return res.status(500).send(err.message);
+    }
+};
+
+module.exports.userLogout = (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            return res.status(500).json({ logoutStatus: false, message: "failed" });
+        }
+        res.cookie("token", "");
+        res.redirect("user/login");
+    });
+}
 
 module.exports.renderRegisterPage = (req, res) => {
     res.render("user/register.ejs");

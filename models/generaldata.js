@@ -1,12 +1,19 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
-const generalDataSchema = new mongoose.Schema({
-	productCategory: {
-		type: Object,
-		required: true,
-	},
+const subCategorySchema = new mongoose.Schema({
+	name: {
+		type: String,
+		required: true
+	}
 });
 
-const generalData = mongoose.model("generalData", generalDataSchema);
+const categorySchema = new mongoose.Schema({
+	name: {
+		type: String,
+		required: true
+	},
+	subcategories: [subCategorySchema]  // Array of sub-categories
+});
 
-module.exports = generalData;
+const Category = mongoose.model('category', categorySchema);
+module.exports = Category;

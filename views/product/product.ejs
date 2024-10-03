@@ -1,0 +1,62 @@
+<!-- views/product.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B2B Product Details</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .product-details {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <h1 class="text-center mb-4">Product Details</h1>
+
+        <!-- Product Image -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <img src="/assets/Kharidlow.png" alt="" class="img-fluid">
+            </div>
+
+            <!-- Product Information -->
+            <div class="col-md-6">
+                <h2>Jeans
+                </h2>
+                <p><strong>Description: Jeans bbag h  ag h dh dv hgd dhg gdvgd ghd  </strong>
+                </p>
+                <p><strong>Price:</strong> $ 200
+                </p>
+
+                <!-- Add to Cart Button -->
+                <button class="btn btn-primary mt-3" onclick="addToCart()">Add to Cart</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function addToCart(productId) {
+            // Implement cart addition logic here
+            console.log('Adding product', productId, 'to cart');
+        }
+    </script>
+</body>
+
+</html>

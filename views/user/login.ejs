@@ -63,17 +63,17 @@
 
         <div class="container login-outer mb-3">
             <div class="logo">
-                <img src="assets/Kharidlow.png" alt="">
+                <img src="/assets/Kharidlow.png" alt="">
             </div>
             <h2 class="text-center">Login to Kharidlow</h2>
-            <form>
+            <form id="loginForm" onsubmit="login(event);">
                 <div class="form-group">
-                    <label for="username">Username</label>
+                    <label for="email">Email</label>
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text inp-txt"><i class="fas fa-user"></i></span>
                         </div>
-                        <input type="text" class="form-control" id="username" placeholder="Enter your username"
+                        <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email"
                             required>
                     </div>
                 </div>
@@ -83,8 +83,8 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text inp-txt"><i class="fas fa-lock"></i></span>
                         </div>
-                        <input type="password" class="form-control" id="password" placeholder="Enter your password"
-                            required>
+                        <input type="password" class="form-control" id="password" name="password"
+                            placeholder="Enter your password" required>
                     </div>
                 </div>
                 <button type="submit" class="btn btn-primary login-btn btn-block">Login</button>
@@ -99,10 +99,39 @@
 
         <%- include("../partials/footer.ejs") %>
 
-            <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+            <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
             <!-- Bootstrap JS -->
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+            <script>
+                function login(event) {
+                    event.preventDefault();
+
+                    const email = document.getElementById("email").value;
+                    const password = document.getElementById("password").value;
+
+                    $.ajax({
+                        url: '/user/login', // The endpoint to send the data to
+                        method: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify({
+                            email: email,
+                            password: password
+                        }),
+                        success: function (response) {
+                            swal("Congratulations!", "You’ve successfully logged in!", "success").then(() => {
+                                window.location.href = '/';
+                            });
+                        },
+                        error: function (xhr, status, error) {
+                            const response = JSON.parse(xhr.responseText);
+                            const errorMessage = response.message || "An unexpected error occurred.";
+                            swal("Something wrong", errorMessage, "error");
+                        }
+                    });
+                }
+            </script>
+
 </body>
 
 </html>

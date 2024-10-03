@@ -3,10 +3,20 @@ const app = express();
 const path = require("path");
 const connectToDb = require("./config/db");
 const cookieParser = require("cookie-parser");
+const session = require("express-session");
 require("dotenv").config();
 
 const userRoute = require("./routes/user.js");
 const mainRoute = require("./routes/main.js");
+const productRoute = require("./routes/product.js");
+
+// Set up session middleware
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: { maxAge: 1000 * 60 * 60 * 24 }
+}));
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -17,6 +27,7 @@ app.use(express.static(path.join(__dirname, "/public")));
 
 connectToDb();
 
+app.use("/product", productRoute);
 app.use("/user", userRoute);
 app.use("/", mainRoute);
 
