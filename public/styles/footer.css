@@ -91,3 +91,9 @@ footer div {
 .margin-auto {
     margin: auto;
 }
+
+@media only screen and (max-width: 435px) {
+    .social-icons {
+        font-size: 25px !important;
+    }
+}

@@ -7,6 +7,24 @@ module.exports.renderAddProductPage = (req, res) => {
     res.render("product/add-product.ejs");
 };
 
+module.exports.renderListingPage = async (req, res) => {
+
+    const page = parseInt(req.query.page) || 1;
+    const pageSize = parseInt(req.query.pageSize) || 24;
+    const currentPage = parseInt(req.query.page) || 1;
+
+    const skip = (page - 1) * pageSize;
+
+    const products = await productModel.find({})
+        .skip(skip)
+        .limit(pageSize)
+        .select('productName price moq mainImage');
+
+    const totalProducts = await productModel.countDocuments({});
+
+    res.render("product/listing.ejs", { products, totalProducts, currentPage });
+}
+
 module.exports.getCategory = async (req, res) => {
     const categories = await categoryModel.find({});
     return res.status(200).send(categories);
