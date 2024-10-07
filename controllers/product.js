@@ -1,5 +1,6 @@
 const categoryModel = require("../models/generaldata");
 const productModel = require("../models/product");
+const cartModel = require("../models/cart");
 const fs = require("fs").promises;
 const path = require("path");
 
@@ -81,5 +82,71 @@ module.exports.addNewProduct = async (req, res) => {
         }
 
         return res.status(500).json({ success: false, message: "Internal server error" });
+    }
+};
+
+module.exports.addToCart = async (req, res) => {
+    try {
+        if (!req.session.user) {
+            return res.status(200).json({ success: false, message: "User must be loggedIn", reason: "authentication" });
+        }
+        const userId = req.session.user.userId;
+        const productId = req.body.productId;
+        const quantity = req.body.moq || 6;
+
+        const product = await productModel.findById(productId);
+        if (!product) {
+            return res.status(404).json({ success: false, message: "Product not found" });
+        }
+
+        let cart = await cartModel.findOne({ userId: userId });
+
+        if (!cart) {
+            cart = new cartModel({
+                userId: userId,
+                items: [{ productId, quantity }],
+            });
+        } else {
+            const existingItem = cart.items.find(item => item.productId.equals(productId));
+
+            if (existingItem) {
+                existingItem.quantity += quantity;
+            } else {
+                cart.items.push({ productId, quantity });
+            }
+        }
+
+        await cart.save();
+
+        return res.status(200).json({ success: true, message: "Product added to cart", cart });
+
+    } catch (error) {
+        return res.status(500).json({ success: false, message: "Internal Server Error", error: error.message });
+    }
+};
+
+module.exports.removeFromCart = async (req, res) => {
+    if(!(req.session.user && req.session.user.isAuthenticated)) {
+        return res.status(200).json({ success: false, message: "User must be loggedIn", reason: "authentication" });
+    }
+
+    const productId = req.params.id;
+    const userId = req.session.user.userId;
+
+    try {
+        const cart = await cartModel.findOne({ userId });
+
+        if (!cart) {
+            return res.status(404).json({ message: "Cart not found" });
+        }
+
+        // Remove the product from the items array
+        cart.items = cart.items.filter(item => item.productId.toString() !== productId.toString());
+
+        await cart.save();
+
+        return res.status(200).redirect("/user/cart");
+    } catch (error) {
+        return res.status(500).json({ message: "Error removing product", error });
     }
 };

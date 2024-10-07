@@ -107,6 +107,9 @@
                 function login(event) {
                     event.preventDefault();
 
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const redirectUrl = urlParams.get('redirect');
+
                     const email = document.getElementById("email").value;
                     const password = document.getElementById("password").value;
 
@@ -120,7 +123,11 @@
                         }),
                         success: function (response) {
                             swal("Congratulations!", "You’ve successfully logged in!", "success").then(() => {
-                                window.location.href = '/';
+                                if (redirectUrl) {
+                                    window.location.href = redirectUrl;
+                                } else {
+                                    window.location.href = '/';
+                                }
                             });
                         },
                         error: function (xhr, status, error) {

@@ -1,4 +1,6 @@
 const userModel = require("../models/user");
+const cartModel = require("../models/cart");
+const { sendWelcomeMail } = require("../services/emailService");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
@@ -15,13 +17,7 @@ module.exports.userRegister = async (req, res) => {
         }
 
         bcrypt.genSalt(10, (err, salt) => {
-            if (err) {
-                console.error(err);
-            }
             bcrypt.hash(password, salt, async (err, hash) => {
-                if (err) {
-                    console.error(err);
-                }
                 const createdUser = await userModel.create({
                     fullName,
                     password: hash,
@@ -31,7 +27,9 @@ module.exports.userRegister = async (req, res) => {
 
                 if (createdUser) {
                     req.session.user = {
+                        userId: createdUser._id,
                         fullName: createdUser.fullName,
+                        email: createdUser.email,
                         role: createdUser.role,
                         isAuthenticated: true
                     };
@@ -47,6 +45,7 @@ module.exports.userRegister = async (req, res) => {
                         secure: true,
                         httpOnly: false,
                     });
+                    sendWelcomeMail(createdUser.email, createdUser.fullName);
                     res.status(200).json({ loginStatus: true, message: "success" });
                 } else {
                     res.status(404).json({ loginStatus: false, message: "failed" });
@@ -54,7 +53,6 @@ module.exports.userRegister = async (req, res) => {
             });
         });
     } catch (err) {
-        console.log(err);
         res.status(500).json({ err: "Server error" });
     }
 };
@@ -73,9 +71,10 @@ module.exports.userLogin = async (req, res) => {
                 return res.status(500).json({ message: "Some error occured" });
             } else {
                 if (result) {
-
                     req.session.user = {
+                        userId: userExists._id,
                         fullName: userExists.fullName,
+                        email: userExists.email,
                         role: userExists.role,
                         isAuthenticated: true
                     };
@@ -116,6 +115,23 @@ module.exports.userLogout = (req, res) => {
 module.exports.renderRegisterPage = (req, res) => {
     res.render("user/register.ejs");
 }
+
+module.exports.renderCartPage = async (req, res) => {
+    try {
+        if (!(req.session.user && req.session.user.isAuthenticated)) {
+            return res.status(401).redirect("/user/login");
+        }
+        const userId = req.session.user.userId;
+        const cartItems = await cartModel.find({ userId }).populate("items.productId", "_id productName price mainImage moq").exec();
+        let items;
+        if (cartItems.length != 0) {
+            items = cartItems[0].items;
+        }
+        return res.render("user/cart.ejs", { items });
+    } catch (error) {
+        return res.status(500).send(error.message);
+    }
+};
 
 module.exports.renderLoginPage = (req, res) => {
     res.render("user/login.ejs");

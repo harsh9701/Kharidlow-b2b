@@ -1,0 +1,143 @@
+const nodemailer = require('nodemailer');
+const mailData = JSON.parse(process.env.NODE_MAILER);
+
+const sendWelcomeMail = async (clientMail, fullName) => {
+    const transport = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: mailData.email,
+            pass: mailData.pass
+        }
+    });
+    const mailOptions = {
+        from: mailData.email,
+        to: clientMail,
+        subject: 'Welcome to Kharidlow!',
+        html: `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <style>
+                        body { font-family: Arial, sans-serif; color: #333; background-color: #f4f4f4; }
+                        .email-container { max-width: 600px; margin: 0 auto; background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+                        h1 { color: #1e90ff; }
+                        p { font-size: 16px; line-height: 1.6; }
+                        .button { background-color: #1e90ff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block; margin-top: 20px; }
+                        .footer { font-size: 12px; color: #999; text-align: center; margin-top: 20px; }
+                    </style>
+                </head>
+                <body>
+                    <div class="email-container">
+                        <h1>Welcome to Kharidlow!</h1>
+                        <p>Hi ${fullName},</p>
+                        <p>Thank you for registering with <strong>Kharidlow</strong>. We're thrilled to have you onboard!</p>
+                        <p>Kharidlow is your one-stop platform for all your B2B needs. We’re committed to making your shopping and business experience smooth and hassle-free.</p>
+                        <p>Feel free to browse our latest products and deals. If you need any assistance, don't hesitate to contact our support team.</p>
+                        <a href="https://kharidlow.com" class="button">Explore Now</a>
+                        <p>We’re here to help you succeed. Welcome to the Kharidlow family!</p>
+                        <div class="footer">
+                            <p>Best Regards,<br>The Kharidlow Team</p>
+                            <p>If you have any questions, contact us at support@kharidlow.com</p>
+                        </div>
+                    </div>
+                </body>
+                </html>
+            `,
+    }
+    await transport.sendMail(mailOptions, function (error, response) {
+        if (error) {
+            console.error(error);
+        } else {
+        }
+    })
+};
+
+const sendOrderSummaryMail = async (clientMail, fullName, orderNumber, orderItems, grandTotal) => {
+    try {
+        let transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: mailData.email,
+                pass: mailData.pass
+            }
+        });
+
+        // Dynamically create order items rows
+        let orderItemsHtml = '';
+        orderItems.forEach(item => {
+            orderItemsHtml += `
+                <tr>
+                    <td>${item.productName}</td>
+                    <td>${item.price}</td>
+                    <td>${item.quantity}</td>
+                    <td>${item.price * item.quantity}</td>
+                </tr>
+            `;
+        });
+
+        let mailOptions = {
+            from: mailData.email,
+            to: clientMail,
+            subject: 'Order Summary from Kharidlow',
+            html: `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <style>
+                        body { font-family: Arial, sans-serif; color: #333; background-color: #f4f4f4; }
+                        .email-container { max-width: 600px; margin: 0 auto; background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+                        h1 { color: #1e90ff; }
+                        h3 { color: #01b944; }
+                        p { font-size: 16px; line-height: 1.6; }
+                        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+                        th, td { padding: 10px; border: 1px solid #ddd; text-align: left; }
+                        th { background-color: #1e90ff; color: white; }
+                        .grand-total { font-weight: bold; font-size: 18px; }
+                        .footer { font-size: 12px; color: #999; text-align: center; margin-top: 20px; }
+                    </style>
+                </head>
+                <body>
+                    <div class="email-container">
+                        <h1>Order Summary</h1>
+                        <h2>Order No. ${orderNumber}</h2>
+                        <p>Hi ${fullName},</p>
+                        <p>Thank you for your order! Below is a summary of the items you have purchased from <strong>Kharidlow</strong>.</p>
+                        
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Product Name</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${orderItemsHtml}
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="3" style="text-align:right;">Grand Total:</td>
+                                    <td class="grand-total">${grandTotal}</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+
+                        <p>If you have any questions or need further assistance, feel free to contact our support team at <strong>support@kharidlow.com</strong>.</p>
+                        
+                        <div class="footer">
+                            <p>Best Regards,<br>The Kharidlow Team</p>
+                        </div>
+                    </div>
+                </body>
+                </html>
+            `
+        };
+
+        await transporter.sendMail(mailOptions);
+    } catch (error) {
+        console.error('Error sending email:', error);
+    }
+};
+
+module.exports = { sendWelcomeMail, sendOrderSummaryMail }
