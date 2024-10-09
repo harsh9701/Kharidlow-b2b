@@ -2,9 +2,10 @@ const express = require("express");
 const router = express.Router();
 const upload = require("../config/multer");
 
-const { renderAddProductPage, getCategory, getSubCategory, addNewProduct, renderListingPage } = require("../controllers/product");
+const { renderAddProductPage, getCategory, getSubCategory, addNewProduct, renderListingPage, renderProductPage } = require("../controllers/product");
 
 router.get("/", renderListingPage);
+router.get("/:id", renderProductPage);
 router.get("/new", renderAddProductPage);
 router.get("/category", getCategory);
 router.get("/category/:id/subCateorgy", getSubCategory);

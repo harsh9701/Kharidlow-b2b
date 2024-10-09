@@ -1,5 +1,6 @@
 const userModel = require("../models/user");
 const cartModel = require("../models/cart");
+const orderModel = require("../models/order");
 const { sendWelcomeMail } = require("../services/emailService");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -114,7 +115,20 @@ module.exports.userLogout = (req, res) => {
 
 module.exports.renderRegisterPage = (req, res) => {
     res.render("user/register.ejs");
-}
+};
+
+module.exports.renderUserAccountPage = (req, res) => {
+    res.render("user/user-account.ejs");
+};
+
+module.exports.renderOrdersPage = async (req, res) => {
+    try {
+        const orders = await orderModel.find({ userId: req.session.user.userId }, { orderNumber: 1, createdAt: 1, status: 1, grandTotal: 1 });
+        res.render("order/orders.ejs", { orders });
+    } catch (error) {
+        return res.status(500).send(error.message);
+    }
+};
 
 module.exports.renderCartPage = async (req, res) => {
     try {
@@ -127,6 +141,7 @@ module.exports.renderCartPage = async (req, res) => {
         if (cartItems.length != 0) {
             items = cartItems[0].items;
         }
+        res.cookie('orderCompletion', 'false', { maxAge: 9000000, httpOnly: true });
         return res.render("user/cart.ejs", { items });
     } catch (error) {
         return res.status(500).send(error.message);

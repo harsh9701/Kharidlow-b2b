@@ -1,6 +1,41 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
+// Define the Address sub-schema
+const addressSchema = new Schema(
+	{
+		flatNo: {
+			type: String,
+			required: true,
+		},
+		streetNo: {
+			type: String,
+			required: true,
+		},
+		area: {
+			type: String,
+			required: true,
+		},
+		state: {
+			type: String,
+			required: true,
+		},
+		pincode: {
+			type: String,
+			required: true,
+		},
+		company: {
+			type: String,
+		},
+		gstNo: {
+			type: String,
+		},
+		altContact: {
+			type: String,
+		},
+	}
+);
+
 const userSchema = new Schema(
 	{
 		fullName: {
@@ -23,12 +58,9 @@ const userSchema = new Schema(
 			type: Number,
 			required: true,
 		},
-		address: {
-			type: String,
-			// required: true,
-		},
+		addresses: [addressSchema],
 	},
-	{ timestamps: true },
+	{ timestamps: true }
 );
 
 module.exports = mongoose.model("User", userSchema);

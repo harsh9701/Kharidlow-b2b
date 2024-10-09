@@ -38,7 +38,7 @@
                     </thead>
                     <tbody>
                         <!-- Product 1 -->
-                        <% if(orderItems) { %>
+                        <% if(orderItems && cookieValue) { %>
                             <% orderItems.forEach(item=> { %>
                                 <tr>
                                     <td data-label="ProductId" class="product-id" style="display: none;">
@@ -75,6 +75,61 @@
                 </div>
             </div>
 
+            <div class="address-section mt-4">
+                <h5>Choose Delivery Address</h5>
+                <select class="form-control" id="existingAddressSelect">
+                    <option value="">Select Address</option>
+                    <% if (userAddresses && userAddresses.length> 0) { %>
+                        <% userAddresses.forEach((address, index)=> { %>
+                            <option value="<%= address._id %>">
+                                <%= address.flatNo %>, <%= address.streetNo %>, <%= address.area %>
+                            </option>
+                            <% }) %>
+                                <% } %>
+                </select>
+                <small class="text-muted">Select from your saved addresses or <a href="#" id="newAddressLink">enter a
+                        new one</a>.</small>
+
+                <div id="newAddressForm" style="display: none;">
+                    <h5 class="mt-3">Enter New Address</h5>
+                    <form id="newAddressFormFields">
+                        <div class="form-group">
+                            <label for="flatNo">Flat, House, Building No.</label>
+                            <input type="text" class="form-control" id="flatNo" placeholder="Enter house no">
+                        </div>
+                        <div class="form-group">
+                            <label for="streetNo">Street No</label>
+                            <input type="text" class="form-control" id="streetNo" placeholder="Enter street">
+                        </div>
+                        <div class="form-group">
+                            <label for="area">Area/Village/Locality</label>
+                            <input type="text" class="form-control" id="area" placeholder="Enter locality">
+                        </div>
+                        <div class="form-group">
+                            <label for="state">State</label>
+                            <input type="text" class="form-control" id="state" placeholder="Enter state">
+                        </div>
+                        <div class="form-group">
+                            <label for="pincode">Pincode</label>
+                            <input type="text" class="form-control" id="pincode" placeholder="Enter pincode">
+                        </div>
+                        <div class="form-group">
+                            <label for="company">Company Name (Optional)</label>
+                            <input type="text" class="form-control" id="company" placeholder="Enter company name">
+                        </div>
+                        <div class="form-group">
+                            <label for="gstNo">GST No (Optional)</label>
+                            <input type="text" class="form-control" id="gstNo" placeholder="Enter GST No">
+                        </div>
+                        <div class="form-group">
+                            <label for="altContact">Alternate Contact No (Optional)</label>
+                            <input type="text" class="form-control" id="altContact"
+                                placeholder="Enter alternate contact">
+                        </div>
+                    </form>
+                </div>
+            </div>
+
             <!-- Checkout Button -->
             <button class="btn btn-success checkout-btn">Confirm Order</button>
         </div>
@@ -89,6 +144,73 @@
             <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
             <script>
                 $(document).ready(function () {
+                    // Initially disable the Confirm Order button
+                    $('.checkout-btn').prop('disabled', true);
+
+                    // Function to check if an address is selected or entered
+                    function checkIfAddressSelectedOrEntered() {
+                        // Check if an existing address is selected
+                        const selectedAddress = $('#existingAddressSelect').val();
+                        if (selectedAddress && selectedAddress !== "") {
+                            return true;
+                        }
+
+                        // Check if new address fields are filled (example: flatNo, streetNo, etc.)
+                        const flatNo = $('#flatNo').val();
+                        const streetNo = $('#streetNo').val();
+                        const area = $('#area').val();
+                        const state = $('#state').val();
+                        const pincode = $('#pincode').val();
+
+                        if (flatNo && streetNo && area && state && pincode) {
+                            return true;
+                        }
+
+                        return false;
+                    }
+
+                    // Enable button if an existing address is selected
+                    $('#existingAddressSelect').on('change', function () {
+                        if (checkIfAddressSelectedOrEntered()) {
+                            $('.checkout-btn').prop('disabled', false);
+                        } else {
+                            $('.checkout-btn').prop('disabled', true);
+                        }
+                    });
+
+                    // Enable button if a new address is entered
+                    $('#newAddressForm input').on('input', function () {
+                        if (checkIfAddressSelectedOrEntered()) {
+                            $('.checkout-btn').prop('disabled', false);
+                        } else {
+                            $('.checkout-btn').prop('disabled', true);
+                        }
+                    });
+
+                    // Toggle new address form visibility and clear the existing address selection
+                    $('#newAddressLink').on('click', function (e) {
+                        e.preventDefault();
+                        $('#newAddressForm').toggle(); // Show or hide the new address form
+
+                        // If entering a new address, clear the existing address selection
+                        if ($('#newAddressForm').is(':visible')) {
+                            $('#existingAddressSelect').val(''); // Clear the existing address dropdown
+                            $('#existingAddressSelect').prop('disabled', true);
+                        } else {
+                            $('#flatNo').val('');
+                            $('#streetNo').val('');
+                            $('#area').val('');
+                            $('#state').val('');
+                            $('#pincode').val('');
+                            $('#company').val('');
+                            $('#gstNo').val('');
+                            $('#altContact').val('');
+                            $('#existingAddressSelect').prop('disabled', false);
+                        }
+
+                        // Reset the form and disable the button if toggled back
+                        $('.checkout-btn').prop('disabled', true);
+                    });
 
                     // Random number generator
                     function generateRandomCode() {
@@ -128,12 +250,12 @@
                         }
                     });
 
-                    // Handle final order submission using AJAX
-                    $('#submit-order-btn').on('click', function () {
+                    // Handle order submission
+                    $('#submit-order-btn').on('click', function (event) {
+                        event.preventDefault(); // Prevent default form submission
 
+                        // Gather order items data (same as your existing code)
                         const orderItems = [];
-
-                        // Gather data from the order summary table
                         $('tbody tr').each(function () {
                             const productId = $(this).find('.product-id').text().trim();
                             const productName = $(this).find('td:eq(2)').text().trim();
@@ -150,11 +272,40 @@
                             });
                         });
 
+                        // Check if an existing address is selected
+                        const selectedAddressId = $('#existingAddressSelect').val();
+
+                        let addressData = {};
+                        if (selectedAddressId && selectedAddressId !== "") {
+                            // User selected an existing address
+                            addressData = {
+                                selectedAddressId: selectedAddressId
+                            };
+                        } else {
+                            // User entered a new address
+                            addressData = {
+                                flatNo: $('#flatNo').val(),
+                                streetNo: $('#streetNo').val(),
+                                area: $('#area').val(),
+                                state: $('#state').val(),
+                                pincode: $('#pincode').val(),
+                                company: $('#company').val(),
+                                gstNo: $('#gstNo').val(),
+                                altContact: $('#altContact').val()
+                            };
+                        }
+
+                        // Send order and address data to the backend
+                        const orderData = {
+                            orderItems: orderItems,
+                            address: addressData
+                        };
+
                         $.ajax({
                             url: '/user/order',
                             type: 'POST',
                             contentType: 'application/json',
-                            data: JSON.stringify(orderItems),
+                            data: JSON.stringify(orderData),
                             success: function (response) {
                                 swal("🎊 Hooray!", "Your order was completed successfully! Thank you for trusting Kharidlow. Enjoy your shopping! 🛍️", "success", {
                                     html: true
@@ -166,7 +317,7 @@
                                 console.error('Error placing order:', error);
                                 const response = JSON.parse(xhr.responseText);
                                 const errorMessage = response.message || "There was an error placing your order. Please try again.";
-                                swal("Oops!", errorMessage, "error")
+                                swal("Oops!", errorMessage, "error");
                             }
                         });
                     });

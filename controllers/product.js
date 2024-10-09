@@ -24,7 +24,18 @@ module.exports.renderListingPage = async (req, res) => {
     const totalProducts = await productModel.countDocuments({});
 
     res.render("product/listing.ejs", { products, totalProducts, currentPage });
-}
+};
+
+module.exports.renderProductPage = async (req, res) => {
+    const productId = req.params.id;
+    const productDetails = await productModel.findById(productId, { productName: 1, subCategory: 1, price: 1, description: 1, moq: 1, mainImage: 1, discount: 1 });
+    const suggestedProducts = await productModel.aggregate([
+        { $match: { subCategory: productDetails.subCategory } },
+        { $sample: { size: 3 } },
+        { $project: { productName: 1, subCategory: 1, price: 1, description: 1, moq: 1, mainImage: 1, discount: 1 } }
+    ]);
+    res.render("product/product.ejs", { productDetails, suggestedProducts });
+};
 
 module.exports.getCategory = async (req, res) => {
     const categories = await categoryModel.find({});
@@ -110,7 +121,7 @@ module.exports.addToCart = async (req, res) => {
             const existingItem = cart.items.find(item => item.productId.equals(productId));
 
             if (existingItem) {
-                existingItem.quantity += quantity;
+                existingItem.quantity += Number(quantity);
             } else {
                 cart.items.push({ productId, quantity });
             }
@@ -126,7 +137,7 @@ module.exports.addToCart = async (req, res) => {
 };
 
 module.exports.removeFromCart = async (req, res) => {
-    if(!(req.session.user && req.session.user.isAuthenticated)) {
+    if (!(req.session.user && req.session.user.isAuthenticated)) {
         return res.status(200).json({ success: false, message: "User must be loggedIn", reason: "authentication" });
     }
 

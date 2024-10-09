@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="/styles/navbar.css">
     <link rel="stylesheet" href="/styles/footer.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body {
             background-color: #f8f9fa;
@@ -111,8 +112,9 @@
                                         <h5 class="item-title">
                                             <%= item.productId.productName %>
                                         </h5>
-                                        <form action="/user/cart/remove/<%= item.productId._id %>" method="POST">
-                                            <button type="submit" class="btn btn-danger remove-btn"><i
+                                        <form class="remove-form" action="/user/cart/remove/<%= item.productId._id %>"
+                                            method="POST">
+                                            <button type="button" class="btn btn-danger remove-btn"><i
                                                     class="fas fa-trash"></i></button>
                                         </form>
                                     </span>
@@ -127,13 +129,14 @@
                                         <!-- <input type="hidden" class="form-control ml-2 user-id"
                                             data-user-id="<%= item._id %>"> -->
                                         <input type="hidden" class="form-control ml-2 product-id"
-                                        data-product-id="<%= item.productId._id %>">
+                                            data-product-id="<%= item.productId._id %>">
                                     </div>
                                 </div>
                             </div>
                             <% }); %>
                                 <% } else { %>
-                                    <div class="alert alert-primary text-center" role="alert"><h3 style="font-weight: 400;">Your cart is empty!</h3>
+                                    <div class="alert alert-primary text-center" role="alert">
+                                        <h3 style="font-weight: 400;">Your cart is empty!</h3>
                                     </div>
                                     <% } %>
                 </div>
@@ -198,6 +201,26 @@
                     // Add event listeners to quantity inputs
                     $('.quantity-input').on('input', function () {
                         updateCartSummary();
+                    });
+
+                    // SweetAlert for remove button
+                    $('.remove-btn').on('click', function (e) {
+                        e.preventDefault();
+                        const form = $(this).closest('.remove-form');
+
+                        Swal.fire({
+                            title: 'Are you sure?',
+                            text: "You won't be able to revert this!",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#d33',
+                            cancelButtonColor: '#3085d6',
+                            confirmButtonText: 'Yes, delete it!'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                form.submit();
+                            }
+                        });
                     });
                 });
             </script>

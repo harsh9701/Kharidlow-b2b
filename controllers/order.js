@@ -1,6 +1,9 @@
+const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
 const productModel = require("../models/product");
 const orderModel = require("../models/order");
 const cartModel = require("../models/cart");
+const userModel = require("../models/user");
 const { sendOrderSummaryMail } = require("../services/emailService");
 const { generateOrderNumber } = require("../utils/generateOrderNumber");
 
@@ -11,6 +14,7 @@ module.exports.orderSummary = async (req, res) => {
             return res.status(401).redirect("/user/login");
         }
 
+        const userId = req.session.user.userId;
         const cartData = JSON.parse(req.body.cartData);
 
         const orderItems = await Promise.all(
@@ -28,9 +32,13 @@ module.exports.orderSummary = async (req, res) => {
             })
         );
 
+        const userDetails = await userModel.findById(userId, { addresses: 1 });
+        const userAddresses = userDetails.addresses;
+        const cookieValue = req.cookies.orderCompletion || "";
+
         const grandTotal = orderItems.reduce((acc, item) => acc + item.total, 0);
 
-        res.render("order/order-summary.ejs", { orderItems, grandTotal });
+        res.render("order/order-summary.ejs", { orderItems, grandTotal, userAddresses, cookieValue });
     } catch (error) {
         console.error(error);
         res.status(500).json({ success: false, message: error.message });
@@ -42,28 +50,70 @@ module.exports.completeOrder = async (req, res) => {
         if (!(req.session.user && req.session.user.isAuthenticated)) {
             return res.status(401).redirect("/user/login");
         }
+
         const userId = req.session.user.userId;
         const userEmail = req.session.user.email;
-        const orderItems = req.body;
+        const orderDetails = req.body;
 
-        const grandTotal = orderItems.reduce((acc, item) => acc + item.total, 0);
+        let address;
+
+        const grandTotal = orderDetails.orderItems.reduce((acc, item) => acc + item.total, 0);
+
+        if (orderDetails.address.selectedAddressId) {
+
+            const userWithAddress = await userModel.findOne(
+                {
+                    _id: new ObjectId(userId),
+                    addresses: {
+                        $elemMatch: {
+                            _id: new ObjectId(orderDetails.address.selectedAddressId)
+                        }
+                    }
+                },
+                {
+                    "addresses.$": 1  // Project only the matched address from the array
+                }
+            );
+
+            address = userWithAddress.addresses[0];
+
+        } else {
+
+            const userDetails = await userModel.findById(userId, { addresses: 1, _id: 0 });
+            const userAddresses = userDetails.addresses;
+
+            if (userAddresses.length > 0) {
+                const updateAddress = await userModel.updateOne(
+                    { _id: userId },
+                    { $push: { addresses: orderDetails.address } }
+                );
+            } else {
+                const updateAddress = await userModel.updateOne({ _id: userId }, { $set: { addresses: orderDetails.address } });
+            }
+
+            address = orderDetails.address;
+
+        }
+
         const orderNumber = generateOrderNumber();
 
-        if (orderItems.length <= 0) {
+        if (orderDetails.orderItems.length <= 0) {
             return res.status(400).json({ success: false, message: "Your Cart is empty" });
         }
 
         const createOrder = await orderModel.create({
             userId,
-            orderItems,
+            orderItems: orderDetails.orderItems,
             orderNumber,
-            grandTotal
+            grandTotal,
+            shippingAddress: address
         });
 
         if (createOrder) {
             const deleteCart = await cartModel.deleteOne({ userId: userId });
             if (deleteCart) {
-                sendOrderSummaryMail(userEmail, req.session.user.fullName, orderNumber, orderItems, grandTotal);
+                sendOrderSummaryMail(userEmail, req.session.user.fullName, orderNumber, orderDetails.orderItems, grandTotal);
+                res.cookie("orderCompletion", "");
                 return res.status(200).json({ success: true, message: "Order created" });
             } else {
                 return res.status(400).json({ success: false, message: "Order not created" })

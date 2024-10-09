@@ -29,10 +29,14 @@ const orderSchema = new mongoose.Schema({
         required: true
     },
     shippingAddress: {
-        address: { type: String },
-        city: { type: String },
-        postalCode: { type: String },
-        country: { type: String },
+        flatNo: { type: String },
+        streetNo: { type: String },
+        area: { type: String },
+        state: { type: String },
+        pincode: { type: String },
+        company: { type: String },
+        gstNo: { type: String },
+        altContact: { type: String }
     },
     paymentMethod: {
         type: String,
