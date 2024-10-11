@@ -33,7 +33,7 @@ const sendWelcomeMail = async (clientMail, fullName) => {
                         <p>Thank you for registering with <strong>Kharidlow</strong>. We're thrilled to have you onboard!</p>
                         <p>Kharidlow is your one-stop platform for all your B2B needs. We’re committed to making your shopping and business experience smooth and hassle-free.</p>
                         <p>Feel free to browse our latest products and deals. If you need any assistance, don't hesitate to contact our support team.</p>
-                        <a href="https://kharidlow.com" class="button">Explore Now</a>
+                        <a href="https://kharidlow.com" class="button" style="color: #fff; font-size: 16px;">Explore Now</a>
                         <p>We’re here to help you succeed. Welcome to the Kharidlow family!</p>
                         <div class="footer">
                             <p>Best Regards,<br>The Kharidlow Team</p>
@@ -50,6 +50,114 @@ const sendWelcomeMail = async (clientMail, fullName) => {
         } else {
         }
     })
+};
+
+const sendForgotPasswordMail = async (clientMail, fullName, resetToken) => {
+    const transport = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: mailData.email,
+            pass: mailData.pass
+        }
+    });
+
+    const resetURL = `http://localhost:3000/resetpassword/${resetToken}`; // The link to reset the password
+
+    const mailOptions = {
+        from: mailData.email,
+        to: clientMail,
+        subject: 'Password Reset Request for Kharidlow',
+        html: `
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <style>
+                    body { font-family: Arial, sans-serif; color: #333; background-color: #f4f4f4; }
+                    .email-container { max-width: 600px; margin: 0 auto; background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+                    h1 { color: #1e90ff; }
+                    p { font-size: 16px; line-height: 1.6; }
+                    .button { background-color: #1e90ff; color: #fffff; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block; margin-top: 20px; }
+                    .footer { font-size: 12px; color: #999; text-align: center; margin-top: 20px; }
+                </style>
+            </head>
+            <body>
+                <div class="email-container">
+                    <h1>Password Reset Request</h1>
+                    <p>Hi ${fullName},</p>
+                    <p>We received a request to reset your password for your Kharidlow account. If you did not request this, please ignore this email.</p>
+                    <p>If you did request a password reset, click the button below to reset your password:</p>
+                    <a href="${resetURL}" class="button" style="color: #fff; font-size: 16px;">Reset Password</a>
+                    <p>This link will expire in 1 hour. If you don’t reset your password within this time, you will need to submit another password reset request.</p>
+                    <p>If you have any questions or need further assistance, feel free to contact our support team.</p>
+                    <div class="footer">
+                        <p>Best Regards,<br>The Kharidlow Team</p>
+                        <p>If you have any questions, contact us at support@kharidlow.com</p>
+                    </div>
+                </div>
+            </body>
+            </html>
+        `,
+    };
+
+    await transport.sendMail(mailOptions, function (error, response) {
+        if (error) {
+            console.error('Error sending email:', error);
+        } else {
+            // console.log('Password reset email sent:');
+        }
+    });
+};
+
+const sendPasswordResetSuccessMail = async (clientMail, fullName) => {
+    const transport = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: mailData.email,
+            pass: mailData.pass
+        }
+    });
+
+    const mailOptions = {
+        from: mailData.email,
+        to: clientMail,
+        subject: 'Your Password Has Been Reset Successfully',
+        html: `
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <style>
+                    body { font-family: Arial, sans-serif; color: #333; background-color: #f4f4f4; }
+                    .email-container { max-width: 600px; margin: 0 auto; background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+                    h1 { color: #1e90ff; }
+                    p { font-size: 16px; line-height: 1.6; }
+                    .footer { font-size: 12px; color: #999; text-align: center; margin-top: 20px; }
+                </style>
+            </head>
+            <body>
+                <div class="email-container">
+                    <h1>Password Reset Successful</h1>
+                    <p>Hi ${fullName},</p>
+                    <p>Your password has been reset successfully! You can now log in to your Kharidlow account using your new password.</p>
+                    <p>If you did not request this change or believe this was a mistake, please contact our support team immediately.</p>
+                    <p>We recommend that you do not share your password with anyone and ensure that your password is strong and secure.</p>
+                    <p>Thank you for being a part of the Kharidlow community!</p>
+                    <div class="footer">
+                        <p>Best Regards,<br>The Kharidlow Team</p>
+                        <p>If you have any questions, contact us at support@kharidlow.com</p>
+                    </div>
+                </div>
+            </body>
+            </html>
+        `,
+    };
+
+    await transport.sendMail(mailOptions, function (error, response) {
+        if (error) {
+            console.error('Error sending email:', error);
+        } else {
+            // console.log('Password reset success email sent:', response);
+        }
+    });
 };
 
 const sendOrderSummaryMail = async (clientMail, fullName, orderNumber, orderItems, grandTotal) => {
@@ -140,4 +248,4 @@ const sendOrderSummaryMail = async (clientMail, fullName, orderNumber, orderItem
     }
 };
 
-module.exports = { sendWelcomeMail, sendOrderSummaryMail }
+module.exports = { sendWelcomeMail, sendOrderSummaryMail, sendForgotPasswordMail, sendPasswordResetSuccessMail }

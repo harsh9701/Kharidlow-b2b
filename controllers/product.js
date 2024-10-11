@@ -5,7 +5,12 @@ const fs = require("fs").promises;
 const path = require("path");
 
 module.exports.renderAddProductPage = (req, res) => {
-    res.render("product/add-product.ejs");
+    try {
+        res.render("product/add-product.ejs");
+    } catch(error) {
+        console.log(error.message);
+        return res.status(500).send(error.message);
+    }
 };
 
 module.exports.renderListingPage = async (req, res) => {

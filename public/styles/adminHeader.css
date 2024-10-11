@@ -1,0 +1,63 @@
+.admin-header {
+    background-color: #343a40;
+    color: white;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.admin-header h2 {
+    color: #fff !important;
+}
+
+.btn-close {
+    filter: invert(1) !important;
+}
+
+.offcanvas {
+    width: 21rem !important;
+}
+
+.offcanvas-body .sidebar-item {
+    width: 100% !important;
+    text-decoration: none !important;
+    font-size: 1.3rem !important;
+    color: #fff !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    padding: 10px 0 !important;
+}
+
+.offcanvas-body .sidebar-item i {
+    min-width: 30px !important;
+    text-align: center !important;
+}
+
+.offcanvas-body .sidebar-item span {
+    margin-left: 10px !important;
+}
+
+.offcanvas-body .sidebar-item:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    border-radius: 10px !important;
+    text-decoration: none !important;
+}
+
+@media (max-width: 768px) {
+    .admin-content {
+        flex-direction: column;
+    }
+
+    .admin-sidebar {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+}
+
+@media only screen and (max-width: 528px) {
+    .nav-brand {
+        display: none;
+    }
+}

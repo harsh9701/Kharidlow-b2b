@@ -45,6 +45,7 @@ const userSchema = new Schema(
 		email: {
 			type: String,
 			required: true,
+			unique: true
 		},
 		password: {
 			type: String,
@@ -58,7 +59,17 @@ const userSchema = new Schema(
 			type: Number,
 			required: true,
 		},
+		orderCount: {
+			type: Number,
+			default: 0
+		},
 		addresses: [addressSchema],
+		resetPasswordToken: {
+			type: String
+		},
+		resetPasswordExpires: {
+			type: Date
+		}
 	},
 	{ timestamps: true }
 );

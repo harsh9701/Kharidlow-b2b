@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Customers - Kharidlow</title>
+    <link rel="icon" type="image/x-icon" href="/assets/Kharidlow.ico">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css" />
+    <link rel="stylesheet" href="/styles/adminHeader.css">
+    <style>
+        body {
+            font-family: "Raleway", sans-serif;
+            background: #f9f9f9;
+        }
+
+        .p-30 {
+            padding: 30px;
+        }
+
+        .main-datatable {
+            padding: 0;
+            border: 1px solid #f3f2f2;
+            border-bottom: 0;
+            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .d-flex {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-body {
+            background-color: #fff;
+            border: 1px solid transparent;
+            border-radius: 2px;
+            -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+        }
+
+        .main-datatable .row {
+            margin: 0;
+        }
+
+        .searchInput {
+            width: 50%;
+            display: flex;
+            align-items: center;
+            position: relative;
+            justify-content: flex-end;
+            margin: 20px 0;
+            padding: 0 4px;
+        }
+
+        .searchInput input {
+            border: 1px solid #e5e5e5;
+            border-radius: 50px;
+            margin-left: 8px;
+            height: 34px;
+            width: 100%;
+            padding: 0 25px 0 10px;
+            transition: all .6s ease;
+        }
+
+        .searchInput label {
+            color: #767676;
+            font-weight: normal;
+        }
+
+        .searchInput input:placeholder-shown {
+            width: 13%;
+        }
+
+        .searchInput:hover input:placeholder-shown {
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .searchInput:after {
+            font-family: 'FontAwesome';
+            color: #d4d4d4;
+            position: relative;
+            content: "\f002";
+            right: 25px;
+        }
+
+        .add_flex {
+            display: flex;
+            justify-content: flex-end;
+            padding-right: 0px;
+        }
+
+        .main-datatable .dataTable.no-footer {
+            border-bottom: 1px solid #eee;
+        }
+
+        .main-datatable .cust-datatable>thead>tr>th {
+            border-bottom-width: 0;
+            color: #443f3f;
+            font-weight: 600;
+            padding: 16px 15px;
+            vertical-align: middle;
+            padding-left: 18px;
+            text-align: center;
+        }
+
+        .main-datatable .cust-datatable>tbody td {
+            padding: 10px 15px 10px 18px;
+            color: #333232;
+            font-size: 13px;
+            font-weight: 500;
+            word-break: break-word;
+            border-color: #eee;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .table .btn {
+            margin-right: 5px;
+        }
+
+        .table .badge {
+            padding: 0.5em 1em;
+        }
+
+        /* .main-datatable .cust-datatable>tbody tr {
+            border-top: none;
+        }
+
+        .main-datatable .table > tbody > tr:nth-child(even) {
+            background-color: #f9f9f9;
+        } */
+
+        /* .main-datatable .dataTables_wrapper .dataTables_paginate .paginate_button {
+            color: #999999 !important;
+            background-color: #f6f6f6 !important;
+            border-color: #d4d4d4 !important;
+            border-radius: 40px;
+            margin: 5px 3px;
+        }
+
+        .main-datatable .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+            color: #fff !important;
+            border: 1px solid #3d96f5 !important;
+            background: #4da3ff !important;
+            box-shadow: none !important;
+        }
+
+        .main-datatable .dataTables_wrapper .dataTables_paginate .paginate_button.current,
+        .main-datatable .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+            color: #fff !important;
+            border-color: transparent !important;
+            background: #007bff !important;
+        } */
+
+        @media only screen and (max-width: 1200px) {
+            .overflow-x {
+                overflow-x: scroll;
+            }
+
+            .overflow-x::-webkit-scrollbar {
+                width: 5px;
+                height: 6px;
+            }
+
+            .overflow-x::-webkit-scrollbar-thumb {
+                background-color: #888;
+            }
+
+            .overflow-x::-webkit-scrollbar-track {
+                background-color: #f1f1f1;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <%- include("../partials/admin-header.ejs"); %>
+
+    <div class="container p-30">
+        <div class="row">
+            <div class="col-md-12 main-datatable">
+                <div class="card_body">
+                    <div class="row d-flex">
+                        <div class="col-sm-4 createSegment">
+                            <!-- <a class="btn dim_button create_new"><span class="glyphicon glyphicon-plus"></span>Create
+                                New</a> -->
+                        </div>
+                        <div class="col-sm-8 add_flex">
+                            <div class="form-group searchInput">
+                                <label for="email">Search:</label>
+                                <input type="search" class="form-control" name="" id="filterbox"
+                                    placeholder="Search Order">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="overflow-x">
+                        <table style="width: 100%;" id="filtertable" class="table cust-datatable dataTable no-footer">
+                            <thead>
+                                <tr>
+                                    <th style="min-width: 50px;">S. No.</th>
+                                    <th style="min-width: 50px;">Customer Name</th>
+                                    <th style="min-width: 50px;">Email</th>
+                                    <th style="min-width: 50px;">Contact</th>
+                                    <th style="min-width: 50px;">Total Orders</th>
+                                    <th style="min-width: 50px;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% if(customers.length> 0) { %>
+                                    <% customers.forEach((customer, index)=> { %>
+                                        <tr>
+                                            <td>
+                                                <%= index+1 %>
+                                            </td>
+                                            <td>
+                                                <%= customer.fullName %>
+                                            </td>
+                                            <td>
+                                                <%= customer.email %>
+                                            </td>
+                                            <td>
+                                                <%= customer.contactNo %>
+                                            </td>
+                                            <td>
+                                                <%= customer.orderCount %>
+                                            </td>
+                                            <td style="min-width: 200px;">
+                                                <div class="btn-group" role="group">
+                                                    <a href="#" class="btn btn-sm btn-info">View</a>
+                                                    <a href="#" class="btn btn-sm btn-primary">Edit</a>
+                                                    <a href="#" class="btn btn-sm btn-danger disabled" tabindex="-1"
+                                                        aria-disabled="true">Delete</a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <% }); %>
+                                            <% } else { %>
+                                                <tr>
+                                                    <td colspan="7" class="text-center fs-5">No Record</td>
+                                                </tr>
+                                                <% } %>
+                                                    </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="offcanvas offcanvas-end bg-dark text-light" data-bs-scroll="true" tabindex="-1"
+        id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
+        <div class="container">
+            <div class="offcanvas-header">
+                <img src="/assets/KharidLow.png" alt="" width="50">
+                <h4 class="offcanvas-title mx-2" id="offcanvasWithBothOptionsLabel">KharidLow</h4>
+                <button type="button" class="btn-close btn-dark" data-bs-dismiss="offcanvas"
+                    aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body d-flex flex-column">
+                <a href="/admin/manage/orders" class="sidebar-item d-flex align-items-center my-2">
+                    <i class="fa-solid fa-box mx-2"></i>
+                    <span>Manage Order</span>
+                </a>
+                <a href="/admin/manage/customers" class="sidebar-item d-flex align-items-center my-2">
+                    <i class="fa-solid fa-users mx-2"></i>
+                    <span>Manage Customer</span>
+                </a>
+                <a href="/admin/manage/products" class="sidebar-item d-flex align-items-center my-2">
+                    <i class="fa-solid fa-rectangle-list mx-2"></i>
+                    <span>Manage Products</span>
+                </a>
+                <a href="/admin/manage" class="sidebar-item d-flex align-items-center my-2">
+                    <i class="fa-solid fa-chart-line mx-2"></i>
+                    <span>Dashboard</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            let dataTable = $('#filtertable').DataTable({
+                "pageLength": 20,
+                "aoColumnDefs": [{
+                    "nSortable": false,
+                    "aTargets": ['nosort']
+                }],
+                columnDefs: [
+                    { type: 'date-dd-mm-yyyy', aTargets: [5] }
+                ],
+                "aoColumns": [
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ],
+                "order": false,
+                "bLengthChange": false,
+                "dom": '<"top">ct<"top"p><"clear">'
+            });
+            $("#filterbox").keyup(function () {
+                dataTable.search(this.value).draw();
+            });
+        });
+    </script>
+</body>
+
+</html>

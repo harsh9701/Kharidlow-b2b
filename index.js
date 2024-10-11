@@ -9,6 +9,7 @@ require("dotenv").config();
 const userRoute = require("./routes/user.js");
 const mainRoute = require("./routes/main.js");
 const productRoute = require("./routes/product.js");
+const adminRoute = require("./routes/admin.js");
 
 // Set up session middleware
 app.use(session({
@@ -35,7 +36,12 @@ connectToDb();
 
 app.use("/product", productRoute);
 app.use("/user", userRoute);
+app.use("/admin", adminRoute);
 app.use("/", mainRoute);
+
+app.all("*", (req, res, next) => {
+    res.render("error.ejs");
+});
 
 app.listen(process.env.PORT || 8010, () => {
     console.log(`Server is running on port ${process.env.PORT || 8010}`);

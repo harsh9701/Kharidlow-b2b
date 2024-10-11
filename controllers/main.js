@@ -1,3 +1,7 @@
 module.exports.renderLandingPage = (req, res) => {
-    res.render("index.ejs");
+    try {
+        res.render("index.ejs");
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
 };
