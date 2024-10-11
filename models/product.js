@@ -72,7 +72,7 @@ const productSchema = new mongoose.Schema(
     taxType: {
       type: String,
       required: true,
-      default: "exclusive"
+      default: "inclusive"
     },
     taxRate: {
       type: Number,

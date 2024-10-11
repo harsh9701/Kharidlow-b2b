@@ -14,7 +14,7 @@
 <body>
     <div class="admin-container">
 
-        <%- include("../partials/admin-header.ejs"); %>
+        <%- include("../includes/admin-header.ejs"); %>
 
             <div class="admin-content">
                 <main class="admin-main">
@@ -234,35 +234,9 @@
                 </main>
             </div>
     </div>
-    <div class="offcanvas offcanvas-end bg-dark text-light" data-bs-scroll="true" tabindex="-1"
-        id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
-        <div class="container">
-            <div class="offcanvas-header">
-                <img src="/assets/KharidLow.png" alt="" width="50">
-                <h4 class="offcanvas-title mx-2" id="offcanvasWithBothOptionsLabel">KharidLow</h4>
-                <button type="button" class="btn-close btn-dark" data-bs-dismiss="offcanvas"
-                    aria-label="Close"></button>
-            </div>
-            <div class="offcanvas-body d-flex flex-column">
-                <a href="/admin/manage/orders" class="d-flex align-items-center my-2">
-                    <i class="fa-solid fa-box mx-2"></i>
-                    <span>Manage Order</span>
-                </a>
-                <a href="/admin/manage/customers" class="d-flex align-items-center my-2">
-                    <i class="fa-solid fa-users mx-2"></i>
-                    <span>Manage Customer</span>
-                </a>
-                <a href="/admin/manage/products" class="d-flex align-items-center my-2">
-                    <i class="fa-solid fa-rectangle-list mx-2"></i>
-                    <span>Manage Products</span>
-                </a>
-                <a href="/admin/manage" class="sidebar-item d-flex align-items-center my-2">
-                    <i class="fa-solid fa-chart-line mx-2"></i>
-                    <span>Dashboard</span>
-                </a>
-            </div>
-        </div>
-    </div>
+
+    <!-- Include Admin Sidebar -->
+    <%- include("../includes/admin-sidebar.ejs"); %>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

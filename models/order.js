@@ -41,6 +41,15 @@ const orderSchema = new mongoose.Schema({
     paymentMethod: {
         type: String,
     },
+    trackingId: {
+        type: String,
+    },
+    trackingUrl: {
+        type: String,
+    },
+    cancellationReason: {
+        type: String,
+    },
     taxRate: {
         type: Number
     },
@@ -50,7 +59,7 @@ const orderSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['pending', 'accepted', 'dispatched', 'delivered'],
+        enum: ['pending', 'accepted', 'dispatched', 'delivered', 'canceled'],
         default: 'pending',
     }
 }, { timestamps: true });

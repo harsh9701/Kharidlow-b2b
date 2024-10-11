@@ -10,169 +10,23 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
     <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css" />
     <link rel="stylesheet" href="/styles/adminHeader.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="/styles/tableStructure.css">
     <style>
-        body {
-            font-family: "Raleway", sans-serif;
-            background: #f9f9f9;
-        }
-
-        .p-30 {
-            padding: 30px;
-        }
-
-        .main-datatable {
-            padding: 0;
-            border: 1px solid #f3f2f2;
-            border-bottom: 0;
-            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.05);
-        }
-
-        .d-flex {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .card-body {
-            background-color: #fff;
-            border: 1px solid transparent;
-            border-radius: 2px;
-            -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
-            box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
-        }
-
-        .main-datatable .row {
-            margin: 0;
-        }
-
-        .searchInput {
-            width: 50%;
-            display: flex;
-            align-items: center;
-            position: relative;
-            justify-content: flex-end;
-            margin: 20px 0;
-            padding: 0 4px;
-        }
-
-        .searchInput input {
-            border: 1px solid #e5e5e5;
-            border-radius: 50px;
-            margin-left: 8px;
-            height: 34px;
-            width: 100%;
-            padding: 0 25px 0 10px;
-            transition: all .6s ease;
-        }
-
-        .searchInput label {
-            color: #767676;
-            font-weight: normal;
-        }
-
-        .searchInput input:placeholder-shown {
-            width: 13%;
-        }
-
-        .searchInput:hover input:placeholder-shown {
-            width: 100%;
-            cursor: pointer;
-        }
-
-        .searchInput:after {
-            font-family: 'FontAwesome';
-            color: #d4d4d4;
-            position: relative;
-            content: "\f002";
-            right: 25px;
-        }
-
-        .add_flex {
-            display: flex;
-            justify-content: flex-end;
-            padding-right: 0px;
-        }
-
-        .main-datatable .dataTable.no-footer {
-            border-bottom: 1px solid #eee;
-        }
-
-        .main-datatable .cust-datatable>thead>tr>th {
-            border-bottom-width: 0;
-            color: #443f3f;
-            font-weight: 600;
-            padding: 16px 15px;
-            vertical-align: middle;
-            padding-left: 18px;
-            text-align: center;
-        }
-
-        .main-datatable .cust-datatable>tbody td {
-            padding: 10px 15px 10px 18px;
-            color: #333232;
-            font-size: 13px;
-            font-weight: 500;
-            word-break: break-word;
-            border-color: #eee;
-            text-align: center;
-            vertical-align: middle;
-        }
-
-        .table .btn {
-            margin-right: 5px;
-        }
-
-        .table .badge {
-            padding: 0.5em 1em;
-        }
-
-        /* .main-datatable .cust-datatable>tbody tr {
-            border-top: none;
-        }
-
-        .main-datatable .table > tbody > tr:nth-child(even) {
-            background-color: #f9f9f9;
-        } */
-
-        /* .main-datatable .dataTables_wrapper .dataTables_paginate .paginate_button {
-            color: #999999 !important;
-            background-color: #f6f6f6 !important;
-            border-color: #d4d4d4 !important;
-            border-radius: 40px;
-            margin: 5px 3px;
-        }
-
-        .main-datatable .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+        .custom-close {
+            background-color: #e2e2e2 !important;
             color: #fff !important;
-            border: 1px solid #3d96f5 !important;
-            background: #4da3ff !important;
-            box-shadow: none !important;
+            border: 1px solid transparent !important;
         }
 
-        .main-datatable .dataTables_wrapper .dataTables_paginate .paginate_button.current,
-        .main-datatable .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
-            color: #fff !important;
-            border-color: transparent !important;
-            background: #007bff !important;
-        } */
+        .custom-close:hover {
+            background-color: #0056b3 !important;
+            border: 1px solid #0056b3 !important;
+        }
 
-        @media only screen and (max-width: 1200px) {
-            .overflow-x {
-                overflow-x: scroll;
-            }
-
-            .overflow-x::-webkit-scrollbar {
-                width: 5px;
-                height: 6px;
-            }
-
-            .overflow-x::-webkit-scrollbar-thumb {
-                background-color: #888;
-            }
-
-            .overflow-x::-webkit-scrollbar-track {
-                background-color: #f1f1f1;
-            }
+        .custom-close:focus {
+            outline: none !important;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5) !important;
         }
     </style>
 
@@ -180,159 +34,257 @@
 
 <body>
 
-    <%- include("../partials/admin-header.ejs"); %>
+    <%- include("../includes/admin-header.ejs"); %>
 
-    <div class="container p-30">
-        <div class="row">
-            <div class="col-md-12 main-datatable">
-                <div class="card_body">
-                    <div class="row d-flex">
-                        <div class="col-sm-4 createSegment">
-                            <!-- <a class="btn dim_button create_new"><span class="glyphicon glyphicon-plus"></span>Create
+        <div class="container p-30">
+            <div class="row">
+                <div class="col-md-12 main-datatable">
+                    <div class="card_body">
+                        <div class="row d-flex">
+                            <div class="col-sm-4 createSegment">
+                                <!-- <a class="btn dim_button create_new"><span class="glyphicon glyphicon-plus"></span>Create
                                 New</a> -->
-                        </div>
-                        <div class="col-sm-8 add_flex">
-                            <div class="form-group searchInput">
-                                <label for="email">Search:</label>
-                                <input type="search" class="form-control" name="" id="filterbox"
-                                    placeholder="Search Order">
+                            </div>
+                            <div class="col-sm-8 add_flex">
+                                <div class="form-group searchInput">
+                                    <label>Search:</label>
+                                    <input type="search" class="form-control" name="" id="filterbox"
+                                        placeholder="Search Order">
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="overflow-x">
-                        <table style="width: 100%;" id="filtertable" class="table cust-datatable dataTable no-footer">
-                            <thead>
-                                <tr>
-                                    <th style="min-width: 50px;">S. No.</th>
-                                    <th style="min-width: 50px;">Order Number</th>
-                                    <th style="min-width: 50px;">Customer Name</th>
-                                    <th style="min-width: 50px;">Date</th>
-                                    <th style="min-width: 50px;">Status</th>
-                                    <th style="min-width: 50px;">Total Amount</th>
-                                    <th style="min-width: 50px;">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <% if(allOrders.length> 0) { %>
-                                    <% allOrders.forEach((order, index)=> { %>
-                                        <tr>
-                                            <td>
-                                                <%= index+1 %>
-                                            </td>
-                                            <td>
-                                                <%= order.orderNumber %>
-                                            </td>
-                                            <td>
-                                                <%= order.userId.fullName %>
-                                            </td>
-                                            <td>
-                                                <%= order.createdAt.toDateString() %>
-                                            </td>
-                                            <td>
-                                                <% if(order.status=="pending" ) { %>
-                                                    <span class="badge bg-warning">
-                                                        <%= order.status %>
-                                                    </span>
-                                                    <% } else if(order.status=="delivered" ) { %>
-                                                        <span class="badge bg-success">
+                        <div class="overflow-x">
+                            <table style="width: 100%;" id="filtertable"
+                                class="table cust-datatable dataTable no-footer">
+                                <thead>
+                                    <tr>
+                                        <th style="min-width: 50px;">S. No.</th>
+                                        <th style="min-width: 50px;">Order Number</th>
+                                        <th style="min-width: 50px;">Customer Name</th>
+                                        <th style="min-width: 50px;">Date</th>
+                                        <th style="min-width: 50px;">Status</th>
+                                        <th style="min-width: 50px;">Total Amount</th>
+                                        <th style="min-width: 50px;">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% if(allOrders.length> 0) { %>
+                                        <% allOrders.forEach((order, index)=> { %>
+                                            <tr>
+                                                <td>
+                                                    <%= index+1 %>
+                                                </td>
+                                                <td>
+                                                    <%= order.orderNumber %>
+                                                </td>
+                                                <td>
+                                                    <%= order.userId.fullName %>
+                                                </td>
+                                                <td>
+                                                    <%= order.createdAt.toDateString() %>
+                                                </td>
+                                                <td>
+                                                    <% if(order.status=="pending" ) { %>
+                                                        <span class="badge bg-warning">
                                                             <%= order.status %>
                                                         </span>
-                                                        <% } else { %>
-                                                            <span class="badge bg-info">
+                                                        <% } else if(order.status=="delivered" ) { %>
+                                                            <span class="badge bg-success">
                                                                 <%= order.status %>
                                                             </span>
-                                                            <% } %>
-                                            </td>
-                                            <td>
-                                                <%= order.grandTotal %>
-                                            </td>
-                                            <td style="min-width: 200px;">
+                                                            <% } else { %>
+                                                                <span class="badge bg-info">
+                                                                    <%= order.status %>
+                                                                </span>
+                                                                <% } %>
+                                                </td>
+                                                <td>
+                                                    <%= order.grandTotal %>
+                                                </td>
+                                                <!-- <td style="min-width: 200px;">
                                                 <div class="btn-group" role="group">
-                                                    <a href="/admin/manage/orders/<%= order._id %>" class="btn btn-sm btn-info">View</a>
-                                                    <a href="#" class="btn btn-sm btn-primary">Edit</a>
+                                                    <a href="/admin/manage/orders/<%= order._id %>" class="btn btn-sm btn-info" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="View"><i class="fa-solid fa-eye"></i></a>
+                                                    <a href="#" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Update"><i class="fa-solid fa-pencil"></i></a>
                                                     <a href="#" class="btn btn-sm btn-danger disabled" tabindex="-1"
-                                                        aria-disabled="true">Delete</a>
+                                                        aria-disabled="true" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete"><i class="fa-solid fa-trash-can"></i></a>
                                                 </div>
-                                            </td>
-                                        </tr>
-                                        <% }); %>
-                                            <% } else { %>
-                                                <tr>
-                                                    <td colspan="7" class="text-center fs-5">No Orders</td>
-                                                </tr>
-                                                <% } %>
+                                            </td> -->
+                                                <td style="min-width: 200px;">
+                                                    <div class="btn-group" role="group">
+                                                        <a href="/admin/manage/orders/<%= order._id %>"
+                                                            class="btn btn-sm btn-info" data-bs-toggle="tooltip"
+                                                            data-bs-placement="top" title="View">
+                                                            <i class="fa-solid fa-eye"></i>
+                                                        </a>
+                                                        <a href="#" class="btn btn-sm btn-primary"
+                                                            data-bs-toggle="tooltip" data-bs-placement="top"
+                                                            title="Update" data-order-id="<%= order._id %>"
+                                                            id="updateOrderBtn">
+                                                            <i class="fa-solid fa-pencil"></i>
+                                                        </a>
+                                                        <a href="#" class="btn btn-sm btn-danger disabled" tabindex="-1"
+                                                            aria-disabled="true" data-bs-toggle="tooltip"
+                                                            data-bs-placement="top" title="Delete">
+                                                            <i class="fa-solid fa-trash-can"></i>
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <% }); %>
+                                                <% } else { %>
+                                                    <tr>
+                                                        <td colspan="7" class="text-center fs-5">No Orders</td>
                                                     </tr>
-                            </tbody>
-                        </table>
+                                                    <% } %>
+                                                        </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="offcanvas offcanvas-end bg-dark text-light" data-bs-scroll="true" tabindex="-1"
-        id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
-        <div class="container">
-            <div class="offcanvas-header">
-                <img src="/assets/KharidLow.png" alt="" width="50">
-                <h4 class="offcanvas-title mx-2" id="offcanvasWithBothOptionsLabel">KharidLow</h4>
-                <button type="button" class="btn-close btn-dark" data-bs-dismiss="offcanvas"
-                    aria-label="Close"></button>
+        <!-- Include Admin Sidebar -->
+        <%- include("../includes/admin-sidebar.ejs"); %>
+
+            <div class="modal fade" id="updateOrderStatusModal" tabindex="-1"
+                aria-labelledby="updateOrderStatusModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form id="updateOrderForm">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="updateOrderStatusModalLabel">Update Order Status</h5>
+                                <button type="button" class="btn-close custom-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="orderStatus" class="form-label">Order Status</label>
+                                    <select class="form-select" id="orderStatus" name="status" required>
+                                        <option value="accepted">Accepted</option>
+                                        <option value="dispatched">Dispatched</option>
+                                        <option value="delivered">Delivered</option>
+                                        <option value="canceled">Canceled</option>
+                                    </select>
+                                </div>
+                                <!-- Conditional fields -->
+                                <div class="mb-3 d-none" id="trackingInfo">
+                                    <label for="trackingId" class="form-label">Tracking ID</label>
+                                    <input type="text" class="form-control" id="trackingId" name="trackingId">
+                                    <label for="trackingUrl" class="form-label mt-2">Tracking URL</label>
+                                    <input type="url" class="form-control" id="trackingUrl" name="trackingUrl">
+                                </div>
+                                <div class="mb-3 d-none" id="cancelReason">
+                                    <label for="reason" class="form-label">Cancellation Reason</label>
+                                    <textarea class="form-control" id="reason" name="reason" rows="3"></textarea>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <input type="hidden" id="orderId" name="orderId">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Update</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
-            <div class="offcanvas-body d-flex flex-column">
-                <a href="/admin/manage/orders" class="sidebar-item d-flex align-items-center my-2">
-                    <i class="fa-solid fa-box mx-2"></i>
-                    <span>Manage Order</span>
-                </a>
-                <a href="/admin/manage/customers" class="sidebar-item d-flex align-items-center my-2">
-                    <i class="fa-solid fa-users mx-2"></i>
-                    <span>Manage Customer</span>
-                </a>
-                <a href="/admin/manage/products" class="sidebar-item d-flex align-items-center my-2">
-                    <i class="fa-solid fa-rectangle-list mx-2"></i>
-                    <span>Manage Products</span>
-                </a>
-                <a href="/admin/manage" class="sidebar-item d-flex align-items-center my-2">
-                    <i class="fa-solid fa-chart-line mx-2"></i>
-                    <span>Dashboard</span>
-                </a>
-            </div>
-        </div>
-    </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+            <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+            <script src="https://cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
 
-    <script>
-        $(document).ready(function () {
-            let dataTable = $('#filtertable').DataTable({
-                "pageLength": 20,
-                "aoColumnDefs": [{
-                    "nSortable": false,
-                    "aTargets": ['nosort']
-                }],
-                columnDefs: [
-                    { type: 'date-dd-mm-yyyy', aTargets: [5] }
-                ],
-                "aoColumns": [
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null
-                ],
-                "order": false,
-                "bLengthChange": false,
-                "dom": '<"top">ct<"top"p><"clear">'
-            });
-            $("#filterbox").keyup(function () {
-                dataTable.search(this.value).draw();
-            });
-        });
-    </script>
+            <script>
+
+                $(document).ready(function () {
+                    let dataTable = $('#filtertable').DataTable({
+                        "pageLength": 20,
+                        "aoColumnDefs": [{
+                            "nSortable": false,
+                            "aTargets": ['nosort']
+                        }],
+                        columnDefs: [
+                            { type: 'date-dd-mm-yyyy', aTargets: [5] }
+                        ],
+                        "aoColumns": [
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null
+                        ],
+                        "order": false,
+                        "bLengthChange": false,
+                        "dom": '<"top">ct<"top"p><"clear">'
+                    });
+                    $("#filterbox").keyup(function () {
+                        dataTable.search(this.value).draw();
+                    });
+                });
+
+                $(document).ready(function () {
+                    // Initialize Bootstrap tooltips
+                    $('[data-bs-toggle="tooltip"]').tooltip();
+
+                    // When the update button is clicked, trigger the modal
+                    $('#updateOrderBtn').on('click', function (event) {
+                        event.preventDefault(); // Prevent default action
+                        let orderId = $(this).data('order-id'); // Get the order ID from the button
+                        $('#updateOrderStatusModal').modal('show'); // Show the modal
+                        $('#orderId').val(orderId); // Set the order ID in the modal form
+                    });
+
+                    // Show/hide tracking info or cancel reason based on status selection
+                    $('#orderStatus').on('change', function () {
+                        let selectedStatus = $(this).val();
+                        if (selectedStatus === 'dispatched') {
+                            $('#trackingInfo').removeClass('d-none');
+                            $('#cancelReason').addClass('d-none');
+                        } else if (selectedStatus === 'canceled') {
+                            $('#trackingInfo').addClass('d-none');
+                            $('#cancelReason').removeClass('d-none');
+                        } else {
+                            $('#trackingInfo').addClass('d-none');
+                            $('#cancelReason').addClass('d-none');
+                        }
+                    });
+
+                    // Handle the form submission via AJAX
+                    $('#updateOrderForm').submit(function (e) {
+                        e.preventDefault();
+                        let formData = $(this).serialize(); // Serialize form data
+
+                        $.ajax({
+                            type: 'PUT',
+                            url: '/admin/manage/orders/update',
+                            data: formData,
+                            success: function (response) {
+                                // alert('Order status updated successfully!');
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Order status updated successfully!',
+                                    confirmButtonText: 'Close'
+                                }).then(() => {
+                                    $('#updateOrderStatusModal').modal('hide');
+                                    location.reload();
+                                });
+                            },
+                            error: function (err) {
+                                // alert('Error updating order status.');
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error!',
+                                    text: 'Error updating order status.',
+                                    confirmButtonText: 'Close'
+                                });
+                            }
+                        });
+                    });
+                });
+
+            </script>
 </body>
 
 </html>

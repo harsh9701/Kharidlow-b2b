@@ -78,7 +78,58 @@ module.exports.renderViewOrderPage = async (req, res) => {
                 path: 'orderItems.productId',
                 select: 'mainImage'
             });
-        res.render("admin/view-order.ejs", { order: orderDetail });
+        if (orderDetail) {
+            return res.render("admin/view-order.ejs", { order: orderDetail });
+        } else {
+            return res.status(404).render("error.ejs");
+        }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+module.exports.updateOrderStatus = async (req, res) => {
+    const { status, trackingId, trackingUrl, reason, orderId } = req.body;
+    try {
+        const updateData = { status: status };
+        if (status === 'dispatched') {
+            updateData.trackingId = trackingId;
+            updateData.trackingUrl = trackingUrl;
+        } else if (status === 'canceled') {
+            updateData.cancellationReason = reason;
+        }
+
+        await orderModel.findByIdAndUpdate(orderId, updateData);
+        res.status(200).json({ success: true, message: 'Order updated successfully' });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Error updating order' });
+    }
+};
+
+module.exports.renderViewCustomerPage = async (req, res) => {
+    const customerId = req.params.customerId;
+    try {
+        const customer = await userModel.findById(customerId);
+        const orders = await orderModel.find({ userId: customerId }, { orderNumber: 1, status: 1, createdAt: 1 });
+        if (customer) {
+            res.render("admin/view-customer.ejs", { customer, recentOrders: orders });
+        } else {
+            res.status(404).render("error.ejs");
+        }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+module.exports.renderUpdateProductPage = async (req, res) => {
+    const productId = req.params.productId;
+    try {
+        const product = await productModel.findById(productId);
+        if (product) {
+            res.render("product/update-product.ejs", { product });
+        } else {
+            res.status(404).render("error.ejs");
+        }
     } catch (error) {
         res.status(500).send(error.message);
     }

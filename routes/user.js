@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { isAuthenticated } = require("../middleware/userAuth");
+const { isAuthenticated } = require("../middleware/auth");
 
 const { userRegister, renderRegisterPage, renderLoginPage, userLogin, renderCartPage, renderUserAccountPage, updatePassword } = require("../controllers/user");
 const { addToCart, removeFromCart } = require("../controllers/product");
