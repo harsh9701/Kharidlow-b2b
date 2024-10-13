@@ -12,8 +12,8 @@
 }
 
 .contact-content p {
-    font-size: 15px;
-    margin: 20px 0 60px;
+    font-size: 18px !important;
+    margin: 20px 0 35px;
     position: relative;
 }
 
@@ -30,7 +30,7 @@
 
 .contact-content h6 {
     color: #bbc3cf;
-    font-size: 15px;
+    font-size: 18px !important;
     font-weight: 400;
 }
 
@@ -92,8 +92,25 @@ footer div {
     margin: auto;
 }
 
+@media only screen and (max-width: 729px) {
+    .contact-content p {
+        font-size: 14px !important;
+    }
+
+    .contact-content h6 {
+        font-size: 14px !important;
+    }
+}
+
 @media only screen and (max-width: 435px) {
     .social-icons {
         font-size: 25px !important;
+    }
+}
+
+@media only screen and (max-width: 312px) {
+    .contact-social ul {
+        display: flex !important;
+        flex-direction: column !important;
     }
 }

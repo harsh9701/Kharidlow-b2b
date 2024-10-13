@@ -119,6 +119,12 @@ module.exports.completeOrder = async (req, res) => {
         });
 
         if (createOrder) {
+            // Increment the order count for the user
+            await userModel.updateOne(
+                { _id: userId },
+                { $inc: { orderCount: 1 } }
+            );
+
             const deleteCart = await cartModel.deleteOne({ userId: userId });
             if (deleteCart) {
                 sendOrderSummaryMail(userEmail, req.session.user.fullName, orderNumber, orderDetails.orderItems, grandTotal);

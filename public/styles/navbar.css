@@ -1,16 +1,42 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+
+body {
+    font-family: "Nunito", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
 .navbar {
     background-color: #07081b;
 }
 
+.navbar-brand img {
+    height: 60px;
+}
+
+.navbar-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .nav-link {
-    color: #bbc3cf !important;
-    transition: all 0.15s;
+    color: #ffffffdd !important;
+    transition: all 0.2s ease-out;
+    font-size: 1.15rem;
 }
 
 .nav-link:hover {
-    color: #cfcbcb;
+    color: #fff !important;
     text-decoration: overline;
-    font-size: 1.05rem;
+    font-size: 1.2rem;
+    background-color: rgb(98, 65, 230);
+    border-radius: 15px;
+}
+
+.cart {
+    display: none;
 }
 
 .navbar-toggler {
@@ -21,17 +47,128 @@
     background-image: url("data:image/svg+xml;charset=UTF8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30' width='30' height='30'%3E%3Cpath stroke='rgba(255, 255, 255, 1)' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E") !important;
 }
 
-.form-control {
-    padding: 0.5rem 1rem;
-}
-
 .btn-light {
     padding: 0.5rem 1.2rem;
     border: none;
 }
 
-@media (max-width: 768px) {
-    .form-control {
+.brand-name {
+    display: none;
+} 
+
+/* ------Brand Logo designing------- */
+
+.brand-name {
+    position: relative;
+    font-size: 1.7rem;
+    font-weight: 600;
+    color: #252839;
+    -webkit-text-stroke: 0.3vw #383d52;
+}
+
+.brand-name::before {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, #fcb045, #ff6347, #1e90ff, #32cd32);
+    background-size: 300%; /* Makes gradient animate */
+    color: transparent; /* Ensures the text is transparent */
+    -webkit-background-clip: text; /* Vendor-specific for WebKit browsers */
+    background-clip: text; /* Standard property for other browsers */
+    -webkit-text-fill-color: transparent; /* Ensures text shows gradient */
+    -webkit-text-stroke: 0vw #383d52;
+    border-right: 2px solid #dedde3;
+    border-radius: 50%;
+    overflow: hidden;
+    animation: animate 4s linear infinite, gradientShift 8s ease infinite;
+}
+
+@keyframes animate {
+    0%, 10%, 100% {
+        width: 0;
+    }
+    70%, 90% {
         width: 100%;
+    }
+}
+
+@keyframes gradientShift {
+    0% {
+        background-position: 0%;
+    }
+    100% {
+        background-position: 100%;
+    }
+}
+
+@media (max-width: 991px) {
+    .brand-name {
+        display: block;
+    }
+
+    .navbar-nav {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .nav-link {
+        font-size: 1.15rem;
+        font-weight: 600 !important;
+        border-bottom: 1px solid #bbc3cf73;
+        padding: 3px 0;
+        background: linear-gradient(90deg, #fcb045, #ff6347, #1e90ff, #32cd32) !important; /* Gradient colors */
+        -webkit-background-clip: text !important; /* Ensures background is clipped to text */
+        background-clip: text !important;
+        color: transparent !important; /* Makes the text transparent so the gradient shows */
+    }
+
+    .container-fluid {
+        margin: 0 5px 0 5px !important;
+    }
+
+    .cart {
+        display: block;
+    }
+
+    .cart-btn {
+        display: none;
+    }
+}
+
+@media (max-width: 649px) {
+    .search {
+        display: none !important;
+    }
+
+    .navbar-brand img {
+        height: 45px;
+    }
+
+    .navbar-toggler {
+        font-size: 1rem !important;
+    }
+}
+
+@media (max-width: 418px) {
+    .brand-name {
+        margin-left: -4px;
+    }
+}
+
+@media only screen and (max-width: 312px) {
+    .brand-name {
+        font-size: 16px;
+    }
+
+    .navbar-brand img {
+        height: 30px;
+    }
+
+    .navbar-toggler {
+        font-size: 0.7rem !important;
     }
 }

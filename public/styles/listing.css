@@ -1,4 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+
 body {
+    font-family: "Nunito", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
     background-color: #f9f9f9;
 }
 
@@ -33,12 +39,14 @@ body {
 }
 
 .add-to-cart-btn {
+    border-radius: 20px;
     background-color: #07081b !important;
     color: #fff !important;
 }
 
 .add-to-cart-btn:hover {
-    background-color: #07081bdc !important;
+    /* background-color: #07081bdc !important; */
+    background-color: rgb(98, 65, 230) !important;
 }
 
 .pagination a {

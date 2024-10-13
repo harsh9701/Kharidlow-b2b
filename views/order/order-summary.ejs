@@ -5,12 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Order Summary - Kharidlow</title>
+    <link rel="icon" type="image/x-icon" href="assets/Kharidlow.ico">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/styles/style.css">
     <link rel="stylesheet" href="/styles/navbar.css">
     <link rel="stylesheet" href="/styles/footer.css">
     <link rel="stylesheet" href="/styles/orderSummary.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
 </head>
 
@@ -87,7 +88,8 @@
                             <% }) %>
                                 <% } %>
                 </select>
-                <small class="text-muted">Select from your saved addresses or <a href="#" id="newAddressLink">enter a
+                <small class="text-muted address-change-text">Select from your saved addresses or <a href="#"
+                        id="newAddressLink">Enter a
                         new one</a>.</small>
 
                 <div id="newAddressForm" style="display: none;">
@@ -111,7 +113,8 @@
                         </div>
                         <div class="form-group">
                             <label for="pincode">Pincode</label>
-                            <input type="text" class="form-control" id="pincode" placeholder="Enter pincode">
+                            <input type="number" class="form-control" id="pincode" placeholder="Enter pincode"
+                                pattern="[0-9]{6}" title="Enter a valid pincode">
                         </div>
                         <div class="form-group">
                             <label for="company">Company Name (Optional)</label>
@@ -123,8 +126,9 @@
                         </div>
                         <div class="form-group">
                             <label for="altContact">Alternate Contact No (Optional)</label>
-                            <input type="text" class="form-control" id="altContact"
-                                placeholder="Enter alternate contact">
+                            <input type="number" class="form-control" id="altContact"
+                                placeholder="Enter alternate contact" pattern="[6789][0-9]{9}"
+                                title="Enter a valid contact number">
                         </div>
                     </form>
                 </div>
@@ -161,10 +165,20 @@
                         const area = $('#area').val();
                         const state = $('#state').val();
                         const pincode = $('#pincode').val();
+                        // const altContact = $('#altContact').val();
 
-                        if (flatNo && streetNo && area && state && pincode) {
-                            return true;
+                        // Validate new address fields
+                        const isPincodeValid = /^\d{6}$/.test(pincode); // Check if pincode is exactly 6 digits
+                        const isAltContactValid = /^[6789]\d{9}$/.test(altContact); // Check if alternate contact starts with 6, 7, 8, or 9 and is 10 digits
+
+                        if (flatNo && streetNo && area && state && isPincodeValid) {
+                            return true; // Only returns true if all required fields are valid
                         }
+
+                        // If the pincode or alternate contact is invalid, disable the button
+                        // if (altContact && !isAltContactValid) {
+                        //     return false; // Alternate contact is invalid
+                        // }
 
                         return false;
                     }
@@ -196,7 +210,9 @@
                         if ($('#newAddressForm').is(':visible')) {
                             $('#existingAddressSelect').val(''); // Clear the existing address dropdown
                             $('#existingAddressSelect').prop('disabled', true);
+                            $(this).text('Select Address');
                         } else {
+                            $(this).text('Enter a new one');
                             $('#flatNo').val('');
                             $('#streetNo').val('');
                             $('#area').val('');

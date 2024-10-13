@@ -7,51 +7,81 @@
     <title>Login - Kharidlow</title>
     <link rel="icon" type="image/x-icon" href="assets/Kharidlow.ico">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
     <link rel="stylesheet" href="/styles/style.css">
     <link rel="stylesheet" href="/styles/navbar.css">
     <link rel="stylesheet" href="/styles/footer.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
     <style>
         body {
-            background-color: #343a40;
-            color: white;
+            background-color: #f8f9fa;
+            color: #343a40;
+            /* font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
         }
 
         .login-outer {
             margin-top: 50px;
-            padding: 30px;
-            border-radius: 10px;
-            background-color: #495057;
-            max-width: 400px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            margin-bottom: 50px;
+            padding: 40px;
+            border-radius: 15px;
+            background-color: #ffffff;
+            max-width: 420px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
-        h2 {
+        h3 {
             margin-bottom: 30px;
+            color: #6241e6;
+            font-weight: 700;
+            text-transform: uppercase;
         }
 
         .login-btn {
-            background-color: #007bff;
+            background-color: #6241e6;
             border: none;
+            border-radius: 25px;
+            transition: background-color 0.3s ease;
+        }
+
+        .login-btn:hover {
+            background-color: #7e67da;
         }
 
         .inp-txt {
-            background-color: #0056b3;
-        }
-
-        .inp-txt {
-            background-color: #6c757d;
+            background-color: #6241e6;
             color: white;
+            border-radius: 50%;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            color: #495057;
         }
 
         .logo {
-            height: 70px;
+            height: 60px;
             text-align: center;
+            margin-bottom: 20px;
         }
 
         .logo img {
             height: 100%;
+        }
+
+        .form-control:focus {
+            box-shadow: 0 0 5px #6241e6;
+        }
+
+        a {
+            color: #6241e6;
+            transition: ease-in-out 0.2s;
+        }
+
+        a:hover {
+            color: #0056b3;
+            font-weight: 600;
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -61,11 +91,11 @@
     <!-- include navbar -->
     <%- include("../includes/navbar.ejs") %>
 
-        <div class="container login-outer mb-3">
+        <div class="container login-outer">
             <div class="logo">
-                <img src="/assets/Kharidlow.png" alt="">
+                <img src="/assets/Kharidlow.png" alt="Kharidlow Logo">
             </div>
-            <h2 class="text-center">Login to Kharidlow</h2>
+            <h3 class="text-center">Login to Kharidlow</h3>
             <form id="loginForm" onsubmit="login(event);">
                 <div class="form-group">
                     <label for="email">Email</label>
@@ -73,8 +103,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text inp-txt"><i class="fas fa-user"></i></span>
                         </div>
-                        <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email"
-                            required>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
                     </div>
                 </div>
                 <div class="form-group">
@@ -83,16 +112,15 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text inp-txt"><i class="fas fa-lock"></i></span>
                         </div>
-                        <input type="password" class="form-control" id="password" name="password"
-                            placeholder="Enter your password" required>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
                     </div>
                 </div>
                 <button type="submit" class="btn btn-primary login-btn btn-block">Login</button>
                 <div class="text-center mt-4">
-                    <a href="/forgetpassword" class="text-white">Can’t remember your password? Reset it here!</a>
+                    <a href="/forgetpassword">Can’t remember your password? Reset it here!</a>
                 </div>
                 <div class="text-center mt-2">
-                    <a href="/user/register" class="text-white">Start your journey with us! Register now!</a>
+                    <a href="/user/register">Start your journey with us! Register now!</a>
                 </div>
             </form>
         </div>
@@ -114,7 +142,7 @@
                     const password = document.getElementById("password").value;
 
                     $.ajax({
-                        url: '/user/login', // The endpoint to send the data to
+                        url: '/user/login',
                         method: 'POST',
                         contentType: 'application/json',
                         data: JSON.stringify({
