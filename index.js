@@ -4,6 +4,7 @@ const path = require("path");
 const connectToDb = require("./config/db");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
+const MongoStore = require('connect-mongo');
 require("dotenv").config();
 
 const userRoute = require("./routes/user.js");
@@ -11,8 +12,21 @@ const mainRoute = require("./routes/main.js");
 const productRoute = require("./routes/product.js");
 const adminRoute = require("./routes/admin.js");
 
+const store = MongoStore.create({
+    mongoUrl: process.env.MONGO_URL,
+    crypto: {
+        secret: process.env.SESSION_SECRET
+    },
+    touchAfter: 24 * 3600 * 7
+});
+
+store.on("error", () => {
+    console.log("ERROR IN MONGO SESSION STORE", err);
+});
+
 // Set up session middleware
 app.use(session({
+    store,
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
