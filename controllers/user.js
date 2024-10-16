@@ -201,7 +201,7 @@ module.exports.renderRegisterPage = (req, res) => {
 
 module.exports.renderUserAccountPage = async (req, res) => {
     try {
-        const orders = await orderModel.find({ userId: req.session.user.userId }, { orderNumber: 1, createdAt: 1, status: 1, grandTotal: 1 }).limit(4);
+        const orders = await orderModel.find({ userId: req.session.user.userId }, { orderNumber: 1, createdAt: 1, status: 1, grandTotal: 1 }).sort({ createdAt: -1 }).limit(4);
         const userAddress = (await userModel.find({ _id: req.session.user.userId }, { addresses: 1, _id: 0 }))[0].addresses;
         res.render("user/user-account.ejs", { orders, userAddress });
     } catch (error) {

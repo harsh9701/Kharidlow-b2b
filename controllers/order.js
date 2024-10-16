@@ -9,7 +9,7 @@ const { generateOrderNumber } = require("../utils/generateOrderNumber");
 
 module.exports.renderOrdersPage = async (req, res) => {
     try {
-        const orders = await orderModel.find({ userId: req.session.user.userId }, { orderNumber: 1, createdAt: 1, status: 1, grandTotal: 1 });
+        const orders = await orderModel.find({ userId: req.session.user.userId }, { orderNumber: 1, createdAt: 1, status: 1, grandTotal: 1 }).sort({ createdAt: -1 });
         res.render("order/orders.ejs", { orders });
     } catch (error) {
         return res.status(500).send(error.message);
@@ -19,18 +19,23 @@ module.exports.renderOrdersPage = async (req, res) => {
 module.exports.renderOrderViewPage = async (req, res) => {
     try {
         const orderId = req.params.orderId;
-        if (!orderId) {
-            return res.status(200).json({ message: "order id is mandatory" });
+        // Check if orderId is a valid ObjectId
+        if (!mongoose.Types.ObjectId.isValid(orderId)) {
+            // return res.status(400).json({ message: "Invalid order ID" });
+            return res.status(400).render("error.ejs", { message: "Invalid order ID" });
         }
-        // const order = await orderModel.find({ _id: orderId });
         const order = await orderModel.findById(orderId)
             .populate({
                 path: 'orderItems.productId',
                 select: 'mainImage'
             });
-        res.status(200).render("order/view-order.ejs", { order });
+        if (order) {
+            res.status(200).render("order/view-order.ejs", { order });
+        } else {
+            res.status(404).json({ success: false, message: "Order not found" });
+        }
     } catch (error) {
-        return res.status(500).send(error.message);
+        return res.status(500).send(`ERROR, ${error.message}`);
     }
 };
 

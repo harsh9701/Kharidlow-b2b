@@ -119,6 +119,21 @@ body {
     font-weight: 600;
 }
 
+.icon-cart {
+    text-decoration: none;
+}
+
+.icon-cart img {
+    margin-top: -20px;
+    width: 70px;
+}
+
+.icon-cart h5 {
+    margin-top: 10px;
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
 @media only screen and (max-width: 991px) {
     .item-title {
         font-size: 1.2rem;

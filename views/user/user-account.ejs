@@ -137,11 +137,31 @@
                                                     <%= order.createdAt.toDateString(); %>
                                                 </td>
                                                 <td>
-                                                    <%= order.status %>
+                                                    <% if(order.status=="pending" ) { %>
+                                                        <span class="badge bg-warning">
+                                                            <%= order.status %>
+                                                        </span>
+                                                        <% } else if(order.status=="delivered" ) { %>
+                                                            <span class="badge bg-success">
+                                                                <%= order.status %>
+                                                            </span>
+                                                            <% } else { %>
+                                                                <span class="badge bg-info">
+                                                                    <%= order.status %>
+                                                                </span>
+                                                                <% } %>
                                                 </td>
                                                 <td>&#8377; <%= order.grandTotal %>
                                                 </td>
-                                                <td><a href="/order/12345" class="btn btn-primary btn-sm">View</a></td>
+                                                <td class="text-center">
+                                                    <div class="btn-group" role="group">
+                                                        <a href="/user/orders/<%= order._id %>"
+                                                            class="btn btn-sm btn-info" data-bs-toggle="tooltip"
+                                                            data-bs-placement="top" title="View">
+                                                            <i class="fa-solid fa-eye"></i>
+                                                        </a>
+                                                    </div>
+                                                </td>
                                             </tr>
                                             <% }; %>
                                                 <% }); %>
@@ -318,6 +338,11 @@
                             swal("Oops!", message, "error");
                         }
                     });
+                });
+
+                $(document).ready(function () {
+                    // Initialize Bootstrap tooltips
+                    $('[data-bs-toggle="tooltip"]').tooltip();
                 });
             </script>
 </body>

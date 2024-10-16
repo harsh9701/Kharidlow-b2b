@@ -25,7 +25,7 @@
             <div class="row">
                 <!-- Cart Items Section -->
                 <% if(items && items.length> 0) { %>
-                <div class="col-lg-8 col-md-7">
+                    <div class="col-lg-8 col-md-7">
                         <% items.forEach(item=> { %>
                             <div class="cart-item">
                                 <img src="/uploads/<%= item.productId.mainImage %>" alt="Product Image">
@@ -54,26 +54,33 @@
                                 </div>
                             </div>
                             <% }); %>
-                        </div>
-                        <% } else { %>
-                            <div class="alert alert-primary text-center col-lg-12" style="margin-bottom: 52px;" role="alert">
+                    </div>
+                    <% } else { %>
+                        <div class="text-center">
+                            <div class="alert alert-primary text-center col-lg-12" style="margin-bottom: 52px;"
+                                role="alert">
                                 <h3 style="font-weight: 400;">Your cart is empty!</h3>
                             </div>
-                            <% } %>
+                            <a href="/product" class="icon-cart">
+                                <img src="/assets/shopping-cart-svgrepo-com.svg" alt="">
+                                <h5>Shop Now</h5>
+                            </a>
+                        </div>
+                        <% } %>
 
-                <!-- Cart Summary Section -->
-                <% if(items && items.length> 0) { %>
-                <div class="col-lg-4 col-md-5">
-                    <div class="cart-summary">
-                        <h4 class="text-center">Order Summary</h4>
-                        <h5><strong>Total:</strong> &#8377; <span id="total">0.00</span></h5>
-                    </div>
-                    <form action="/user/order/summary" method="POST">
-                        <input type="hidden" name="cartData" id="cartData">
-                            <button type="submit" class="btn checkout-btn">Proceed to confirm</button>
-                    </form>
-                    <% } %>
-                </div>
+                            <!-- Cart Summary Section -->
+                            <% if(items && items.length> 0) { %>
+                                <div class="col-lg-4 col-md-5">
+                                    <div class="cart-summary">
+                                        <h4 class="text-center">Order Summary</h4>
+                                        <h5><strong>Total:</strong> &#8377; <span id="total">0.00</span></h5>
+                                    </div>
+                                    <form action="/user/order/summary" method="POST">
+                                        <input type="hidden" name="cartData" id="cartData">
+                                        <button type="submit" class="btn checkout-btn">Proceed to confirm</button>
+                                    </form>
+                                    <% } %>
+                                </div>
             </div>
         </div>
 
