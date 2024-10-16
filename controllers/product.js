@@ -14,43 +14,82 @@ module.exports.renderAddProductPage = (req, res) => {
 };
 
 module.exports.renderListingPage = async (req, res) => {
-
     const page = parseInt(req.query.page) || 1;
     const pageSize = parseInt(req.query.pageSize) || 24;
     const currentPage = parseInt(req.query.page) || 1;
+    const categoryFilter = req.query.category;
 
     const skip = (page - 1) * pageSize;
 
-    const products = await productModel.find({})
-        .skip(skip)
-        .limit(pageSize)
-        .select('productName price moq mainImage');
+    let filter = {};
+    if (categoryFilter) {
+        filter.subCategory = categoryFilter;
+    }
 
-    const totalProducts = await productModel.countDocuments({});
+    try {
+        const products = await productModel.find(filter)
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(pageSize)
+            .select('productName price moq mainImage');
 
-    res.render("product/listing.ejs", { products, totalProducts, currentPage });
+        const totalProducts = await productModel.countDocuments(filter);
+
+        const categories = await productModel.aggregate([
+            {
+                $group: {
+                    _id: "$subCategory"
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    subCategory: "$_id"
+                }
+            }
+        ]);
+
+        const totalPages = Math.ceil(totalProducts / pageSize);
+
+        res.render("product/listing.ejs", { products, totalProducts, currentPage, totalPages, categories, selectedCategory: categoryFilter || '' });
+
+    } catch (error) {
+        return res.status(500).send(error.message);
+    }
 };
 
 module.exports.renderProductPage = async (req, res) => {
     const productId = req.params.id;
-    const productDetails = await productModel.findById(productId, { productName: 1, subCategory: 1, price: 1, description: 1, moq: 1, mainImage: 1, discount: 1 });
-    const suggestedProducts = await productModel.aggregate([
-        { $match: { subCategory: productDetails.subCategory } },
-        { $sample: { size: 3 } },
-        { $project: { productName: 1, subCategory: 1, price: 1, description: 1, moq: 1, mainImage: 1, discount: 1 } }
-    ]);
-    res.render("product/product.ejs", { productDetails, suggestedProducts });
+    try {
+        const productDetails = await productModel.findById(productId, { productName: 1, subCategory: 1, price: 1, description: 1, moq: 1, mainImage: 1, discount: 1 });
+        const suggestedProducts = await productModel.aggregate([
+            { $match: { subCategory: productDetails.subCategory } },
+            { $sample: { size: 3 } },
+            { $project: { productName: 1, subCategory: 1, price: 1, description: 1, moq: 1, mainImage: 1, discount: 1 } }
+        ]);
+        res.render("product/product.ejs", { productDetails, suggestedProducts });
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
 };
 
 module.exports.getCategory = async (req, res) => {
-    const categories = await categoryModel.find({});
-    return res.status(200).send(categories);
+    try {
+        const categories = await categoryModel.find({});
+        return res.status(200).send(categories);
+    } catch (error) {
+        return res.status(500).send(error.message);
+    }
 };
 
 module.exports.getSubCategory = async (req, res) => {
     const categoryId = req.params.id;
-    const subCategories = (await categoryModel.find({ _id: categoryId }))[0].subcategories;
-    return res.status(200).send(subCategories);
+    try {
+        const subCategories = (await categoryModel.find({ _id: categoryId }))[0].subcategories;
+        return res.status(200).send(subCategories);
+    } catch (error) {
+        return res.status(500).send(error.message);
+    }
 };
 
 module.exports.addNewProduct = async (req, res) => {

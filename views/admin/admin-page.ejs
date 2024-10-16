@@ -23,35 +23,35 @@
                             <div class="card">
                                 <h5>Total Sales</h5>
                                 <p>
-                                    <%= data.totalSales[0].totalSales %>
+                                    <%= (data && data.totalSales) ? data.totalSales[0].totalSales: 0 %>
                                 </p>
                                 <i class="fa-solid fa-chart-line"></i>
                             </div>
                             <div class="card">
                                 <h5>Delivered Orders</h5>
                                 <p>
-                                    <%= data.deliveredOrder %>
+                                    <%= (data && data.deliveredOrder) ? data.deliveredOrder : 0 %>
                                 </p>
                                 <i class="fa-solid fa-truck"></i>
                             </div>
                             <div class="card">
                                 <h5>Total Orders</h5>
                                 <p>
-                                    <%= data.orderCount %>
+                                    <%= (data && data.orderCount) ? data.orderCount : 0 %>
                                 </p>
                                 <i class="fas fa-box"></i>
                             </div>
                             <div class="card">
                                 <h5>Total Customers</h5>
                                 <p>
-                                    <%= data.userCount %>
+                                    <%= (data && data.userCount) ? data.userCount : 0 %>
                                 </p>
                                 <i class="fas fa-users"></i>
                             </div>
                             <div class="card">
                                 <h5>Total Listings</h5>
                                 <p>
-                                    <%= data.productCount %>
+                                    <%= (data && data.productCount) ? data.productCount : 0 %>
                                 </p>
                                 <i class="fas fa-th-list"></i>
                             </div>
@@ -84,13 +84,19 @@
                                                             <%= order.userId.fullName %>
                                                         </td>
                                                         <td>
-                                                            <% if(order.status == "pending") { %>
-                                                                <span class="badge bg-warning"><%= order.status %></span>
-                                                            <% } else if(order.status == "delivered") { %>
-                                                                <span class="badge bg-success"><%= order.status %></span>
-                                                            <% } else { %>
-                                                                <span class="badge bg-info"><%= order.status %></span>
-                                                            <% } %>
+                                                            <% if(order.status=="pending" ) { %>
+                                                                <span class="badge bg-warning">
+                                                                    <%= order.status %>
+                                                                </span>
+                                                                <% } else if(order.status=="delivered" ) { %>
+                                                                    <span class="badge bg-success">
+                                                                        <%= order.status %>
+                                                                    </span>
+                                                                    <% } else { %>
+                                                                        <span class="badge bg-info">
+                                                                            <%= order.status %>
+                                                                        </span>
+                                                                        <% } %>
                                                         </td>
                                                         <td>
                                                             <%= order.grandTotal %>
@@ -102,7 +108,8 @@
                                                             <% if(count==5) {%>
                                                                 <tr>
                                                                     <td colspan="5" class="text-center fs-5"><a
-                                                                            href="/admin/manage/orders">View More</a></td>
+                                                                            href="/admin/manage/orders">View More</a>
+                                                                    </td>
                                                                 </tr>
                                                                 <% } %>
                                                                     <% } else { %>
@@ -158,7 +165,8 @@
                                                             <% if(count==5) {%>
                                                                 <tr>
                                                                     <td colspan="6" class="text-center fs-5"><a
-                                                                            href="/admin/manage/customers">View More</a></td>
+                                                                            href="/admin/manage/customers">View More</a>
+                                                                    </td>
                                                                 </tr>
                                                                 <% } %>
                                                                     <% } else { %>
@@ -218,7 +226,8 @@
                                                             <% if(count==5) {%>
                                                                 <tr>
                                                                     <td colspan="7" class="text-center fs-5"><a
-                                                                            href="/admin/manage/products">View More</a></td>
+                                                                            href="/admin/manage/products">View More</a>
+                                                                    </td>
                                                                 </tr>
                                                                 <% } %>
                                                                     <% } else { %>
@@ -238,7 +247,7 @@
     <!-- Include Admin Sidebar -->
     <%- include("../includes/admin-sidebar.ejs"); %>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

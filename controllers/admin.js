@@ -68,7 +68,6 @@ module.exports.renderManageProductPage = async (req, res) => {
 module.exports.renderViewOrderPage = async (req, res) => {
     try {
         const orderId = req.params.orderId;
-        // const orderDetail = await orderModel.findById(orderId);
         const orderDetail = await orderModel.findById(orderId)
             .populate({
                 path: 'userId',

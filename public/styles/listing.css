@@ -14,10 +14,10 @@ body {
 }
 
 .filter-sidebar {
-    background-color: #fff;
+    background-color: #f0f3f1;
     padding: 20px;
     border: 1px solid #ddd;
-    border-radius: 5px;
+    border-radius: 12px;
 }
 
 .filter-sidebar h5 {
@@ -51,6 +51,24 @@ body {
 
 .pagination a {
     margin: 0 5px;
+}
+
+.list-unstyled li a {
+    text-decoration: none;
+    color: #07081b;
+    font-size: 1.1rem;
+    font-weight: 600;
+    transition: ease-in-out 0.15s;
+}
+
+.list-unstyled li a:hover {
+    color: rgb(98, 65, 230);
+}
+
+@media only screen and (max-width: 768px) {
+    .filter-sidebar {
+        display: none;
+    }
 }
 
 @media only screen and (max-width: 435px) {

@@ -1,4 +1,5 @@
 const cartModel = require("../models/cart");
+const generalDataModel = require("../models/generaldata");
 
 module.exports.renderLandingPage = (req, res) => {
     try {
@@ -21,4 +22,9 @@ module.exports.cartCount = async (req, res) => {
         console.error(error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
+};
+
+module.exports.renderCategoriesPage = async (req, res) => {
+    const categories = await generalDataModel.find({});
+    res.render("product/categories.ejs", { categories });
 };

@@ -16,6 +16,24 @@ module.exports.renderOrdersPage = async (req, res) => {
     }
 };
 
+module.exports.renderOrderViewPage = async (req, res) => {
+    try {
+        const orderId = req.params.orderId;
+        if (!orderId) {
+            return res.status(200).json({ message: "order id is mandatory" });
+        }
+        // const order = await orderModel.find({ _id: orderId });
+        const order = await orderModel.findById(orderId)
+            .populate({
+                path: 'orderItems.productId',
+                select: 'mainImage'
+            });
+        res.status(200).render("order/view-order.ejs", { order });
+    } catch (error) {
+        return res.status(500).send(error.message);
+    }
+};
+
 module.exports.orderSummary = async (req, res) => {
     try {
 
