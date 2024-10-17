@@ -61,7 +61,7 @@ const sendForgotPasswordMail = async (clientMail, fullName, resetToken) => {
         }
     });
 
-    const resetURL = `http://localhost:3000/resetpassword/${resetToken}`; // The link to reset the password
+    const resetURL = `https://kharidlow.com/resetpassword/${resetToken}`; // The link to reset the password
 
     const mailOptions = {
         from: mailData.email,
