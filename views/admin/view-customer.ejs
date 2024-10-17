@@ -79,10 +79,21 @@
                                     <% if (recentOrders.length> 0) { %>
                                         <% recentOrders.forEach(order=> { %>
                                             <li class="list-group-item">
-                                                <strong>Order No. #<%= order.orderNumber %></strong> - Status:
-                                                <span class="badge bg-success">
-                                                    <%= order.status %>
-                                                </span> -
+                                                <strong>Order No. #<%= order.orderNumber %></strong>
+                                                <% if(order.status=="delivered" ) { %>
+                                                    <span class="badge rounded-pill text-bg-success">
+                                                        <%= order.status %>
+                                                    </span>
+                                                    <%} else if(order.status=="pending" ) {%>
+                                                        <span class="badge rounded-pill text-bg-warning">
+                                                            <%= order.status %>
+                                                        </span>
+                                                        <%} else {%>
+                                                            <span class="badge rounded-pill text-bg-info">
+                                                                <%= order.status %>
+                                                            </span>
+                                                            <%} %>
+                                                            <br>
                                                 <span class="text-muted">Date: <%= new
                                                         Date(order.createdAt).toLocaleDateString() %></span>
                                             </li>

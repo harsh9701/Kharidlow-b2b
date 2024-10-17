@@ -1,9 +1,16 @@
 const cartModel = require("../models/cart");
 const generalDataModel = require("../models/generaldata");
 
-module.exports.renderLandingPage = (req, res) => {
+module.exports.renderLandingPage = async (req, res) => {
     try {
-        res.render("index.ejs");
+        const category = await generalDataModel.aggregate([
+            {
+                $group: {
+                    _id: "$name"
+                }
+            }
+        ]);
+        res.render("index.ejs", { category });
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }

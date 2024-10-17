@@ -134,6 +134,28 @@ body {
     font-weight: 600;
 }
 
+/* Hide default increase/decrease buttons on number input for Chrome, Safari, Edge, and Opera */
+.quantity-input::-webkit-outer-spin-button,
+.quantity-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Hide default increase/decrease buttons on number input for Firefox */
+.quantity-input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+.decrement-btn,
+.increment-btn {
+    background-color: #6241e6;
+    border-radius: 50%;
+    color: #fff;
+    padding: 0px 3px;
+    font-size: 0.8rem;
+}
+
+
 @media only screen and (max-width: 991px) {
     .item-title {
         font-size: 1.2rem;
@@ -155,5 +177,17 @@ body {
 
     .remove-btn {
         font-size: 0.9rem;
+    }
+}
+
+@media only screen and (max-width: 330px) {
+    .quantity-input {
+        width: 60px !important;
+    }
+}
+
+@media only screen and (max-width: 309px) {
+    .quantity {
+        display: none;
     }
 }
