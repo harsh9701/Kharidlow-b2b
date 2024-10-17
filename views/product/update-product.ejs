@@ -79,6 +79,10 @@
             left: 125px;
         }
 
+        #loadingSpinner {
+            display: none;
+        }
+
         @media (max-width: 768px) {
             .image-list-item {
                 width: calc(50% - 10px);
@@ -132,7 +136,7 @@
                 <!-- Main Image Section -->
                 <div class="main-image-container mb-4">
                     <% if (product.mainImage) { %>
-                        <img src="/uploads/<%= product.mainImage %>" alt="Main Image" class="image-preview">
+                        <img src="<%= product.mainImage %>" alt="Main Image" class="image-preview">
                         <input type="file" id="mainImage" name="mainImage" style="display:none;"
                             onchange="updateMainImage(event)">
                         <button type="button" class="change-image"
@@ -207,7 +211,7 @@
                         <% if (product.productImages.length> 0) { %>
                             <% product.productImages.forEach(image=> { %>
                                 <div class="image-list-item" data-image="<%= image %>">
-                                    <img src="/uploads/<%= image %>" alt="Product Image" class="image-preview">
+                                    <img src="<%= image %>" alt="Product Image" class="image-preview">
                                     <button type="button" class="remove-image"
                                         onclick="removeProductImage('<%= image %>')">
                                         <i class="fa-regular fa-trash-can"></i>
@@ -225,6 +229,14 @@
                     <a href="/admin/manage/products" class="btn btn-secondary">Back to Products</a>
                 </div>
             </form>
+        </div>
+
+        <div id="loadingSpinner"
+            class="d-none position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center"
+            style="background: rgba(0, 0, 0, 0.5); z-index: 1050;">
+            <div class="spinner-border text-light" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
         </div>
 
         <!-- Include Admin Sidebar -->
@@ -266,6 +278,14 @@
                     }
                 }
 
+                function showLoader() {
+                    $("#loadingSpinner").removeClass('d-none').show();
+                }
+
+                function hideLoader() {
+                    $("#loadingSpinner").hide();
+                }
+
                 function removeProductImage(image) {
                     const productId = "<%= product._id %>"; // Replace with your actual product ID
 
@@ -281,25 +301,26 @@
                         cancelButtonText: 'Cancel'
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            // If user confirms deletion, send AJAX request
+                            showLoader();
                             $.ajax({
                                 url: `/admin/delete/productimage/${productId}`,
                                 type: 'DELETE',
                                 data: JSON.stringify({ imageName: image }),
                                 contentType: 'application/json',
                                 success: function (response) {
+                                    hideLoader();
                                     if (response.success) {
-                                        // SweetAlert success popup
                                         Swal.fire(
                                             'Deleted!',
                                             'Your image has been deleted.',
                                             'success'
-                                        );
+                                        ).then(() => {
+                                            location.reload(); // Reload the page
+                                        });;
 
-                                        // Remove the image element from the DOM
-                                        $(`[data-image="${image}"]`).remove();
+                                        // Remove the image element from the DOM & hide Spinner
+                                        // $(`[data-image="${image}"]`).remove();
                                     } else {
-                                        // SweetAlert error popup
                                         Swal.fire(
                                             'Error!',
                                             response.message,
@@ -308,8 +329,8 @@
                                     }
                                 },
                                 error: function (xhr, status, error) {
+                                    hideLoader();
                                     console.error('Error deleting image:', error);
-                                    // SweetAlert error popup
                                     Swal.fire(
                                         'Error!',
                                         'An error occurred while deleting the image.',
@@ -327,6 +348,7 @@
 
                         let formData = new FormData(this);
 
+                        showLoader();
                         $.ajax({
                             url: '/admin/update/product/<%= product._id %>',
                             type: 'PUT',
@@ -334,7 +356,7 @@
                             processData: false,
                             contentType: false,
                             success: function (response) {
-                                // Use SweetAlert for success
+                                hideLoader();
                                 Swal.fire({
                                     icon: 'success',
                                     title: 'Product Updated',
@@ -342,12 +364,11 @@
                                     confirmButtonText: 'OK',
                                     timer: 4000 // Optional: Auto-close after 4 seconds
                                 }).then(() => {
-                                    // Optionally, redirect to another page or update UI after user confirms
                                     window.location.href = '/admin/manage/products';
                                 });
                             },
                             error: function (xhr, status, error) {
-                                // Use SweetAlert for error
+                                hideLoader();
                                 Swal.fire({
                                     icon: 'error',
                                     title: 'Error',

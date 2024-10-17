@@ -1,8 +1,7 @@
 const categoryModel = require("../models/generaldata");
 const productModel = require("../models/product");
 const cartModel = require("../models/cart");
-const fs = require('fs').promises;
-const path = require('path');
+const { deleteCloudinaryImage } = require("../utils/helper");
 
 module.exports.renderAddProductPage = (req, res) => {
     try {
@@ -97,17 +96,25 @@ module.exports.addNewProduct = async (req, res) => {
         const { productName, category, subCategory, price, stock, description, sku, brand, tags } = req.body;
 
         if (!productName || !category || !price || !sku) {
+            // Delete uploaded image if required fields are missing
+            if (req.file && req.file.path) {
+                await deleteCloudinaryImage(req.file.path);
+            }
             return res.status(400).json({ success: false, message: "Missing required fields" });
+        }
+
+        const isProductExist = await productModel.findOne({ sku });
+        if (isProductExist) {
+            // Delete uploaded image if SKU already exists
+            if (req.file && req.file.path) {
+                await deleteCloudinaryImage(req.file.path);
+            }
+            return res.status(400).json({ success: false, message: "This SKU already exists" });
         }
 
         let tagsArray = [];
         if (tags) {
             tagsArray = tags.split(',').map(tag => tag.trim());
-        }
-
-        const isProductExist = await productModel.findOne({ sku });
-        if (isProductExist) {
-            return res.status(400).json({ success: false, message: "This SKU already exists" });
         }
 
         const newProduct = await productModel.create({
@@ -118,21 +125,20 @@ module.exports.addNewProduct = async (req, res) => {
             productName,
             description,
             price,
-            mainImage: req.file.filename,
-            tags: tagsArray
+            mainImage: req.file ? req.file.path : null,
+            tags: tagsArray,
         });
 
-        return res.status(200).json({ success: true, message: "Product Created Successfully", product: newProduct });
-
+        return res.status(200).json({ success: true, message: "Product Created Successfully" });
     } catch (err) {
         console.error('Error occurred while adding product:', err);
-        if (req.file && req.file.filename) {
+
+        // Delete the uploaded image in case of an error
+        if (req.file && req.file.path) {
             try {
-                const imagePath = path.join(__dirname, '..', 'public', 'uploads', req.file.filename);
-                await fs.unlink(imagePath);
-                console.log('File deleted:', req.file.filename);
-            } catch (unlinkErr) {
-                console.error('Error deleting file:', unlinkErr);
+                await deleteCloudinaryImage(req.file.path);
+            } catch (error) {
+                return res.status(500).json({ success: false, message: 'Failed to delete image' });
             }
         }
 
@@ -210,11 +216,18 @@ module.exports.updateProduct = async (req, res) => {
     try {
         const productId = req.params.productId;
         const updatedProductData = req.body;
-        const mainImage = req.files.mainImage ? req.files.mainImage[0] : null;
+        const mainImage = req.files.mainImage ? req.files.mainImage[0].path : null;
         const additionalImages = req.files.productImages || [];
 
         const product = await productModel.findById(productId, { mainImage: 1, productImages: 1 });
         if (!product) {
+            if (mainImage) {
+                try {
+                    await deleteCloudinaryImage(mainImage);
+                } catch (error) {
+                    return res.status(500).json({ success: false, message: 'Failed to delete image' });
+                }
+            }
             return res.status(404).json({ success: false, message: "Product Not Found" });
         }
 
@@ -227,7 +240,7 @@ module.exports.updateProduct = async (req, res) => {
             const totalImagesCount = Number(productImages.length) + Number(additionalImages.length);
 
             if (totalImagesCount <= 5) {
-                productImages = productImages.concat(additionalImages.map(file => file.filename));
+                productImages = productImages.concat(additionalImages.map(file => file.path));
             } else {
                 return res.status(400).json({
                     success: false,
@@ -246,7 +259,7 @@ module.exports.updateProduct = async (req, res) => {
             taxType: updatedProductData.taxType,
             taxRate: updatedProductData.taxRate,
             tags: tagsArray,
-            mainImage: mainImage ? mainImage.filename : product.mainImage,
+            mainImage: mainImage ? mainImage : product.mainImage,
             productImages
         };
 
@@ -255,11 +268,10 @@ module.exports.updateProduct = async (req, res) => {
         if (updatedProduct) {
             // Delete old main image if it's being replaced
             if (mainImage && product.mainImage) {
-                const oldMainImagePath = path.join(__dirname, '..', 'public', 'uploads', product.mainImage);
                 try {
-                    await fs.unlink(oldMainImagePath);
-                } catch (err) {
-                    console.error('Error deleting old main image:', err);
+                    await deleteCloudinaryImage(product.mainImage);
+                } catch (error) {
+                    return res.status(500).json({ success: false, message: 'Failed to delete image' });
                 }
             }
         }
@@ -289,13 +301,12 @@ module.exports.deleteProductImage = async (req, res) => {
 
         if (!updatedProduct) {
             return res.status(404).json({ success: false, message: 'Product not found.' });
-        }
-
-        const oldImagePath = path.join(__dirname, '..', 'public', 'uploads', imageName);
-        try {
-            await fs.unlink(oldImagePath);
-        } catch (err) {
-            console.error('Error deleting image from file system:', err);
+        } else {
+            try {
+                await deleteCloudinaryImage(imageName);
+            } catch (error) {
+                return res.status(500).json({ success: false, message: 'Failed to delete image' });
+            }
         }
 
         return res.status(200).json({ success: true, message: 'Image deleted successfully.' });
@@ -319,11 +330,10 @@ module.exports.deleteProduct = async (req, res) => {
         // Delete product images
         const imagesToDelete = [product.mainImage, ...product.productImages];
         for (const image of imagesToDelete) {
-            const imagePath = path.join(__dirname, '..', 'public', 'uploads', image);
             try {
-                await fs.unlink(imagePath);
-            } catch (err) {
-                console.error('Error deleting image:', err);
+                await deleteCloudinaryImage(image);
+            } catch (error) {
+                return res.status(500).json({ success: false, message: 'Failed to delete image' });
             }
         }
 

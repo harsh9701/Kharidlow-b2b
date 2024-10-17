@@ -51,12 +51,19 @@
                     <a class="nav-link" href="/product"><i class="fa-solid fa-tag"></i> <span>New Arrival</span></a>
                 </li>
                 <% if (user) { %>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/user/orders"><i class="fa-solid fa-dolly"></i> <span>Orders</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/user/account"><i class="fa-regular fa-user"></i> <span>Profile</span></a>
-                    </li>
+                    <% if(user.role === "admin") { %>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin/manage"><i class="fa-regular fa-user"></i> <span>Admin</span></a>
+                        </li>
+                    <% } else { %>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/user/orders"><i class="fa-solid fa-dolly"></i> <span>Orders</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/user/account"><i class="fa-regular fa-user"></i> <span>Profile</span></a>
+                        </li>
+                    <% } %>
+                    
                     <li class="nav-item">
                         <a class="nav-link" href="/logout"><i class="fa-solid fa-arrow-right-from-bracket"></i> <span>Logout</span></a>
                     </li>

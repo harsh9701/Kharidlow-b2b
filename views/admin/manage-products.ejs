@@ -14,6 +14,12 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
+<style>
+    #loadingSpinner {
+        display: none;
+    }
+</style>
+
 <body>
 
     <%- include("../includes/admin-header.ejs"); %>
@@ -95,17 +101,20 @@
                                                 </td>
                                             </tr>
                                             <% }); %>
-                                                <% } else { %>
-                                                    <tr>
-                                                        <td colspan="7" class="text-center fs-5">No Products</td>
-                                                    </tr>
-                                                    <% } %>
-                                                        </tr>
+                                                <% } %>
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <div id="loadingSpinner"
+            class="d-none position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center"
+            style="background: rgba(0, 0, 0, 0.5); z-index: 1050;">
+            <div class="spinner-border text-light" role="status">
+                <span class="visually-hidden">Loading...</span>
             </div>
         </div>
 
@@ -150,6 +159,14 @@
                     $('[data-bs-toggle="tooltip"]').tooltip();
                 });
 
+                function showLoader() {
+                    $("#loadingSpinner").removeClass('d-none').show();
+                }
+
+                function hideLoader() {
+                    $("#loadingSpinner").hide();
+                }
+
                 function deleteProduct(productId) {
                     Swal.fire({
                         title: 'Are you sure?',
@@ -161,10 +178,12 @@
                         confirmButtonText: 'Yes, delete it!'
                     }).then((result) => {
                         if (result.isConfirmed) {
+                            showLoader();
                             $.ajax({
                                 url: `/admin/delete/product/${productId}`,
                                 type: 'DELETE',
                                 success: function (response) {
+                                    hideLoader();
                                     if (response.success) {
                                         Swal.fire(
                                             'Deleted!',
@@ -182,6 +201,7 @@
                                     }
                                 },
                                 error: function (xhr, status, error) {
+                                    hideLoader();
                                     console.error('Error deleting product:', error);
                                     Swal.fire(
                                         'Error!',

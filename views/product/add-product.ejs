@@ -125,9 +125,14 @@
                     <label for="productImage">Product Image</label>
                     <input type="file" class="form-control-file file-upload" id="productImage" name="productImage"
                         required>
+                    <small id="fileError" class="text-danger d-none">Invalid file format. Please upload .jpeg, .jpg,
+                        .png, or .webp files only.</small>
                 </div>
 
-                <button type="submit" class="btn btn-block submit-btn">Add Product</button>
+                <button type="submit" class="btn btn-block submit-btn" id="submitBtn">
+                    <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                    Add Product
+                </button>
             </form>
         </div>
 
@@ -152,6 +157,21 @@
                             $("#subCategory").html('<option value="">Select a sub category</option>');
                         }
                     });
+
+                    // Validate file format on file input change
+                    $("#productImage").on("change", function () {
+                        const filePath = this.value;
+                        const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.webp)$/i;
+                        const fileError = $("#fileError");
+
+                        // Check if file extension is valid
+                        if (!allowedExtensions.exec(filePath)) {
+                            fileError.removeClass("d-none");
+                            this.value = ''; // Clear the input
+                        } else {
+                            fileError.addClass("d-none");
+                        }
+                    });
                 });
 
                 // Handle form submission
@@ -159,6 +179,12 @@
                     e.preventDefault();
 
                     let formData = new FormData(this);
+                    const submitBtn = $("#submitBtn");
+                    const spinner = $(".spinner-border");
+
+                    // Show loader and disable button
+                    spinner.removeClass("d-none");
+                    submitBtn.prop("disabled", true).text("Adding...");
 
                     $.ajax({
                         url: '/product/new',
@@ -170,12 +196,19 @@
                             swal("Good Job!", "Product added successfully!", "success");
                             $("#addProductForm")[0].reset();
                         },
-                        error: function (err) {
-                            console.error("Error adding product:", err);
-                            swal("Something went wrong!", "Ensure that the image is in one of the allowed formats: .jpg, .jpeg, .png, or .webp.", "error");
+                        error: function (xhr, status, error) {
+                            const response = JSON.parse(xhr.responseText);
+                            const errorMessage = response.message || "An unexpected error occurred.";
+                            swal("Something Went Wrong", errorMessage, "error");
+                        },
+                        complete: function () {
+                            // Hide loader and enable button
+                            spinner.addClass("d-none");
+                            submitBtn.prop("disabled", false).text("Add Product");
                         }
                     });
                 });
+
 
                 function fetchCategories() {
                     $.ajax({
@@ -195,13 +228,13 @@
 
                 function fetchSubCategories(categoryId) {
                     $.ajax({
-                        url: `/product/category/${categoryId}/subCateorgy`, // Replace with your server endpoint to get subcategories
+                        url: `/product/category/${categoryId}/subCateorgy`,
                         method: 'GET',
                         success: function (subCategories) {
                             const subCategoryDropdown = $("#subCategory");
-                            subCategoryDropdown.html('<option value="">Select a sub category</option>'); // Reset sub-category options
+                            subCategoryDropdown.html('<option value="">Select a sub category</option>');
                             subCategories.forEach(subCategory => {
-                                subCategoryDropdown.append(new Option(subCategory.name, subCategory._id)); // Assuming the server returns _id and name
+                                subCategoryDropdown.append(new Option(subCategory.name, subCategory._id));
                             });
                         },
                         error: function (err) {

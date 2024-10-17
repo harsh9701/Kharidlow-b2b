@@ -52,7 +52,7 @@
                     <% order.orderItems.forEach(item=> { %>
                         <div class="item-card">
                             <% const imagePath=item.productId && item.productId.mainImage ?
-                                `/uploads/${item.productId.mainImage}` : '/assets/Image_deleted_logo.png' ; %>
+                                `${item.productId.mainImage}` : '/assets/Image_deleted_logo.png' ; %>
                                 <img src="<%= imagePath %>" alt="<%= item.productName %>"
                                     class="item-image img-thumbnail" data-bs-toggle="modal" data-bs-target="#imageModal"
                                     onclick="openImageModal('<%= imagePath %>', '<%= item.productName %>')">
