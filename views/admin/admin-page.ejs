@@ -23,7 +23,7 @@
                             <div class="card">
                                 <h5>Total Sales</h5>
                                 <p>
-                                    <%= (data && data.totalSales) ? data.totalSales[0].totalSales: 0 %>
+                                    <%= (data && (data.totalSales).length > 0) ? data.totalSales[0].totalSales : 0 %>
                                 </p>
                                 <i class="fa-solid fa-chart-line"></i>
                             </div>
