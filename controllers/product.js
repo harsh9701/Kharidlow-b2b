@@ -2,6 +2,7 @@ const categoryModel = require("../models/generaldata");
 const productModel = require("../models/product");
 const cartModel = require("../models/cart");
 const { deleteCloudinaryImage } = require("../utils/helper");
+const mongoose = require("mongoose");
 
 module.exports.renderAddProductPage = (req, res) => {
     try {
@@ -60,7 +61,11 @@ module.exports.renderListingPage = async (req, res) => {
 module.exports.renderProductPage = async (req, res) => {
     const productId = req.params.id;
     try {
-        const productDetails = await productModel.findById(productId, { productName: 1, subCategory: 1, price: 1, description: 1, moq: 1, mainImage: 1, discount: 1 });
+        const productDetails = await productModel.findById(productId, { productName: 1, subCategory: 1, price: 1, description: 1, moq: 1, mainImage: 1, discount: 1, reviews: 1 })
+            .populate({
+                path: "reviews.user",
+                select: "fullName"
+            });
         const suggestedProducts = await productModel.aggregate([
             { $match: { subCategory: productDetails.subCategory } },
             { $sample: { size: 3 } },
@@ -93,7 +98,7 @@ module.exports.getSubCategory = async (req, res) => {
 
 module.exports.addNewProduct = async (req, res) => {
     try {
-        const { productName, category, subCategory, price, stock, description, sku, brand, tags } = req.body;
+        const { productName, category, subCategory, price, stock, description, sku, tags, moq } = req.body;
 
         if (!productName || !category || !price || !sku) {
             // Delete uploaded image if required fields are missing
@@ -121,6 +126,7 @@ module.exports.addNewProduct = async (req, res) => {
             category,
             subCategory,
             sku,
+            moq: Number(moq),
             stock,
             productName,
             description,
@@ -345,4 +351,38 @@ module.exports.deleteProduct = async (req, res) => {
         console.error('Error deleting product:', error);
         res.status(500).json({ success: false, message: 'Internal server error.' });
     }
+};
+
+module.exports.addReview = async (req, res) => {
+    try {
+        if (!(req.session.user && req.session.user.isAuthenticated)) {
+            return res.status(200).json({ success: false, message: "User must be logged In", reason: "authentication" });
+        }
+
+        const { rating, comment, productId } = req.body;
+
+        if (!mongoose.Types.ObjectId.isValid(productId)) {
+            return res.status(400).json({ success: false, message: "Invalid Product ID" });
+        }
+
+        const product = await productModel.findById(productId);
+
+        if (!product) {
+            return res.status(404).json({ success: false, message: "Product not found" });
+        }
+
+        product.reviews.push({
+            rating: parseInt(rating, 10),
+            comment: comment,
+            user: req.session.user.userId,
+        });
+
+        await product.save();
+
+        return res.status(200).json({ success: true, message: 'Review submitted successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: 'Internal server error.' });
+    }
+
 };

@@ -141,9 +141,18 @@ body {
     margin: 0;
 }
 
-/* Hide default increase/decrease buttons on number input for Firefox */
+/* Hide increase/decrease buttons on number input for WebKit browsers (Chrome, Safari, etc.) */
+.quantity-input[type="number"]::-webkit-outer-spin-button,
+.quantity-input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none; /* WebKit prefix */
+    appearance: none; /* Standard property */
+    margin: 0;
+}
+
+/* Hide increase/decrease buttons on number input for Firefox */
 .quantity-input[type="number"] {
-    -moz-appearance: textfield;
+    -moz-appearance: textfield; /* Mozilla prefix */
+    appearance: textfield; /* Standard property */
 }
 
 .decrement-btn,
