@@ -82,6 +82,8 @@
                                     <%= review.comment %>
                                 </div>
                                 <% }) %>
+                                    <% } else { %>
+                                        <div>No reviews</div>
                                     <% } %>
                     </div>
                 </div>
@@ -133,13 +135,13 @@
                 decreaseQty.addEventListener('click', () => {
                     let currentQty = parseInt(productQty.value);
                     if (currentQty > minQty) {
-                        productQty.value = currentQty - 1;
+                        productQty.value = currentQty - minQty;
                     }
                 });
 
                 increaseQty.addEventListener('click', () => {
                     let currentQty = parseInt(productQty.value);
-                    productQty.value = currentQty + 1;
+                    productQty.value = currentQty + minQty;
                 });
 
                 // Add to Cart logic with AJAX

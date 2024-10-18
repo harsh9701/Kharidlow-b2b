@@ -258,7 +258,8 @@ body {
     }
 
     .cart-icon a i {
-        font-size: 1.4rem !important;
+        font-size: 1.5rem !important;
+        margin-right: -5px;
     }
 }
 
@@ -307,7 +308,8 @@ body {
     }
 
     .cart-icon a i {
-        font-size: 1.2rem !important;
+        margin-top: 4px;
+        font-size: 1.3rem !important;
     }
 }
 

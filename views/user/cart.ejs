@@ -166,7 +166,7 @@
                         control.querySelector('.decrement-btn').addEventListener('click', () => {
                             let currentQty = parseInt(quantityInput.value);
                             if (currentQty > minQty) {
-                                quantityInput.value = currentQty - 1;
+                                quantityInput.value = currentQty - minQty;
                                 updateCartSummary();  // Update totals after decrementing
                             } else {
                                 Swal.fire({
@@ -179,7 +179,7 @@
                         // Increment button functionality
                         control.querySelector('.increment-btn').addEventListener('click', () => {
                             let currentQty = parseInt(quantityInput.value);
-                            quantityInput.value = currentQty + 1;
+                            quantityInput.value = currentQty + minQty;
                             updateCartSummary();  // Update totals after incrementing
                         });
 
