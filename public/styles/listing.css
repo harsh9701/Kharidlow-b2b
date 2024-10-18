@@ -65,9 +65,17 @@ body {
     color: rgb(98, 65, 230);
 }
 
+.filter-sidebar-smallscreen {
+    display: none;
+}
+
 @media only screen and (max-width: 768px) {
-    .filter-sidebar {
+    .filter-sidebar-bigscreen {
         display: none;
+    }
+
+    .filter-sidebar-smallscreen {
+        display: block;
     }
 }
 

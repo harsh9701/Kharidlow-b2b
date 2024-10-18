@@ -130,17 +130,20 @@
                             <div class="col-6 col-md-4 col-lg-3 mb-3">
                                 <div class="card">
                                     <div class="card-img-container">
-                                        <img src="<%= product.mainImage %>" class="card-img-top"
-                                            alt="<%= product.productName %>">
+                                        <a href="/product/<%= product._id %>"><img src="<%= product.mainImage %>"
+                                                class="card-img-top" alt="<%= product.productName %>"></a>
                                     </div>
                                     <div class="card-body">
                                         <h5 class="card-title">
                                             <%= product.productName %>
                                         </h5>
-                                        <p class="card-text">Price: &#8377; <%= product.price %>
+                                        <div class="d-flex justify-content-between">
+                                            <p class="card-text">Price: &#8377; <%= product.price %>
+                                            <p class="card-text">MOQ: <%= product.moq %>
+                                        </div>
                                         </p>
-                                        <button class="btn btn-primary add-to-cart-btn-card"
-                                            data-product-id="<%= product._id %>">Add to Cart</button>
+                                        <button class="btn btn-primary add-to-cart-btn-card" data-product-id="<%= product._id %>"
+                                            data-moq="<%= product.moq %>">Add to Cart</button>
                                     </div>
                                 </div>
                             </div>
@@ -246,6 +249,36 @@
                                 },
                                 error: function () {
                                     swal("Oops!", "An error occurred while submitting the review.", "error");
+                                }
+                            });
+                        });
+
+                        $('.add-to-cart-btn-card').on('click', function (event) {
+                            event.preventDefault();
+
+                            const productId = $(this).data('product-id');
+                            const moq = $(this).data('moq');
+
+                            $.ajax({
+                                url: '/user/cart',
+                                method: 'POST',
+                                contentType: 'application/json',
+                                data: JSON.stringify({ productId: productId, moq: moq }),
+                                success: function (response) {
+                                    if (response.success) {
+                                        swal("Fantastic!", "Product added to cart successfully!", "success");
+                                    } else {
+                                        if (response.reason) {
+                                            swal("Oops!", "Please login!", "error").then(() => {
+                                                window.location.href = '/user/login';
+                                            });;
+                                        } else {
+                                            swal("Oops!", "Something went wrong!", "error");
+                                        }
+                                    }
+                                },
+                                error: function (xhr, status, error) {
+                                    swal("Oops!", error, "error");
                                 }
                             });
                         });
