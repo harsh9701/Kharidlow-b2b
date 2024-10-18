@@ -79,13 +79,23 @@ footer div {
     text-align: center;
 }
 
+.pvdBy {
+    font-size: 1.2rem;
+}
+
 .footer-logo {
     display: flex;
     justify-content: center;
+    flex-direction: column;
+    align-items: center;
 }
 
 .footer-logo img {
     max-width: 250px;
+}
+
+.kharidlow-logo {
+    width: 120px;
 }
 
 .margin-auto {

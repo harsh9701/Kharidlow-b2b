@@ -84,7 +84,7 @@
                                 <% }) %>
                                     <% } else { %>
                                         <div>No reviews</div>
-                                    <% } %>
+                                        <% } %>
                     </div>
                 </div>
 
@@ -118,6 +118,34 @@
                 </div>
             </section>
         </div>
+
+        <!-- Suggested Products Section -->
+         <% if(suggestedProducts.length > 0) { %>
+        <section class=" container suggested-products mt-5">
+            <h4>Suggested Products</h4>
+            <div class="suggested-products-container">
+                <div class="row">
+                    <% suggestedProducts.forEach((product)=> { %>
+                        <div class="col-6 col-md-4 col-lg-3 mb-3">
+                            <div class="card">
+                                <img src="<%= product.mainImage %>" class="card-img-top"
+                                    alt="<%= product.productName %>">
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <%= product.productName %>
+                                    </h5>
+                                    <p class="card-text">Price: &#8377; <%= product.price %>
+                                    </p>
+                                    <button class="btn btn-primary add-to-cart-btn-card"
+                                        data-product-id="<%= product._id %>">Add to Cart</button>
+                                </div>
+                            </div>
+                        </div>
+                        <% }) %>
+                </div>
+            </div>
+        </section>
+        <% } %>
 
         <!-- include footer -->
         <%- include("../includes/footer.ejs") %>
