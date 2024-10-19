@@ -114,6 +114,35 @@ body {
     font-size: 0.9rem;
 }
 
+.cta-section {
+    background-color: #6241e6;
+}
+
+.join-now-btn {
+    width: 95%;
+    color: #ded3d3;
+    background-color: #07081b;
+    transition: all 0.3s;
+}
+
+.join-now-btn:hover {
+    width: 100%;
+    color: #ffffff;
+    background-color: #060fbd;
+}
+
+.how-it-works {
+    margin: 10px;
+    padding: 10px;
+    border-radius: 20px;
+    background-color: #f1f0f0cb;
+}
+
+.how-it-works-row {
+    display: flex;
+    justify-content: center;
+}
+
 @media only screen and (max-width: 1249px) {
     .category-card-main {
         justify-content: flex-start;
@@ -132,6 +161,14 @@ body {
 
     .card-title {
         font-size: 1rem;
+    }
+
+    .cta-section h1 {
+        font-size: 1.4rem;
+    }
+
+    .cta-section h5 {
+        font-size: 1.1rem;
     }
 }
 
@@ -154,6 +191,10 @@ body {
 
     .card-body p {
         font-size: 0.8rem;
+    }
+
+    .join-now-btn {
+        font-size: 1rem;
     }
 }
 
