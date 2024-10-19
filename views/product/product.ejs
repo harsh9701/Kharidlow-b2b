@@ -121,7 +121,6 @@
 
         <!-- Suggested Products Section -->
         <% if(suggestedProducts.length> 0) { %>
-            <!-- Suggested Products Section -->
             <section class="container suggested-products mt-5">
                 <h4>Suggested Products</h4>
                 <div class="suggested-products-container">
@@ -138,7 +137,7 @@
                                             <%= product.productName %>
                                         </h5>
                                         <div class="d-flex justify-content-between">
-                                            <p class="card-text">Price: &#8377; <%= product.price %>
+                                            <p class="card-text"><span class="price">Price: </span>&#8377; <%= product.price %>
                                             <p class="card-text">MOQ: <%= product.moq %>
                                         </div>
                                         <button class="btn btn-primary add-to-cart-btn-card" data-product-id="<%= product._id %>"

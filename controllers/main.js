@@ -6,7 +6,12 @@ const productModel = require("../models/product");
 module.exports.renderLandingPage = async (req, res) => {
     try {
         const category = await generalDataModel.find({}, { subcategories: 0 });
-        res.render("index.ejs", { category });
+
+        const recentProducts = await productModel.find({}, { productName: 1, price: 1, moq: 1, mainImage: 1 })
+            .sort({ createdAt: -1 })
+            .limit(12);
+
+        res.render("index.ejs", { category, recentProducts });
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }

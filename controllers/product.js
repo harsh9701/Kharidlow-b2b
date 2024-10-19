@@ -69,7 +69,7 @@ module.exports.renderProductPage = async (req, res) => {
         const suggestedProducts = await productModel.aggregate([
             { $match: { subCategory: productDetails.subCategory } },
             { $sample: { size: 12 } },
-            { $project: { productName: 1, subCategory: 1, price: 1, description: 1, moq: 1, mainImage: 1, discount: 1 } }
+            { $project: { productName: 1, price: 1, moq: 1, mainImage: 1 } }
         ]);
         res.render("product/product.ejs", { productDetails, suggestedProducts });
     } catch (error) {
@@ -331,6 +331,16 @@ module.exports.deleteProduct = async (req, res) => {
 
         if (!product) {
             return res.status(404).json({ success: false, message: "Product not found." });
+        }
+
+        const cartWithProduct = await cartModel.find({ 'items.productId': productId });
+
+        if (cartWithProduct.length > 0) {
+            // Product is in someone's cart, remove it from all carts
+            await cartModel.updateMany(
+                { 'items.productId': productId },
+                { $pull: { items: { productId: productId } } }
+            );
         }
 
         // Delete product images

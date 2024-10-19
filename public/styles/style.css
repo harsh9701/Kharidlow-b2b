@@ -28,16 +28,18 @@ body {
     object-fit: fill;
 }
 
-.category-scroll {
+/* .category-scroll {
     padding: 10px;
-}
+} */
 
 .category-card-main {
     padding: 5px;
-    justify-content: center;
     display: flex;
-    overflow-x: auto;
+    justify-content: center;
+    overflow-x: scroll;
     scroll-behavior: smooth;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
     gap: 20px;
 }
 
@@ -48,8 +50,8 @@ body {
 }
 
 .card-img-top {
-    width: 220px;
-    height: 220px;
+    width: 200px;
+    height: 200px;
     border-radius: 50%;
     border: 1.5px solid #6868686a;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
@@ -69,6 +71,47 @@ body {
     color: #000;
     padding: 5px;
     font-size: 1.4rem;
+}
+
+.recent-products-container {
+    overflow-x: hidden;
+    white-space: nowrap;
+    padding-bottom: 15px;
+    /* scrollbar-width: none; */
+}
+
+.recent-products-container .row {
+    display: flex;
+}
+
+.recent-card-img {
+    border-radius: 10px 10px 0 0;
+    width: 100%;
+    height: 200px;
+}
+
+.recent-card-title {
+    font-size: 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /* if text long then ... append after text */
+}
+
+.recent-product-card {
+    border-radius: 10px 10px 5px 5px;
+}
+
+.add-to-cart-btn-card {
+    width: 100%;
+    padding: 2px 15px 2px 15px;
+    background-color: #6241e6;
+    font-size: 0.95rem;
+}
+
+.card-body p {
+    margin: 5px 0;
+    font-size: 0.9rem;
 }
 
 @media only screen and (max-width: 1249px) {
@@ -103,6 +146,21 @@ body {
         width: 120px;
         height: 120px;
     }
+
+    .recent-card-img {
+        width: 100%;
+        height: 140px;
+    }
+
+    .card-body p {
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 375px) {
+    .price {
+        display: none;
+    }
 }
 
 @media (max-width: 349px) {
@@ -113,5 +171,9 @@ body {
     .card-img-top {
         width: 100px;
         height: 100px;
+    }
+
+    .add-to-cart-btn-card {
+        font-size: 0.7rem;
     }
 }

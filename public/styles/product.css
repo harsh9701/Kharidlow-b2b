@@ -89,7 +89,7 @@
     width: 100%;
     padding: 2px 15px 2px 15px;
     background-color: #6241e6;
-    font-size: 0.95rem;   
+    font-size: 0.95rem;
 }
 
 .add-to-cart-btn:hover,
@@ -219,6 +219,18 @@
 @media (max-width: 411px) {
     .product-img {
         height: 400px;
+    }
+}
+
+@media (max-width: 375px) {
+    .price {
+        display: none;
+    }
+}
+
+@media (max-width: 349px) {
+    .add-to-cart-btn-card {
+        font-size: 0.7rem;
     }
 }
 
