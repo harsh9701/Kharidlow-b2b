@@ -1,15 +1,11 @@
+const mongoose = require("mongoose");
 const cartModel = require("../models/cart");
 const generalDataModel = require("../models/generaldata");
+const productModel = require("../models/product");
 
 module.exports.renderLandingPage = async (req, res) => {
     try {
-        const category = await generalDataModel.aggregate([
-            {
-                $group: {
-                    _id: "$name"
-                }
-            }
-        ]);
+        const category = await generalDataModel.find({}, { subcategories: 0 });
         res.render("index.ejs", { category });
     } catch (error) {
         return res.status(500).json({ message: error.message });
@@ -31,7 +27,43 @@ module.exports.cartCount = async (req, res) => {
     }
 };
 
-module.exports.renderCategoriesPage = async (req, res) => {
-    const categories = await generalDataModel.find({});
-    res.render("product/categories.ejs", { categories });
+module.exports.renderCategoryWiseListingPage = async (req, res) => {
+    try {
+        const categoryId = req.params.id;
+        const page = parseInt(req.query.page) || 1;
+        const pageSize = parseInt(req.query.pageSize) || 24;
+        const currentPage = parseInt(req.query.page) || 1;
+        const categoryFilter = req.query.category || req.body.category;
+
+        const skip = (page - 1) * pageSize;
+
+        let filter = { category: categoryId };
+        if (categoryFilter) {
+            filter.subCategory = categoryFilter;
+        }
+
+        if (!mongoose.Types.ObjectId.isValid(categoryId)) {
+            return res.status(400).render("error.ejs", { message: "Invalid category ID" });
+        }
+
+        const isCategoryExist = await generalDataModel.findById(categoryId);
+
+        if (!isCategoryExist) {
+            return res.status(400).render("error.ejs", { message: "Invalid category ID" });
+        }
+
+        const products = await productModel.find(filter)
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(pageSize)
+            .select('productName price moq mainImage');
+
+        const totalProducts = await productModel.countDocuments(filter);
+        const totalPages = Math.ceil(totalProducts / pageSize);
+        const categories = isCategoryExist;
+
+        res.render("product/category-wise-listing.ejs", { products, totalProducts, currentPage, totalPages, categories, selectedCategory: categoryFilter || '' });
+    } catch (error) {
+        return res.status(500).send(error.message);
+    }
 };

@@ -52,29 +52,19 @@
         </div>
 
         <!-- Shop by Category -->
-        <div class="category-scroll">
-            <div class="row flex-nowrap">
-                <div class="category-card">
-                    <img src="https://via.placeholder.com/150" class="card-img-top" alt="Category 1">
-                    <h5 class="card-title">Top Offers</h5>
-                </div>
-                <div class="category-card">
-                    <img src="https://via.placeholder.com/150" class="card-img-top" alt="Category 2">
-                    <h5 class="card-title">Mobiles & Tablets</h5>
-                </div>
-                <div class="category-card">
-                    <img src="https://via.placeholder.com/150" class="card-img-top" alt="Category 3">
-                    <h5 class="card-title">TVs & Appliances</h5>
-                </div>
-                <div class="category-card">
-                    <img src="https://via.placeholder.com/150" class="card-img-top" alt="Category 4">
-                    <h5 class="card-title">Electronics</h5>
-                </div>
-                <div class="category-card">
-                    <img src="https://via.placeholder.com/150" class="card-img-top" alt="Category 5">
-                    <h5 class="card-title">Fashion</h5>
-                </div>
-                <!-- Add more categories as needed -->
+        <div class="category-scroll text-center">
+            <h2 class="my-2">Shop By Category</h2>
+            <div class="category-card-main">
+                <% if(category.length > 0){ %>
+                <% category.forEach((item) => { %>
+                    <a href="/category/<%= item._id %>" class="category-text">
+                        <div class="category-card">
+                            <img src="assets/<%= item.img %>" class="card-img-top" alt="<%= item.img %>">
+                            <h5 class="card-title"><%= item.name %></h5>
+                        </div>
+                    </a>
+                <% }) %>
+                <% } %>
             </div>
         </div>
 
@@ -84,7 +74,7 @@
             <div class="row">
                 <div class="col-md-3 mb-4">
                     <div class="card product-card">
-                        <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="Product 1">
+                        <img src="https://via.placeholder.com/300x200" class="" alt="Product 1">
                         <div class="card-body">
                             <h5 class="card-title">Product 1</h5>
                             <p class="card-text">Price: $100</p>
@@ -94,7 +84,7 @@
                 </div>
                 <div class="col-md-3 mb-4">
                     <div class="card product-card">
-                        <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="Product 2">
+                        <img src="https://via.placeholder.com/300x200" class="" alt="Product 2">
                         <div class="card-body">
                             <h5 class="card-title">Product 2</h5>
                             <p class="card-text">Price: $150</p>
@@ -104,7 +94,7 @@
                 </div>
                 <div class="col-md-3 mb-4">
                     <div class="card product-card">
-                        <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="Product 3">
+                        <img src="https://via.placeholder.com/300x200" class="" alt="Product 3">
                         <div class="card-body">
                             <h5 class="card-title">Product 3</h5>
                             <p class="card-text">Price: $200</p>
@@ -114,7 +104,7 @@
                 </div>
                 <div class="col-md-3 mb-4">
                     <div class="card product-card">
-                        <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="Product 4">
+                        <img src="https://via.placeholder.com/300x200" class="" alt="Product 4">
                         <div class="card-body">
                             <h5 class="card-title">Product 4</h5>
                             <p class="card-text">Price: $250</p>
@@ -139,14 +129,14 @@
                     </div>
                     <div class="col-md-4">
                         <div class="service-box p-4">
-                            <h3>Wishlist & Cart</h3>
-                            <p>Add products to your wishlist and cart for easy future purchases.</p>
+                            <h3>Free Shipping</h3>
+                            <p>Enjoy free shipping on all orders, ensuring a seamless and cost-effective shopping experience.</p>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="service-box p-4">
-                            <h3>Order Management</h3>
-                            <p>Track your recent orders and manage cancellations efficiently.</p>
+                            <h3>Pan India Delivery</h3>
+                            <p>We offer reliable delivery across India, no matter where you are located.</p>
                         </div>
                     </div>
                 </div>

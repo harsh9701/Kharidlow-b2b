@@ -87,9 +87,9 @@
 
 .add-to-cart-btn-card {
     width: 100%;
-    padding: 4px 15px 4px 15px;
+    padding: 2px 15px 2px 15px;
     background-color: #6241e6;
-    font-size: 1rem;   
+    font-size: 0.95rem;   
 }
 
 .add-to-cart-btn:hover,
@@ -145,16 +145,16 @@
 .suggested-products-container {
     overflow-x: auto;
     white-space: nowrap;
-    scrollbar-width: none;
+    /* scrollbar-width: none; */
 }
 
 .suggested-products-container .row {
     display: flex;
 }
 
-.suggested-products-container::-webkit-scrollbar {
+/* .suggested-products-container::-webkit-scrollbar {
     display: none;
-}
+} */
 
 .card {
     display: inline-block;
@@ -163,10 +163,10 @@
 }
 
 .card-title {
-    font-size: 1rem; /* Adjust font size as needed */
-    white-space: nowrap; /* Prevent the text from wrapping */
-    overflow: hidden; /* Hide overflow text */
-    text-overflow: ellipsis; /* Add ellipsis (...) to the end of the text */
+    font-size: 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .card-img-container {
@@ -187,7 +187,8 @@
 }
 
 .card-body p {
-    margin: 5px 0; /* Adjust margin if needed */
+    margin: 5px 0;
+    font-size: 0.9rem;
 }
 
 /* Responsive adjustments */

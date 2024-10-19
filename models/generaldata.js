@@ -12,6 +12,9 @@ const categorySchema = new mongoose.Schema({
 		type: String,
 		required: true
 	},
+	img: {
+		type: String,
+	},
 	subcategories: [subCategorySchema]  // Array of sub-categories
 });
 

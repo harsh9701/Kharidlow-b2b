@@ -15,7 +15,7 @@ body {
 
 .filter-sidebar {
     background-color: #f0f3f1;
-    padding: 20px;
+    padding: 12px;
     border: 1px solid #ddd;
     border-radius: 12px;
 }
@@ -42,6 +42,14 @@ body {
     border-radius: 20px;
     background-color: #07081b !important;
     color: #fff !important;
+}
+
+.filter-btn {
+    background-color: #6241e6;
+}
+
+.filter-btn:hover {
+    background-color: #735eca;
 }
 
 .add-to-cart-btn:hover {
@@ -77,6 +85,11 @@ body {
     .filter-sidebar-smallscreen {
         display: block;
     }
+
+    .new-arrival {
+        margin-top: 0.5rem;
+        margin-bottom: -0.3rem;
+    }
 }
 
 @media only screen and (max-width: 435px) {
@@ -98,5 +111,15 @@ body {
 
     .page-link {
         font-size: 0.6rem !important;
+    }
+}
+
+@media only screen and (max-width: 379px) {
+    .filter-content h5 {
+        font-size: 1rem;
+    }
+
+    .filter-content h6 {
+        font-size: 0.8rem;
     }
 }

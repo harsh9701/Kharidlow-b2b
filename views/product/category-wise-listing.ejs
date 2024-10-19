@@ -27,17 +27,17 @@
                 <aside class="col-lg-3 col-md-4">
                     <div class="filter-sidebar">
                         <div class="filter-sidebar-bigscreen">
-                            <% if(categories && categories.length> 0) { %>
+                            <% if(categories && categories.subcategories.length> 0) { %>
                                 <h4>Categories</h4>
                                 <ul class="list-unstyled">
-                                    <li><a href="/product"><i class="fa-solid fa-location-arrow"></i> All Products</a>
+                                    <li><a href="/category/<%= categories._id %>"><i class="fa-solid fa-location-arrow"></i> All <%= categories.name %> items</a>
                                     </li>
                                 </ul>
-                                <% categories.forEach((category)=> { %>
+                                <% categories.subcategories.forEach((category)=> { %>
                                     <ul class="list-unstyled">
-                                        <li><a href="/product?category=<%= category.subCategory %>"><i
+                                        <li><a href="/category/<%= categories._id %>?category=<%= category.name %>"><i
                                                     class="fa-solid fa-location-arrow"></i>
-                                                <%= category.subCategory %>
+                                                <%= category.name %>
                                             </a></li>
                                     </ul>
                                     <% }) %>
@@ -47,15 +47,15 @@
 
                             <div class="d-flex justify-content-between filter-content">
                                 <h5>Filter by Category</h5>
-                                <h6>Selected: <span id="selectedcategory">All Product</span></h6>
+                                <h6>Selected: <span id="selectedcategory">All <%= categories.name %> items</span></h6>
                             </div>
-                            <form action="/product">
+                            <form action="/category/<%= categories._id %>">
                                 <select class="form-select w-100 my-2" name="category">
-                                    <option value="" selected>All Product</option>
-                                    <% if(categories && categories.length> 0) { %>
-                                        <% categories.forEach((category)=> { %>
-                                            <option value="<%= category.subCategory %>">
-                                                <%= category.subCategory %>
+                                    <option value="" selected>All <%= categories.name %> items</option>
+                                    <% if(categories && categories.subcategories.length> 0) { %>
+                                        <% categories.subcategories.forEach((category)=> { %>
+                                            <option value="<%= category.name %>">
+                                                <%= category.name %>
                                             </option>
                                             <% }) %>
                                                 <% } %>
@@ -69,7 +69,7 @@
                 <!-- Product Listing Grid -->
                 <div class="col-lg-9 col-md-8">
                     <div class="d-flex justify-content-center align-items-center mb-3">
-                        <h2 class="new-arrival">New Arrivals</h2>
+                        <h2 class="new-arrival"><%= categories.name %> Items</h2>
                         <!-- <select class="form-select w-auto">
                             <option>Default Sorting</option>
                             <option>Price: Low to High</option>
@@ -116,7 +116,7 @@
                             <!-- Previous Button -->
                             <li class="page-item <%= (currentPage === 1) ? 'disabled' : '' %>">
                                 <a class="page-link"
-                                    href="/product?page=<%= currentPage - 1 %>&pageSize=24&category=<%= selectedCategory %>">Previous</a>
+                                    href="/category/<%= categories._id %>?page=<%= currentPage - 1 %>&pageSize=24&category=<%= selectedCategory %>">Previous</a>
                             </li>
 
                             <% const totalPages=Math.ceil(totalProducts / 24); const maxPagesToShow=2; let
@@ -127,7 +127,7 @@
                                 (let i=startPage; i <=endPage; i++) { %>
                                 <li class="page-item <%= (i === currentPage) ? 'active' : '' %>">
                                     <a class="page-link"
-                                        href="/product?page=<%= i %>&pageSize=24&category=<%= selectedCategory %>">
+                                        href="/category/<%= categories._id %>?page=<%= i %>&pageSize=24&category=<%= selectedCategory %>">
                                         <%= i %>
                                     </a>
                                 </li>
@@ -141,7 +141,7 @@
                                     <!-- Next Button -->
                                     <li class="page-item <%= (currentPage === totalPages) ? 'disabled' : '' %>">
                                         <a class="page-link"
-                                            href="/product?page=<%= currentPage + 1 %>&pageSize=24&category=<%= selectedCategory %>">Next</a>
+                                            href="/category/<%= categories._id %>?page=<%= currentPage + 1 %>&pageSize=24&category=<%= selectedCategory %>">Next</a>
                                     </li>
                         </ul>
                     </nav>
@@ -218,7 +218,7 @@
                         });
                     } else {
                         // Default to "All Product"
-                        $('#selectedcategory').text('All Product');
+                        $('#selectedcategory').text('All <%= categories.name %> items');
                         $('select[name="category"] option[value=""]').prop('selected', true);
                     }
                 });
