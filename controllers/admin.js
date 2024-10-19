@@ -71,7 +71,7 @@ module.exports.renderViewOrderPage = async (req, res) => {
         const orderDetail = await orderModel.findById(orderId)
             .populate({
                 path: 'userId',
-                select: 'fullName'
+                select: 'fullName contactNo'
             })
             .populate({
                 path: 'orderItems.productId',

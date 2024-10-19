@@ -209,7 +209,7 @@ const sendOrderSummaryMail = async (clientMail, fullName, orderNumber, orderItem
                         <h1>Order Summary</h1>
                         <h2>Order No. ${orderNumber}</h2>
                         <p>Hi ${fullName},</p>
-                        <p>Thank you for your order! Below is a summary of the items you have purchased from <strong>Kharidlow</strong>.</p>
+                        <p>Thank you for your order! Below is a summary of the items you have ordered from <strong>Kharidlow</strong>.</p>
                         
                         <table>
                             <thead>

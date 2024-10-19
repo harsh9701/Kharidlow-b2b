@@ -21,7 +21,9 @@
                 </div>
                 <div class="order-date">Order Date: <%= order.createdAt.toDateString() %>
                 </div>
-                <div class="fullName">Customer <%= order.userId.fullName %>
+                <div class="fullName">Customer: <%= order.userId.fullName %>
+                </div>
+                <div class="fullName">Contact: <%= order.userId.contactNo %>
                 </div>
                 <div class="fullName">Status:
                     <% if(order.status=="delivered" ) { %>

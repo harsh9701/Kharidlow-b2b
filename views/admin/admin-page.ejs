@@ -23,7 +23,7 @@
                             <div class="card">
                                 <h5>Total Sales</h5>
                                 <p>
-                                    <%= (data && (data.totalSales).length > 0) ? data.totalSales[0].totalSales : 0 %>
+                                    <%= (data && (data.totalSales).length> 0) ? data.totalSales[0].totalSales : 0 %>
                                 </p>
                                 <i class="fa-solid fa-chart-line"></i>
                             </div>
@@ -101,7 +101,12 @@
                                                         <td>
                                                             <%= order.grandTotal %>
                                                         </td>
-                                                        <td><button class="btn">View</button></td>
+                                                        <td class="text-center"><a
+                                                                href="/admin/manage/orders/<%= order._id %>"
+                                                                class="btn btn-sm btn-info" data-bs-toggle="tooltip"
+                                                                data-bs-placement="top" title="View">
+                                                                <i class="fa-solid fa-eye"></i>
+                                                            </a></td>
                                                     </tr>
                                                     <% } %>
                                                         <% }); %>
@@ -158,7 +163,15 @@
                                                         <td>
                                                             <%= customer.orderCount %>
                                                         </td>
-                                                        <td><button class="btn">View</button></td>
+                                                        <td class="text-center">
+                                                            <div class="btn-group" role="group">
+                                                                <a href="/admin/manage/customers/<%= customer._id %>"
+                                                                    class="btn btn-sm btn-info" data-bs-toggle="tooltip"
+                                                                    data-bs-placement="top" title="View">
+                                                                    <i class="fa-solid fa-eye"></i>
+                                                                </a>
+                                                            </div>
+                                                        </td>
                                                     </tr>
                                                     <% } %>
                                                         <% }); %>
@@ -219,7 +232,11 @@
                                                         <td>
                                                             <%= item.stock %>
                                                         </td>
-                                                        <td><button class="btn">Edit</button></td>
+                                                        <td class="text-center"><a href="/product/<%= item._id %>"
+                                                                class="btn btn-sm btn-info" data-bs-toggle="tooltip"
+                                                                data-bs-placement="top" title="View on browser">
+                                                                <i class="fa-solid fa-eye"></i>
+                                                            </a></td>
                                                     </tr>
                                                     <% } %>
                                                         <% }); %>
