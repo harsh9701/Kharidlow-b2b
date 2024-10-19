@@ -105,6 +105,10 @@ body {
     transform: translateY(10px); /* Dropdown initially moves from bottom */
 }
 
+.cart-for-small-screen {
+    display: none;
+}
+
 /* ------Brand Logo designing------- */
 
 .brand-name {
@@ -195,7 +199,8 @@ body {
 }
 
 @media (max-width: 991px) {
-    .brand-name {
+    .brand-name,
+    .cart-for-small-screen {
         display: block;
     }
 
