@@ -50,8 +50,8 @@ body {
 }
 
 .card-img-top {
-    width: 200px;
-    height: 200px;
+    width: 180px;
+    height: 180px;
     border-radius: 50%;
     border: 1.5px solid #6868686a;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
@@ -143,7 +143,6 @@ body {
     justify-content: center;
 }
 
-/* Responsive map container */
 .map-container {
     position: relative;
     width: 100%;
