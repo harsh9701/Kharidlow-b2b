@@ -1,9 +1,13 @@
 const nodemailer = require('nodemailer');
-const mailData = JSON.parse(process.env.NODE_MAILER);
+const mailData = {
+    email: process.env.NODE_MAILER_EMAIL,
+    pass: process.env.NODE_MAILER_PASS
+}
 
 const sendWelcomeMail = async (clientMail, fullName) => {
     const transport = nodemailer.createTransport({
-        service: 'gmail',
+        host: 'smtpout.secureserver.net',
+        port: 465,
         auth: {
             user: mailData.email,
             pass: mailData.pass
@@ -54,7 +58,8 @@ const sendWelcomeMail = async (clientMail, fullName) => {
 
 const sendForgotPasswordMail = async (clientMail, fullName, resetToken) => {
     const transport = nodemailer.createTransport({
-        service: 'gmail',
+        host: 'smtpout.secureserver.net',
+        port: 465,
         auth: {
             user: mailData.email,
             pass: mailData.pass
@@ -110,7 +115,8 @@ const sendForgotPasswordMail = async (clientMail, fullName, resetToken) => {
 
 const sendPasswordResetSuccessMail = async (clientMail, fullName) => {
     const transport = nodemailer.createTransport({
-        service: 'gmail',
+        host: 'smtpout.secureserver.net',
+        port: 465,
         auth: {
             user: mailData.email,
             pass: mailData.pass
@@ -163,7 +169,8 @@ const sendPasswordResetSuccessMail = async (clientMail, fullName) => {
 const sendOrderSummaryMail = async (clientMail, fullName, orderNumber, orderItems, grandTotal) => {
     try {
         let transporter = nodemailer.createTransport({
-            service: 'gmail',
+            host: 'smtpout.secureserver.net',
+            port: 465,
             auth: {
                 user: mailData.email,
                 pass: mailData.pass

@@ -151,7 +151,7 @@ module.exports.forgetPassword = async (req, res) => {
     try {
         const user = await userModel.findOne({ email });
         if (!user) {
-            return res.status(404).json({ message: 'User not found' });
+            return res.status(404).json({ message: 'User not found with this email' });
         }
 
         const resetToken = uuidv4();

@@ -81,7 +81,7 @@
                                                             <%= order.orderNumber %>
                                                         </td>
                                                         <td>
-                                                            <%= order.userId.fullName %>
+                                                            <%= order.userId.fullName.charAt(0).toUpperCase() + searchTerm.slice(1).toLowerCase(); %>
                                                         </td>
                                                         <td>
                                                             <% if(order.status=="pending" ) { %>
@@ -152,7 +152,7 @@
                                                             <%= index+1 %>
                                                         </td>
                                                         <td>
-                                                            <%= customer.fullName %>
+                                                            <%= customer.fullName.charAt(0).toUpperCase() + searchTerm.slice(1).toLowerCase(); %>
                                                         </td>
                                                         <td>
                                                             <%= customer.email %>
