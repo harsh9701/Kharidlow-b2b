@@ -21,7 +21,7 @@
                 </div>
                 <div class="order-date">Order Date: <%= order.createdAt.toDateString() %>
                 </div>
-                <div class="fullName">Customer: <%= order.userId.fullName.charAt(0).toUpperCase() + searchTerm.slice(1).toLowerCase(); %>
+                <div class="fullName">Customer: <%= order.userId.fullName.charAt(0).toUpperCase() + fullName.slice(1).toLowerCase(); %>
                 </div>
                 <div class="fullName">Contact: <%= order.userId.contactNo %>
                 </div>
