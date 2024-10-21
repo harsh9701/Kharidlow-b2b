@@ -102,6 +102,11 @@ footer div {
     margin: auto;
 }
 
+h6 > a {
+    text-decoration: none;
+    color: inherit;
+}
+
 @media only screen and (max-width: 729px) {
     .contact-content p {
         font-size: 14px !important;

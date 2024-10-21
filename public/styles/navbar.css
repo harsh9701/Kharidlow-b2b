@@ -57,7 +57,9 @@ body {
     border: none;
 }
 
-.brand-name {
+.brand-name,
+.cart-for-small-screen,
+.home {
     display: none;
 }
 
@@ -103,10 +105,6 @@ body {
     opacity: 0;
     visibility: hidden;
     transform: translateY(10px); /* Dropdown initially moves from bottom */
-}
-
-.cart-for-small-screen {
-    display: none;
 }
 
 /* ------Brand Logo designing------- */
@@ -200,7 +198,8 @@ body {
 
 @media (max-width: 991px) {
     .brand-name,
-    .cart-for-small-screen {
+    .cart-for-small-screen,
+    .home {
         display: block;
     }
 
