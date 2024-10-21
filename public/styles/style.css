@@ -28,9 +28,9 @@ body {
     object-fit: fill;
 }
 
-/* .category-scroll {
+.category-scroll {
     padding: 10px;
-} */
+}
 
 .category-card-main {
     padding: 5px;
@@ -164,6 +164,12 @@ body {
 @media only screen and (max-width: 1249px) {
     .category-card-main {
         justify-content: flex-start;
+    }
+}
+
+@media only screen and (max-width: 991px) {
+    .category-scroll {
+        padding: 2px;
     }
 }
 

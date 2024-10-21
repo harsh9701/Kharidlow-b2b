@@ -70,26 +70,37 @@ body {
 
 /* Dropdown menu styling */
 .navbar .dropdown-menu {
-    background-color: #07081b; /* Match the navbar background */
-    border: none; /* Remove borders */
-    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1); /* Optional shadow for better visibility */
-    margin-top: 0; /* Align the dropdown with the category */
-    border-radius: 10px; /* Rounded corners for dropdown */
+    background-color: #07081b;
+    /* Match the navbar background */
+    border: none;
+    /* Remove borders */
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+    /* Optional shadow for better visibility */
+    margin-top: 0;
+    /* Align the dropdown with the category */
+    border-radius: 10px;
+    /* Rounded corners for dropdown */
     transition: all 0.3s ease-in-out;
 }
 
 /* Dropdown menu items */
 .navbar .dropdown-item {
-    color: #ffffffdd; /* Text color */
-    padding: 10px 20px; /* Spacing for the items */
+    color: #ffffffdd;
+    /* Text color */
+    padding: 10px 20px;
+    /* Spacing for the items */
     transition: background-color 0.2s ease, color 0.2s ease;
-    font-size: 1.1rem; /* Adjust font size */
+    font-size: 1.1rem;
+    /* Adjust font size */
 }
 
 .navbar .dropdown-item:hover {
-    background-color: rgb(98, 65, 230); /* Change background color on hover */
-    color: #fff; /* Change text color on hover */
-    border-radius: 15px; /* Rounded hover effect */
+    background-color: rgb(98, 65, 230);
+    /* Change background color on hover */
+    color: #fff;
+    /* Change text color on hover */
+    border-radius: 15px;
+    /* Rounded hover effect */
 }
 
 /* Show the dropdown on hover */
@@ -104,7 +115,8 @@ body {
     display: none;
     opacity: 0;
     visibility: hidden;
-    transform: translateY(10px); /* Dropdown initially moves from bottom */
+    transform: translateY(10px);
+    /* Dropdown initially moves from bottom */
 }
 
 /* ------Brand Logo designing------- */
@@ -166,6 +178,8 @@ body {
     }
 }
 
+
+/* -----------Media Query---------- */
 @media only screen and (max-width: 1325px) {
     .nav-link {
         font-size: 1rem;
@@ -197,6 +211,7 @@ body {
 }
 
 @media (max-width: 991px) {
+
     .brand-name,
     .cart-for-small-screen,
     .home {
@@ -242,8 +257,10 @@ body {
     }
 
     .dropdown-menu {
-        position: static; /* Keep the dropdown in flow on mobile */
-        width: 100%; /* Full width dropdown on mobile */
+        position: static;
+        /* Keep the dropdown in flow on mobile */
+        width: 100%;
+        /* Full width dropdown on mobile */
         text-align: center;
     }
 }
@@ -264,6 +281,11 @@ body {
     .cart-icon a i {
         font-size: 1.5rem !important;
         margin-right: -5px;
+    }
+
+    .dropdown-item {
+        font-size: 1.05rem !important;
+        padding: 5px 10px !important;
     }
 }
 
