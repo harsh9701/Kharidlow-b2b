@@ -72,3 +72,37 @@ module.exports.renderCategoryWiseListingPage = async (req, res) => {
         return res.status(500).send(error.message);
     }
 };
+
+module.exports.renderSearchResultPage = async (req, res) => {
+    const page = parseInt(req.query.page) || 1;
+    const pageSize = parseInt(req.query.pageSize) || 24;
+    const currentPage = parseInt(req.query.page) || 1;
+    const searchTerm = req.query.searchTerm;
+
+    const skip = (page - 1) * pageSize;
+
+    try {
+        const searchResult = await productModel.find({
+            $or: [
+                { productName: { $regex: searchTerm, $options: 'i' } },
+                { description: { $regex: searchTerm, $options: 'i' } }
+            ]
+        }, { productName: 1, price: 1, moq: 1, mainImage: 1 })
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(pageSize);
+
+        const totalProducts = await productModel.countDocuments({
+            $or: [
+                { productName: { $regex: searchTerm, $options: 'i' } },
+                { description: { $regex: searchTerm, $options: 'i' } }
+            ]
+        });
+        const totalPages = Math.ceil(totalProducts / pageSize);
+
+        res.status(200).render("product/searchResult.ejs", { searchResult, searchTerm, totalProducts, currentPage, totalPages });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send(error.message);
+    }
+};

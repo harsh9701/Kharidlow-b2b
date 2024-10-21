@@ -104,7 +104,7 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="settings-tab" data-toggle="tab" href="#settings" role="tab"
-                        aria-controls="settings" aria-selected="false">Account Settings</a>
+                        aria-controls="settings" aria-selected="false">User Profile</a>
                 </li>
             </ul>
 
@@ -165,18 +165,18 @@
                                             </tr>
                                             <% }; %>
                                                 <% }); %>
-                                                <% if(count == 4) { %>
-                                                    <tr>
-                                                        <td colspan="5" class="text-center">
-                                                            <a href="/user/orders">See More Orders</a>
-                                                        </td>
-                                                    </tr>
-                                                <% } %>
-                                                    <% } else { %>
+                                                    <% if(count==4) { %>
                                                         <tr>
-                                                            <td colspan="5" class="text-center">No Orders</td>
+                                                            <td colspan="5" class="text-center">
+                                                                <a href="/user/orders">See More Orders</a>
+                                                            </td>
                                                         </tr>
                                                         <% } %>
+                                                            <% } else { %>
+                                                                <tr>
+                                                                    <td colspan="5" class="text-center">No Orders</td>
+                                                                </tr>
+                                                                <% } %>
                             </tbody>
                         </table>
                     </div>
@@ -283,8 +283,12 @@
 
                 <!-- Account Settings Tab -->
                 <div class="tab-pane fade" id="settings" role="tabpanel" aria-labelledby="settings-tab">
-                    <h3 class="section-title">Account Settings</h3>
-                    <p>Manage your account settings such as notification preferences, privacy settings, etc.</p>
+                    <h3 class="section-title">User Profile</h3>
+                    <p>
+                        <strong><i class="fa-regular fa-user"></i> Your Name:</strong> <%= user.fullName %><br>
+                            <strong><i class="fa-regular fa-envelope"></i> Email:</strong> <%= user.email %><br>
+                            <strong><i class="fa-solid fa-phone"></i> Your Contact:</strong> <%= user.contactNo %>
+                    </p>
                 </div>
 
             </div>

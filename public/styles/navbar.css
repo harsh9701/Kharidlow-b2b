@@ -225,7 +225,7 @@ body {
     }
 
     .nav-link {
-        font-size: 1.15rem;
+        font-size: 1.12rem;
         font-weight: 600 !important;
         border-bottom: 1px solid #bbc3cf73;
         padding: 3px 0;
@@ -266,8 +266,23 @@ body {
 }
 
 @media (max-width: 649px) {
-    .search {
+    /* .search {
         display: none !important;
+    } */
+
+    .search {
+        width: 80% !important;
+        height: 30px;
+    }
+
+    .search-input {
+        font-size: 0.8rem !important;
+    }
+
+    .search-btn {
+        font-size: 0.8rem !important;
+        display: flex;
+        align-items: center;
     }
 
     .navbar-brand img {

@@ -32,6 +32,7 @@ module.exports.userRegister = async (req, res) => {
                         userId: createdUser._id,
                         fullName: createdUser.fullName,
                         email: createdUser.email,
+                        contactNo: createdUser.contactNo,
                         role: createdUser.role,
                         isAuthenticated: true
                     };
@@ -77,6 +78,7 @@ module.exports.userLogin = async (req, res) => {
                         userId: userExists._id,
                         fullName: userExists.fullName,
                         email: userExists.email,
+                        contactNo: userExists.contactNo,
                         role: userExists.role,
                         isAuthenticated: true
                     };

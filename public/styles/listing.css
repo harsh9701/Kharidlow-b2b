@@ -122,4 +122,13 @@ body {
     .filter-content h6 {
         font-size: 0.8rem;
     }
+
+    .card-title {
+        font-size: 0.87rem !important;
+    }
+
+    .product-card img {
+        height: 160px;
+        object-fit: cover;
+    }
 }

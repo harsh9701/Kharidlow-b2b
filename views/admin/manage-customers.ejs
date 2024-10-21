@@ -55,7 +55,7 @@
                                                     <%= index+1 %>
                                                 </td>
                                                 <td>
-                                                    <%= customer.fullName %>
+                                                    <%= customer.fullName.charAt(0).toUpperCase() + searchTerm.slice(1).toLowerCase(); %>
                                                 </td>
                                                 <td>
                                                     <%= customer.email %>
