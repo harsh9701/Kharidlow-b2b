@@ -1,6 +1,7 @@
 const orderModel = require("../models/order");
 const userModel = require("../models/user");
 const productModel = require("../models/product");
+const { formatAmount } = require("../utils/helper");
 
 module.exports.renderAdminPage = async (req, res) => {
     try {
@@ -29,7 +30,7 @@ module.exports.renderAdminPage = async (req, res) => {
             customers: lastFiveUser,
             listing: lastFiveProduct,
             deliveredOrder: deliveredOrder,
-            totalSales: totalSales
+            totalSales: formatAmount(Number(totalSales[0].totalSales))
         }
 
         res.render("admin/admin-page.ejs", { data });

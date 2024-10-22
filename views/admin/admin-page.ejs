@@ -7,7 +7,7 @@
     <title>Kharidlow Admin Dashboard</title>
     <link rel="icon" type="image/x-icon" href="/assets/Kharidlow.ico">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="/styles/adminAccount.css"> <!-- Link to external CSS -->
+    <link rel="stylesheet" href="/styles/adminAccount.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
 </head>
 
@@ -22,8 +22,7 @@
                         <div class="grid">
                             <div class="card">
                                 <h5>Total Sales</h5>
-                                <p>
-                                    <%= (data && (data.totalSales).length> 0) ? data.totalSales[0].totalSales : 0 %>
+                                <p>&#8377;<%= (data && (data.totalSales)) ? data.totalSales : 0 %>
                                 </p>
                                 <i class="fa-solid fa-chart-line"></i>
                             </div>
@@ -81,7 +80,8 @@
                                                             <%= order.orderNumber %>
                                                         </td>
                                                         <td>
-                                                            <%= order.userId.fullName.charAt(0).toUpperCase() + order.userId.fullName.slice(1).toLowerCase(); %>
+                                                            <%= order.userId.fullName.charAt(0).toUpperCase() +
+                                                                order.userId.fullName.slice(1).toLowerCase(); %>
                                                         </td>
                                                         <td>
                                                             <% if(order.status=="pending" ) { %>
@@ -98,8 +98,7 @@
                                                                         </span>
                                                                         <% } %>
                                                         </td>
-                                                        <td>
-                                                            <%= order.grandTotal %>
+                                                        <td>&#8377;<%= order.grandTotal %>
                                                         </td>
                                                         <td class="text-center"><a
                                                                 href="/admin/manage/orders/<%= order._id %>"
@@ -152,7 +151,8 @@
                                                             <%= index+1 %>
                                                         </td>
                                                         <td>
-                                                            <%= customer.fullName.charAt(0).toUpperCase() + customer.fullName.slice(1).toLowerCase(); %>
+                                                            <%= customer.fullName.charAt(0).toUpperCase() +
+                                                                customer.fullName.slice(1).toLowerCase(); %>
                                                         </td>
                                                         <td>
                                                             <%= customer.email %>
@@ -223,8 +223,7 @@
                                                         <td>
                                                             <%= item.subCategory %>
                                                         </td>
-                                                        <td>
-                                                            <%= item.price %>
+                                                        <td>&#8377;<%= item.price %>
                                                         </td>
                                                         <td>
                                                             <%= item.moq %>

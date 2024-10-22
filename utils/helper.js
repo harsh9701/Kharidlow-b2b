@@ -19,4 +19,21 @@ const deleteCloudinaryImage = async (imagePath) => {
     }
 };
 
-module.exports = { deleteCloudinaryImage };
+// Helper fucntion to format amounts
+const formatAmount = (amount) => {
+    if (amount >= 10000000) {
+        // For crore (>= 1 crore)
+        return (amount / 10000000).toFixed(2) + 'Cr';
+    } else if (amount >= 100000) {
+        // For lakh (>= 1 lakh but less than 1 crore)
+        return (amount / 100000).toFixed(2) + 'L';
+    } else if (amount >= 1000) {
+        // For thousands (>= 1 thousand but less than 1 lakh)
+        return (amount / 1000).toFixed(2) + 'K';
+    } else {
+        // For small amounts (less than 1 thousand)
+        return amount.toString();
+    }
+}
+
+module.exports = { deleteCloudinaryImage, formatAmount };

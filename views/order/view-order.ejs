@@ -65,7 +65,7 @@
                                     <div>
                                         <span class="badge badge-info text-bg-info my-1">Quantity: <%= item.quantity %>
                                         </span>
-                                        <span class="badge badge-info text-bg-info my-1">Price: &#8377; <%= item.price
+                                        <span class="badge badge-info text-bg-info my-1">Price: &#8377;<%= item.price
                                                 %>
                                         </span>
                                     </div>
@@ -79,7 +79,7 @@
 
             <!-- Total -->
             <div class="order-info text-center">
-                <div class="order-total">Total: &#8377; <%= order.grandTotal %>
+                <div class="order-total">Total: &#8377;<%= order.grandTotal %>
                 </div>
                 <div class="address">Delivery Address: <br>
                     <%= order.shippingAddress.flatNo %>, <%= order.shippingAddress.streetNo %>,

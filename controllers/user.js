@@ -4,7 +4,6 @@ const orderModel = require("../models/order");
 const { v4: uuidv4 } = require("uuid");
 const { sendWelcomeMail, sendForgotPasswordMail, sendPasswordResetSuccessMail } = require("../services/emailService");
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 
 module.exports.userRegister = async (req, res) => {
     try {
@@ -38,16 +37,7 @@ module.exports.userRegister = async (req, res) => {
                     };
                 };
 
-                const token = jwt.sign(
-                    { email: email, userid: createdUser._id },
-                    process.env.JWT_SECRET,
-                );
-
-                if (token && createdUser) {
-                    res.cookie("token", token, {
-                        secure: true,
-                        httpOnly: false,
-                    });
+                if (createdUser) {
                     sendWelcomeMail(createdUser.email, createdUser.fullName);
                     res.status(200).json({ loginStatus: true, message: "success" });
                 } else {
@@ -83,15 +73,7 @@ module.exports.userLogin = async (req, res) => {
                         isAuthenticated: true
                     };
 
-                    const token = jwt.sign(
-                        { email: userExists.email, userid: userExists._id },
-                        process.env.JWT_SECRET,
-                    );
-                    if (token && userExists) {
-                        res.cookie("token", token, {
-                            httpOnly: false,
-                            secure: true,
-                        });
+                    if (userExists) {
                         return res.status(200).json({ message: "Login Successful" });
                     } else {
                         return res.status(500).json({ message: "Failed to login" });
@@ -111,7 +93,6 @@ module.exports.userLogout = (req, res) => {
         if (err) {
             return res.status(500).json({ logoutStatus: false, message: "failed" });
         }
-        res.cookie("token", "");
         res.redirect("user/login");
     });
 };
