@@ -50,8 +50,8 @@ body {
 }
 
 .card-img-top {
-    width: 180px;
-    height: 180px;
+    width: 155px;
+    height: 155px;
     border-radius: 50%;
     border: 1.5px solid #6868686a;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
@@ -135,7 +135,7 @@ body {
     margin: 10px;
     padding: 10px;
     border-radius: 20px;
-    background-color: #f2efefcb;
+    background-color: #cbd0feaa;
 }
 
 .how-it-works-row {
@@ -144,7 +144,7 @@ body {
 }
 
 .how-it-works-row .col-md-3 {
-    background-color: #ebe8e8cb;
+    background-color: #abbdff86;
     margin: 3px;
     padding: 3px;
     border: 0.2px solid #d6d5d5;
