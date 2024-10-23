@@ -28,7 +28,8 @@ body {
     object-fit: fill;
 }
 
-.category-scroll {
+.category-scroll,
+.under99-scroll {
     padding: 10px;
 }
 
@@ -184,6 +185,71 @@ body {
     color: #343a40;
 }
 
+.under99-card-main {
+    padding: 5px;
+    display: flex;
+    justify-content: flex-start;
+    overflow-x: scroll;
+    scroll-behavior: smooth;
+    -ms-overflow-style: none;
+    gap: 20px;
+}
+
+.see-all-products-card {
+    background-color: #abbdff86;
+    border: 1px solid #6241e63c;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    height: 100%;
+}
+
+.see-all-products-card:hover {
+    background-color: #856cea;
+    transform: translateY(-5px);
+}
+
+.see-all-link {
+    text-decoration: none;
+    color: #6241e6;
+    font-weight: bold;
+}
+
+.see-all-text {
+    margin-top: 10px;
+}
+
+.see-all-icon {
+    color: #6241e6;
+}
+
+.see-all-products-card:hover .see-all-text,
+.see-all-products-card:hover .see-all-icon {
+    color: #fff;
+}
+
+
+/* Target the scrollbar */
+::-webkit-scrollbar {
+    width: 5px;
+    height: 8px;
+    background-color: #f1f1f1;
+}
+
+/* Handle of the scrollbar */
+::-webkit-scrollbar-thumb {
+    background-color: #856cea;
+    border-radius: 10px;
+}
+
+/* Hover effect for the scrollbar handle */
+::-webkit-scrollbar-thumb:hover {
+    background-color: #6241e6;
+}
+
+/* Change scrollbar corner when both horizontal and vertical scrollbars appear */
+::-webkit-scrollbar-corner {
+    background-color: #f1f1f1;
+}
+
 @media only screen and (max-width: 1249px) {
     .category-card-main {
         justify-content: flex-start;
@@ -191,10 +257,19 @@ body {
 }
 
 @media only screen and (max-width: 991px) {
-    .category-scroll {
+
+    .category-scroll,
+    .under99-scroll {
         padding: 2px;
     }
 }
+
+@media only screen and (min-width: 991px) {
+    .under99-product-card {
+        width: 280px;
+    }
+}
+
 
 @media (max-width: 768px) {
     .carousel-item img {

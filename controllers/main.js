@@ -11,7 +11,11 @@ module.exports.renderLandingPage = async (req, res) => {
             .sort({ createdAt: -1 })
             .limit(12);
 
-        res.render("index.ejs", { category, recentProducts });
+        const under99Products = await productModel.find({ price: { $lte: 99 } }, { productName: 1, price: 1, moq: 1, mainImage: 1 })
+            .sort({ createdAt: -1 })
+            .limit(36);
+
+        res.render("index.ejs", { category, recentProducts, under99Products });
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
