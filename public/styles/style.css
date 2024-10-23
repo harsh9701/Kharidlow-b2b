@@ -177,6 +177,13 @@ body {
     border: 0;
 }
 
+.title-style {
+    margin-bottom: 20px;
+    font-weight: bold;
+    font-size: 2rem;
+    color: #343a40;
+}
+
 @media only screen and (max-width: 1249px) {
     .category-card-main {
         justify-content: flex-start;

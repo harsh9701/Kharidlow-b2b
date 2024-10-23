@@ -186,6 +186,7 @@
 
                             if (quantity < minQty) {
                                 swal("Oops!", "Quantity cannot be below the minimum order quantity.", "error");
+                                $('#productQty').val(minQty);
                                 return;
                             }
 

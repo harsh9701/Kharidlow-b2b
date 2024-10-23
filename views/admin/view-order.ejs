@@ -21,7 +21,8 @@
                 </div>
                 <div class="order-date">Order Date: <%= order.createdAt.toDateString() %>
                 </div>
-                <div class="fullName">Customer: <%= order.userId.fullName.charAt(0).toUpperCase() + order.userId.fullName.slice(1).toLowerCase(); %>
+                <div class="fullName">Customer: <%= order.userId.fullName.charAt(0).toUpperCase() +
+                        order.userId.fullName.slice(1).toLowerCase(); %>
                 </div>
                 <div class="fullName">Contact: <%= order.userId.contactNo %>
                 </div>
@@ -53,23 +54,25 @@
                         <div class="item-card">
                             <% const imagePath=item.productId && item.productId.mainImage ?
                                 `${item.productId.mainImage}` : '/assets/Image_deleted_logo.png' ; %>
-                                <img src="<%= imagePath %>" alt="<%= item.productName %>"
-                                    class="item-image img-thumbnail" data-bs-toggle="modal" data-bs-target="#imageModal"
-                                    onclick="openImageModal('<%= imagePath %>', '<%= item.productName %>')">
-                                <div class="item-details d-flex flex-column">
-                                    <div>
-                                        <span class="badge badge-product fs-5 my-1">
-                                            <%= item.productName %>
-                                        </span>
-                                    </div>
-                                    <div>
-                                        <span class="badge badge-info text-bg-info my-1">Quantity: <%= item.quantity %>
-                                        </span>
-                                        <span class="badge badge-info text-bg-info my-1">Price: &#8377;<%= item.price
-                                                %>
-                                        </span>
-                                    </div>
-                                </div>
+                                <img src="<%= imagePath %>" alt="<%= item.productName.replace(/'/g, " \\'") %>"
+                                class="item-image img-thumbnail" data-bs-toggle="modal" data-bs-target="#imageModal"
+                                onclick="openImageModal('<%= imagePath.replace(/'/g, "\\'" ) %>', '<%=
+                                        item.productName.replace(/'/g, "\\'" ) %>')">
+                                        <div class="item-details d-flex flex-column">
+                                            <div>
+                                                <span class="badge badge-product fs-5 my-1">
+                                                    <%= item.productName %>
+                                                </span>
+                                            </div>
+                                            <div>
+                                                <span class="badge badge-info text-bg-info my-1">Quantity: <%=
+                                                        item.quantity %>
+                                                </span>
+                                                <span class="badge badge-info text-bg-info my-1">Price: &#8377;<%=
+                                                        item.price %>
+                                                </span>
+                                            </div>
+                                        </div>
                         </div>
                         <% }) %>
                 </div>
@@ -111,10 +114,21 @@
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
             <script>
                 function openImageModal(imageSrc, productName) {
+                    // Update the modal image source and product name
                     document.getElementById('modalImage').src = imageSrc;
                     document.getElementById('imageModalLabel').innerText = productName;
                 }
+
+                // Attach event listeners to all images dynamically
+                document.querySelectorAll('.item-image').forEach(function (image) {
+                    image.addEventListener('click', function () {
+                        const imageSrc = this.getAttribute('src'); // Get the image source from clicked image
+                        const productName = this.getAttribute('alt'); // Get the product name from alt attribute
+                        openImageModal(imageSrc, productName); // Pass the source and name to modal function
+                    });
+                });
             </script>
+
 
 </body>
 

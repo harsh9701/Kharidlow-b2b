@@ -5,9 +5,6 @@ body {
     font-optical-sizing: auto;
     font-weight: 400;
     font-style: normal;
-}
-
-body {
     background-color: #f8f9fa;
 }
 
@@ -71,6 +68,26 @@ body {
 .address-change-text {
     font-size: 1rem;
 }
+
+#loader {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1051 !important;
+    background-color: rgba(255, 255, 255, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#loader .spinner-border {
+    width: 3rem;
+    height: 3rem;
+}
+
 
 @media (max-width: 576px) {
     .table thead {

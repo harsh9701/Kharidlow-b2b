@@ -77,6 +77,17 @@ body {
     display: none;
 }
 
+.new-arrival {
+    margin-top: 0.6rem;
+    font-weight: bold;
+    font-size: 2rem;
+    color: #343a40;
+}
+
+.category-bar {
+    margin-top: 4.38rem;
+}
+
 @media only screen and (max-width: 768px) {
     .filter-sidebar-bigscreen {
         display: none;

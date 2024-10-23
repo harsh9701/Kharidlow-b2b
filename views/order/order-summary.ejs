@@ -45,8 +45,8 @@
                                     <td data-label="ProductId" class="product-id" style="display: none;">
                                         <%= item.productId %>
                                     </td>
-                                    <td data-label="Product"><img src="<%= item.mainImage %>"
-                                            alt="Product Image" width="50" height="50"></td>
+                                    <td data-label="Product"><img src="<%= item.mainImage %>" alt="Product Image"
+                                            width="50" height="50"></td>
                                     <td data-label="Product Name">
                                         <%= item.productName %>
                                     </td>
@@ -266,9 +266,22 @@
                         }
                     });
 
+                    // Show loader function
+                    function showLoader() {
+                        $('#loader').show();
+                    }
+
+                    // Hide loader function
+                    function hideLoader() {
+                        $('#loader').hide();
+                    }
+
                     // Handle order submission
                     $('#submit-order-btn').on('click', function (event) {
                         event.preventDefault(); // Prevent default form submission
+
+                        // Show the loader when the order is being processed
+                        showLoader();
 
                         // Gather order items data (same as your existing code)
                         const orderItems = [];
@@ -323,6 +336,7 @@
                             contentType: 'application/json',
                             data: JSON.stringify(orderData),
                             success: function (response) {
+                                hideLoader();
                                 swal("🎊 Hooray!", "Your order was completed successfully! Thank you for trusting Kharidlow. Enjoy your shopping! 🛍️", "success", {
                                     html: true
                                 }).then(() => {
@@ -330,6 +344,7 @@
                                 });
                             },
                             error: function (xhr, status, error) {
+                                hideLoader(); // Hide the loader on error
                                 console.error('Error placing order:', error);
                                 const response = JSON.parse(xhr.responseText);
                                 const errorMessage = response.message || "There was an error placing your order. Please try again.";
@@ -368,13 +383,21 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button id="submit-order-btn" type="button" class="btn btn-success" disabled>Submit
+                            <button id="submit-order-btn" type="button" class="btn btn-success" disabled>Complete
                                 Order</button>
                         </div>
                     </div>
                 </div>
             </div>
 
+            <!-- Loader (Hidden by default) -->
+            <div id="loader"
+                style="display:none; position: fixed; left: 0; top: 0; width: 100%; height: 100%; z-index: 1000; background: rgba(255, 255, 255, 0.7); text-align: center; justify-content: center; align-items: center;">
+                <div class="spinner-border text-primary" role="status"
+                    style="width: 3rem; height: 3rem; margin-top: 20%;">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
 
 </body>
 

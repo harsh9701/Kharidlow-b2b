@@ -72,7 +72,6 @@ module.exports.orderSummary = async (req, res) => {
 
         res.render("order/order-summary.ejs", { orderItems, grandTotal, userAddresses, cookieValue });
     } catch (error) {
-        console.error(error);
         res.status(500).json({ success: false, message: error.message });
     }
 };
@@ -86,6 +85,10 @@ module.exports.completeOrder = async (req, res) => {
         const userId = req.session.user.userId;
         const userEmail = req.session.user.email;
         const orderDetails = req.body;
+
+        if (orderDetails.orderItems[0].productId == "") {
+            return res.status(400).json({ success: false, message: "Please add products to complete purchase" });
+        }
 
         let address;
 
@@ -160,7 +163,6 @@ module.exports.completeOrder = async (req, res) => {
             return res.status(400).json({ success: false, message: "Order not created" })
         }
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ message: error.message });
     }
 };
