@@ -78,7 +78,8 @@
                                                     <%= order.orderNumber %>
                                                 </td>
                                                 <td>
-                                                    <%= order.userId.fullName.charAt(0).toUpperCase() + order.userId.fullName.slice(1).toLowerCase(); %>
+                                                    <%= order.userId.fullName.charAt(0).toUpperCase() +
+                                                        order.userId.fullName.slice(1).toLowerCase(); %>
                                                 </td>
                                                 <td>
                                                     <%= order.createdAt.toDateString() %>
@@ -98,8 +99,7 @@
                                                                 </span>
                                                                 <% } %>
                                                 </td>
-                                                <td>
-                                                    <%= order.grandTotal %>
+                                                <td>&#8377;<%= order.grandTotal %>
                                                 </td>
                                                 <td style="min-width: 200px;">
                                                     <div class="btn-group" role="group">
