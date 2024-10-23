@@ -225,17 +225,19 @@ body {
     }
 
     .nav-link {
-        font-size: 1.12rem;
+        font-size: 1.05rem;
         font-weight: 600 !important;
-        border-bottom: 1px solid #bbc3cf73;
-        padding: 3px 0;
+        padding: 5px 0;
         background: linear-gradient(90deg, #fcb045, #ff6347, #1e90ff, #32cd32) !important;
-        /* Gradient colors */
         -webkit-background-clip: text !important;
         /* Ensures background is clipped to text */
         background-clip: text !important;
         color: transparent !important;
         /* Makes the text transparent so the gradient shows */
+    }
+
+    .nav-link > span {
+        margin-left: 8px !important;
     }
 
     .container-fluid {

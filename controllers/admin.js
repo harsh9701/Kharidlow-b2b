@@ -30,7 +30,7 @@ module.exports.renderAdminPage = async (req, res) => {
             customers: lastFiveUser,
             listing: lastFiveProduct,
             deliveredOrder: deliveredOrder,
-            totalSales: formatAmount(Number(totalSales[0].totalSales))
+            totalSales: (totalSales.length > 0) ? formatAmount(Number(totalSales[0].totalSales)) : 0
         }
 
         res.render("admin/admin-page.ejs", { data });
