@@ -24,7 +24,19 @@
             <div class="row product-details">
                 <div class="col-md-6">
                     <!-- Product Image -->
-                    <img src="<%= productDetails.mainImage %>" alt="Product Image" class="product-img">
+                    <img id="mainImage" src="<%= productDetails.mainImage %>" alt="Product Image" class="product-img">
+                    <% if((productDetails.productImages).length> 0){ %>
+                        <div class="additional-image-main">
+                            <div class="additional-image-container">
+                                <img src="<%= productDetails.mainImage %>" alt="Product Image" class="additional-image">
+                            </div>
+                            <% productDetails.productImages.forEach((image)=> { %>
+                                <div class="additional-image-container">
+                                    <img src="<%= image %>" alt="<%= image %>" class="additional-image">
+                                </div>
+                                <% }) %>
+                        </div>
+                        <% } %>
                 </div>
                 <div class="col-md-6">
                     <!-- Product Info -->
@@ -137,11 +149,13 @@
                                             <%= product.productName %>
                                         </h5>
                                         <div class="d-flex justify-content-between">
-                                            <p class="card-text"><span class="price">Price: </span>&#8377; <%= product.price %>
-                                            <p class="card-text">MOQ: <%= product.moq %>
+                                            <p class="card-text"><span class="price">Price: </span>&#8377; <%=
+                                                    product.price %>
+                                                    <p class="card-text">MOQ: <%= product.moq %>
                                         </div>
-                                        <button class="btn btn-primary add-to-cart-btn-card" data-product-id="<%= product._id %>"
-                                            data-moq="<%= product.moq %>">Add to Cart</button>
+                                        <button class="btn btn-primary add-to-cart-btn-card"
+                                            data-product-id="<%= product._id %>" data-moq="<%= product.moq %>">Add to
+                                            Cart</button>
                                     </div>
                                 </div>
                             </div>
@@ -279,6 +293,17 @@
                                 error: function (xhr, status, error) {
                                     swal("Oops!", error, "error");
                                 }
+                            });
+                        });
+
+                        // Get the main image element
+                        const mainImage = document.getElementById('mainImage');
+
+                        // Add click event listeners to all additional images
+                        document.querySelectorAll('.additional-image').forEach((img) => {
+                            img.addEventListener('click', function () {
+                                // Update the main image source with the clicked image's source
+                                mainImage.src = this.src;
                             });
                         });
 

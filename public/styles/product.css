@@ -191,6 +191,49 @@
     font-size: 0.9rem;
 }
 
+.additional-image-main {
+    display: flex;
+    justify-content: flex-start;
+    overflow-x: scroll;
+    scroll-behavior: smooth;
+    -ms-overflow-style: none;
+}
+
+.additional-image {
+    height: 105px;
+    width: 105px;
+    margin: 2px;
+    border: 1px solid rgba(190, 189, 189, 0.742);
+    border-radius: 10px;
+}
+
+.additional-image-container {
+    cursor: pointer;
+}
+
+/* Target the scrollbar */
+::-webkit-scrollbar {
+    width: 5px;
+    height: 3px;
+    background-color: #f1f1f1;
+}
+
+/* Handle of the scrollbar */
+::-webkit-scrollbar-thumb {
+    background-color: #856cea;
+    border-radius: 10px;
+}
+
+/* Hover effect for the scrollbar handle */
+::-webkit-scrollbar-thumb:hover {
+    background-color: #6241e6;
+}
+
+/* Change scrollbar corner when both horizontal and vertical scrollbars appear */
+::-webkit-scrollbar-corner {
+    background-color: #f1f1f1;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .product-img {
@@ -213,6 +256,15 @@
     .add-to-cart-btn,
     .review-btn {
         width: 100%;
+    }
+
+    .additional-image {
+        height: 80px;
+        width: 80px;
+    }
+
+    ::-webkit-scrollbar {
+        display: none;
     }
 }
 

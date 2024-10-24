@@ -11,9 +11,18 @@ module.exports.renderLandingPage = async (req, res) => {
             .sort({ createdAt: -1 })
             .limit(12);
 
-        const under99Products = await productModel.find({ price: { $lte: 99 } }, { productName: 1, price: 1, moq: 1, mainImage: 1 })
-            .sort({ createdAt: -1 })
-            .limit(36);
+        const under99Products = await productModel.aggregate([
+            { $match: { price: { $lte: 99 } } },
+            { $sample: { size: 36 } },
+            {
+                $project: {
+                    productName: 1,
+                    price: 1,
+                    moq: 1,
+                    mainImage: 1
+                }
+            }
+        ]);
 
         res.render("index.ejs", { category, recentProducts, under99Products });
     } catch (error) {

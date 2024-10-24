@@ -61,7 +61,7 @@ module.exports.renderListingPage = async (req, res) => {
 module.exports.renderProductPage = async (req, res) => {
     const productId = req.params.id;
     try {
-        const productDetails = await productModel.findById(productId, { productName: 1, subCategory: 1, price: 1, description: 1, moq: 1, mainImage: 1, discount: 1, reviews: 1 })
+        const productDetails = await productModel.findById(productId, { productName: 1, subCategory: 1, price: 1, description: 1, moq: 1, mainImage: 1, discount: 1, reviews: 1, productImages: 1 })
             .populate({
                 path: "reviews.user",
                 select: "fullName"
