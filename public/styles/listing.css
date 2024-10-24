@@ -88,6 +88,18 @@ body {
     margin-top: 4.38rem;
 }
 
+.page-link {
+    color: #6241e6;
+}
+
+.page-item.disabled .page-link {
+    color: #6241e6 !important;
+}
+
+.page-item.active .page-link {
+    background-color: #6241e6 !important;
+}
+
 /* Target the scrollbar */
 ::-webkit-scrollbar {
     width: 5px;

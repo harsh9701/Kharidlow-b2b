@@ -50,6 +50,7 @@
                                     <tr>
                                         <th style="min-width: 50px;">S. No.</th>
                                         <th style="min-width: 50px;">Product Name</th>
+                                        <th style="min-width: 50px;">SKU</th>
                                         <th style="min-width: 50px;">Category</th>
                                         <th style="min-width: 50px;">Price</th>
                                         <th style="min-width: 50px;">MOQ</th>
@@ -66,6 +67,9 @@
                                                 </td>
                                                 <td>
                                                     <%= product.productName %>
+                                                </td>
+                                                <td>
+                                                    <%= product.sku %>
                                                 </td>
                                                 <td>
                                                     <%= product.subCategory %>
@@ -136,6 +140,7 @@
                             { type: 'date-dd-mm-yyyy', aTargets: [5] }
                         ],
                         "aoColumns": [
+                            null,
                             null,
                             null,
                             null,

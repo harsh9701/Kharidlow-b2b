@@ -197,6 +197,7 @@
     overflow-x: scroll;
     scroll-behavior: smooth;
     -ms-overflow-style: none;
+    scrollbar-width: none;
 }
 
 .additional-image {

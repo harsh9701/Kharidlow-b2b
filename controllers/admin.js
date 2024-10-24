@@ -59,7 +59,7 @@ module.exports.renderManageCustomerPage = async (req, res) => {
 
 module.exports.renderManageProductPage = async (req, res) => {
     try {
-        const products = await productModel.find({}, { productName: 1, price: 1, stock: 1, moq: 1, subCategory: 1 }).sort({ createdAt: -1 });
+        const products = await productModel.find({}, { productName: 1, price: 1, sku: 1, stock: 1, moq: 1, subCategory: 1 }).sort({ createdAt: -1 });
         res.render("admin/manage-products.ejs", { products });
     } catch (error) {
         res.status(500).send(error.message);
