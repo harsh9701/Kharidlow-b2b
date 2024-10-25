@@ -73,11 +73,11 @@
                                                 </span>
                                             </div>
                                             <% if(item.instruction != "" ){ %>
-                                                <div>
+                                                <div class="mt-1">
                                                     <button type="button" class="btn btn-warning instruction-btn"
                                                         data-bs-toggle="popover" data-bs-placement="right"
                                                         data-bs-custom-class="custom-popover"
-                                                        data-bs-title="Custom popover"
+                                                        data-bs-title="Customer Instruction"
                                                         data-bs-content="<%= item.instruction %>">
                                                         Instruction <i class="fa-solid fa-circle-info"></i>
                                                     </button>
@@ -139,8 +139,8 @@
                     });
                 });
 
-                const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
-                const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
+                const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]');
+                const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl));
             </script>
 
 

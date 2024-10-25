@@ -28,10 +28,6 @@ body {
     object-fit: fill;
 }
 
-.category-scroll {
-    scrollbar-width: none;
-}
-
 .category-scroll,
 .under99-scroll {
     padding: 10px;
