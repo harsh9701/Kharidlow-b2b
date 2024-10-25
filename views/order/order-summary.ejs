@@ -57,6 +57,8 @@
                                     </td>
                                     <td data-label="Total" class="item-total">&#8377; <%= item.total %>
                                     </td>
+                                    <td data-label="instruction" class="instruction" style="display: none;"><%= item.instruction %>
+                                    </td>
                                 </tr>
                                 <% }) %>
                                     <% } else { %>
@@ -290,11 +292,13 @@
                             const productName = $(this).find('td:eq(2)').text().trim();
                             const price = parseFloat($(this).find('td:eq(3)').text().replace('₹', '').trim());
                             const quantity = parseInt($(this).find('td:eq(4)').text().trim());
+                            const instruction = $(this).find('.instruction').text().trim();
                             const total = parseFloat($(this).find('.item-total').text().replace('₹', '').trim());
 
                             orderItems.push({
                                 productId: productId,
                                 productName: productName,
+                                instruction: instruction,
                                 price: price,
                                 quantity: quantity,
                                 total: total

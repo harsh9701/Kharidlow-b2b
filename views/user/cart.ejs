@@ -57,6 +57,17 @@
                                         <input type="hidden" class="form-control ml-2 product-id"
                                             data-product-id="<%= item.productId._id %>">
                                     </div>
+
+                                    <div class="customization-instructions m-2">
+                                        <label for="instructions_<%= item.productId._id %>"
+                                            class="form-label instruction-label">
+                                            Special Instructions:
+                                        </label>
+                                        <textarea class="form-control instruction-input"
+                                            id="instructions_<%= item.productId._id %>"
+                                            placeholder="Add instructions (e.g., preferred color, size adjustment, etc.)..."
+                                            data-product-id="<%= item.productId._id %>" rows="2"></textarea>
+                                    </div>
                                 </div>
 
                             </div>
@@ -81,6 +92,11 @@
                                     <div class="cart-summary">
                                         <h4 class="text-center">Order Summary</h4>
                                         <h5><strong>Total:</strong> &#8377; <span id="total">0.00</span></h5>
+                                        <!-- Bootstrap Alert for Minimum Cart Value Warning -->
+                                        <div class="alert alert-warning mt-3" id="min-value-alert"
+                                            style="display: none;">
+                                            Your order must be at least ₹2500 to proceed.
+                                        </div>
                                     </div>
                                     <form action="/user/order/summary" method="POST">
                                         <input type="hidden" name="cartData" id="cartData">
@@ -109,13 +125,15 @@
                             const quantity = parseInt($(this).val());
                             const price = parseFloat($(this).data('price'));
                             const productId = $(this).siblings('.product-id').data('product-id');
+                            const instruction = $(`textarea[data-product-id="${productId}"]`).val() || '';
 
                             subtotal += quantity * price;
 
                             cartData.push({
                                 productId: productId,
                                 quantity: quantity,
-                                price: price
+                                price: price,
+                                instruction: instruction
                             });
                         });
 
@@ -127,6 +145,16 @@
 
                         // Store the cart data as JSON in the hidden input
                         $('#cartData').val(JSON.stringify(cartData));
+
+                        // Check if total is below minimum value and toggle alert and button state
+                        const minimumCartValue = 2500;
+                        if (total < minimumCartValue) {
+                            $('#min-value-alert').show(); // Show Bootstrap alert
+                            $('.checkout-btn').prop('disabled', true);
+                        } else {
+                            $('#min-value-alert').hide(); // Hide Bootstrap alert
+                            $('.checkout-btn').prop('disabled', false);
+                        }
                     }
 
                     // Initial update
@@ -134,6 +162,11 @@
 
                     // Add event listeners to quantity inputs
                     $('.quantity-input').on('input', function () {
+                        updateCartSummary();
+                    });
+
+                    // Update cart summary each time an instruction changes
+                    $('.instruction-input').on('input', function () {
                         updateCartSummary();
                     });
 

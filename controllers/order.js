@@ -57,6 +57,7 @@ module.exports.orderSummary = async (req, res) => {
                     productId: product._id,
                     productName: product.productName,
                     mainImage: product.mainImage,
+                    instruction: item.instruction,
                     quantity: Number(item.quantity),
                     price: Number(item.price),
                     total: Number(item.quantity) * Number(item.price)

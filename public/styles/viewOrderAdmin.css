@@ -133,6 +133,18 @@ body {
     box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5) !important;
 }
 
+.custom-popover {
+    --bs-popover-max-width: 200px;
+    --bs-popover-border-color: #6241e6;
+    --bs-popover-header-bg: #6241e6;
+    --bs-popover-header-color: #f0f0f0;
+}
+
+.instruction-btn {
+    font-size: 0.9rem;
+    padding: 2px 9px 2px 9px;
+}
+
 /* Media Queries */
 @media (max-width: 768px) {
     .items-list {

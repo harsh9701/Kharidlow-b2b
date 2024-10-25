@@ -72,6 +72,17 @@
                                                         item.price %>
                                                 </span>
                                             </div>
+                                            <% if(item.instruction != "" ){ %>
+                                                <div>
+                                                    <button type="button" class="btn btn-warning instruction-btn"
+                                                        data-bs-toggle="popover" data-bs-placement="right"
+                                                        data-bs-custom-class="custom-popover"
+                                                        data-bs-title="Custom popover"
+                                                        data-bs-content="<%= item.instruction %>">
+                                                        Instruction <i class="fa-solid fa-circle-info"></i>
+                                                    </button>
+                                                </div>
+                                            <% } %>
                                         </div>
                         </div>
                         <% }) %>
@@ -127,6 +138,9 @@
                         openImageModal(imageSrc, productName); // Pass the source and name to modal function
                     });
                 });
+
+                const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
+                const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
             </script>
 
 
