@@ -5,7 +5,8 @@ const productModel = require("../models/product");
 
 module.exports.renderLandingPage = async (req, res) => {
     try {
-        const category = await generalDataModel.find({}, { subcategories: 0 });
+        const category = await generalDataModel.find({}, { subcategories: 0 })
+            .sort({ createdAt: -1 });
 
         const recentProducts = await productModel.find({}, { productName: 1, price: 1, moq: 1, mainImage: 1 })
             .sort({ createdAt: -1 })
