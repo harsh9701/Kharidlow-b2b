@@ -3,9 +3,10 @@ const router = express.Router();
 const upload = require("../config/multer");
 const { isAdmin } = require("../middleware/auth");
 
-const { renderAdminPage, renderManageCustomerPage, renderManageOrderPage, renderManageProductPage, renderViewOrderPage, updateOrderStatus, renderViewCustomerPage, renderUpdateProductPage } = require("../controllers/admin");
+const { renderAdminPage, renderManageCustomerPage, renderManageOrderPage, renderManageProductPage, renderViewOrderPage, updateOrderStatus, renderViewCustomerPage, renderUpdateProductPage, renderCartAnalysisPage } = require("../controllers/admin");
 const { updateProduct, deleteProductImage, deleteProduct } = require("../controllers/product");
 
+router.get("/cartanalysis", isAdmin, renderCartAnalysisPage);
 router.get("/manage", isAdmin, renderAdminPage);
 router.put("/manage/orders/update", isAdmin, updateOrderStatus);
 router.get("/manage/orders/:orderId", isAdmin, renderViewOrderPage);

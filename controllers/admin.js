@@ -1,6 +1,7 @@
 const orderModel = require("../models/order");
 const userModel = require("../models/user");
 const productModel = require("../models/product");
+const cartModel = require("../models/cart");
 const { formatAmount } = require("../utils/helper");
 
 module.exports.renderAdminPage = async (req, res) => {
@@ -130,6 +131,38 @@ module.exports.renderUpdateProductPage = async (req, res) => {
         } else {
             res.status(404).render("error.ejs");
         }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+module.exports.renderCartAnalysisPage = async (req, res) => {
+    try {
+        const limit = parseInt(req.query.limit) || 10;
+        const page = parseInt(req.query.page) || 1;
+
+        const totalCarts = await cartModel.countDocuments({
+            items: { $elemMatch: { productId: { $exists: true } } }
+        });
+
+        const cartDetails = await cartModel.find({
+            items: { $elemMatch: { productId: { $exists: true } } }
+        })
+            .populate({
+                path: "userId",
+                select: "fullName contactNo email"
+            })
+            .populate({
+                path: "items.productId",
+                select: "_id productName price mainImage moq"
+            })
+            .sort({ createdAt: -1 })
+            .skip((page - 1) * limit)
+            .limit(limit)
+            .lean() // Optional: returns plain JavaScript objects
+            .exec();
+
+        res.render("admin/cart-analysis.ejs", { cartDetails, totalCarts, currentPage: page, limit });
     } catch (error) {
         res.status(500).send(error.message);
     }
