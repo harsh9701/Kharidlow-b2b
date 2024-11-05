@@ -14,9 +14,9 @@ router.get("/login", renderLoginPage);
 router.get("/cart", isAuthenticated, renderCartPage);
 router.put("/updatepassword", isAuthenticated, updatePassword);
 router.post("/cart", addToCart);
-router.post("/cart/remove/:id", removeFromCart);
-router.post("/order/summary", orderSummary);
-router.post("/order", completeOrder);
+router.post("/cart/remove/:id", isAuthenticated, removeFromCart);
+router.post("/order/summary", isAuthenticated, orderSummary);
+router.post("/order", isAuthenticated, completeOrder);
 router.post("/register", userRegister);
 router.post("/login", userLogin);
 

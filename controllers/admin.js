@@ -1,8 +1,10 @@
+const mongoose = require('mongoose');
 const orderModel = require("../models/order");
 const userModel = require("../models/user");
 const productModel = require("../models/product");
 const cartModel = require("../models/cart");
 const { formatAmount } = require("../utils/helper");
+const { sendAbandonedCartEmail } = require("../services/emailService");
 
 module.exports.renderAdminPage = async (req, res) => {
     try {
@@ -145,9 +147,7 @@ module.exports.renderCartAnalysisPage = async (req, res) => {
             items: { $elemMatch: { productId: { $exists: true } } }
         });
 
-        const cartDetails = await cartModel.find({
-            items: { $elemMatch: { productId: { $exists: true } } }
-        })
+        const cartDetails = await cartModel.find({ items: { $elemMatch: { productId: { $exists: true } } } })
             .populate({
                 path: "userId",
                 select: "fullName contactNo email"
@@ -156,13 +156,48 @@ module.exports.renderCartAnalysisPage = async (req, res) => {
                 path: "items.productId",
                 select: "_id productName price mainImage moq"
             })
-            .sort({ createdAt: -1 })
+            .sort({ updatedAt: -1 })
             .skip((page - 1) * limit)
             .limit(limit)
             .lean() // Optional: returns plain JavaScript objects
             .exec();
 
         res.render("admin/cart-analysis.ejs", { cartDetails, totalCarts, currentPage: page, limit });
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+module.exports.sendAbandonedCartEmailService = async (req, res) => {
+    const TWO_DAYS = 2 * 24 * 60 * 60 * 1000;
+    try {
+        const userId = req.params.userId;
+        const cartItems = await cartModel.findOne({ userId })
+            .populate({
+                path: "userId",
+                select: "fullName contactNo email"
+            })
+            .populate({
+                path: "items.productId",
+                select: "_id productName price mainImage moq"
+            });
+
+        if (!cartItems.length && (cartItems.items).length < 0) {
+            return res.status(404).json({ success: false, message: "No abandoned cart found for the user" });
+        }
+
+        if (cartItems.lastNotified && (new Date() - new Date(cartItems.lastNotified)) < TWO_DAYS) {
+            return res.status(400).json({ success: false, message: "Notification already sent within the last 2 days." });
+        }
+
+        const items = (cartItems.items).map(item => item.productId.productName);
+
+        sendAbandonedCartEmail(cartItems.userId.email, cartItems.userId.fullName, items, "https://www.kharidlow.com/user/cart");
+
+        cartItems.lastNotified = new Date();
+        await cartItems.save();
+
+        res.status(200).json({ success: true, message: "Email alert for abandoned cart sent successfully!" });
     } catch (error) {
         res.status(500).send(error.message);
     }

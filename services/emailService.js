@@ -255,4 +255,59 @@ const sendOrderSummaryMail = async (clientMail, fullName, orderNumber, orderItem
     }
 };
 
-module.exports = { sendWelcomeMail, sendOrderSummaryMail, sendForgotPasswordMail, sendPasswordResetSuccessMail }
+const sendAbandonedCartEmail = async (clientMail, customerName, cartItems, cartLink) => {
+    try {
+
+        let transporter = nodemailer.createTransport({
+            host: 'smtpout.secureserver.net',
+            port: 465,
+            auth: {
+                user: mailData.email,
+                pass: mailData.pass
+            }
+        });
+
+        const itemList = cartItems.map(item => `<li style="margin-bottom: 5px;">${item}</li>`).join('');
+
+        const mailOptions = {
+            from: mailData.email,
+            to: clientMail,
+            subject: 'Don’t Miss Out! Your Cart is Waiting for You 🛒',
+            html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; color: #333;">
+          <div style="padding: 14px; background-color: #f4f4f4; text-align: center;">
+            <h1 style="color: #4A90E2;">Kharidlow</h1>
+            <p style="color: #555;">Powered by Nitvi Fashion Pvt Ltd</p>
+          </div>
+  
+          <div style="padding: 20px; background-color: #ffffff;">
+            <p>Hello ${customerName},</p>
+            <p>We noticed that you left some items in your cart, and we wanted to make sure you don’t miss out on them! Here’s a quick reminder of what’s waiting for you:</p>
+            <ul style="padding-left: 20px; color: #4A90E2;">
+              ${itemList}
+            </ul>
+            <p style="font-size: 16px;">
+              Complete your purchase today before these items go out of stock! Just click the link below to pick up where you left off:
+            </p>
+            <p style="text-align: center; margin: 20px 0;">
+              <a href="${cartLink}" style="background-color: #4A90E2; color: #ffffff; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Return to your cart</a>
+            </p>
+            <p>If you have any questions or need assistance, feel free to reply to this email—we’re here to help.</p>
+            <p>Happy Shopping!<br><strong>The Kharidlow Team</strong></p>
+          </div>
+  
+          <div style="padding: 15px; background-color: #f4f4f4; text-align: center; color: #888; font-size: 12px;">
+            <p>© ${new Date().getFullYear()} Kharidlow | Nitvi Fashion Pvt Ltd</p>
+            <p>Contact us: <a href="mailto:support@kharidlow.com" style="color: #4A90E2;">support@kharidlow.com</a></p>
+          </div>
+        </div>
+      `
+        };
+
+        await transporter.sendMail(mailOptions);
+    } catch (error) {
+        console.error('Error sending email:', error);
+    }
+};
+
+module.exports = { sendWelcomeMail, sendOrderSummaryMail, sendForgotPasswordMail, sendPasswordResetSuccessMail, sendAbandonedCartEmail }

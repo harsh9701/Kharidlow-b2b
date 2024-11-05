@@ -19,6 +19,7 @@ const cartSchema = new mongoose.Schema(
 				},
 			},
 		],
+		lastNotified: { type: Date, default: null }
 	},
 	{ timestamps: true },
 );
