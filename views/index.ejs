@@ -77,7 +77,7 @@
                     <% category.forEach((item)=> { %>
                         <a href="/category/<%= item._id %>" class="category-text">
                             <div class="category-card">
-                                <img src="assets/<%= item.img %>" class="card-img-top" alt="<%= item.img %>">
+                                <img src="<%= item.img %>" class="card-img-top" alt="<%= item.img %>">
                                 <h5 class="card-title">
                                     <%= item.name %>
                                 </h5>
