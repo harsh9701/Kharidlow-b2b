@@ -12,6 +12,15 @@
     <link rel="stylesheet" href="/styles/navbar.css">
     <link rel="stylesheet" href="/styles/footer.css">
     <link rel="stylesheet" href="/styles/listing.css">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SNMCFJBC49"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-SNMCFJBC49');
+    </script>
 </head>
 
 <body>
@@ -30,7 +39,9 @@
                             <% if(categories && categories.subcategories.length> 0) { %>
                                 <h4>Categories</h4>
                                 <ul class="list-unstyled">
-                                    <li><a href="/category/<%= categories._id %>"><i class="fa-solid fa-location-arrow"></i> All <%= categories.name %> items</a>
+                                    <li><a href="/category/<%= categories._id %>"><i
+                                                class="fa-solid fa-location-arrow"></i> All <%= categories.name %>
+                                                items</a>
                                     </li>
                                 </ul>
                                 <% categories.subcategories.forEach((category)=> { %>
@@ -69,7 +80,9 @@
                 <!-- Product Listing Grid -->
                 <div class="col-lg-9 col-md-8">
                     <div class="d-flex justify-content-center align-items-center mb-3">
-                        <h2 class="new-arrival"><%= categories.name %> Items</h2>
+                        <h2 class="new-arrival">
+                            <%= categories.name %> Items
+                        </h2>
                         <!-- <select class="form-select w-auto">
                             <option>Default Sorting</option>
                             <option>Price: Low to High</option>
