@@ -46,7 +46,7 @@
                                 </ul>
                                 <% categories.subcategories.forEach((category)=> { %>
                                     <ul class="list-unstyled">
-                                        <li><a href="/category/<%= categories._id %>?category=<%= category.name %>"><i
+                                        <li><a href="/category/<%= categories._id %>?category=<%= encodeURIComponent(category.name) %>"><i
                                                     class="fa-solid fa-location-arrow"></i>
                                                 <%= category.name %>
                                             </a></li>
@@ -129,7 +129,7 @@
                             <!-- Previous Button -->
                             <li class="page-item <%= (currentPage === 1) ? 'disabled' : '' %>">
                                 <a class="page-link"
-                                    href="/category/<%= categories._id %>?page=<%= currentPage - 1 %>&pageSize=24&category=<%= selectedCategory %>">Previous</a>
+                                    href="/category/<%= categories._id %>?page=<%= currentPage - 1 %>&pageSize=24&category=<%= encodeURIComponent(selectedCategory) %>">Previous</a>
                             </li>
 
                             <% const totalPages=Math.ceil(totalProducts / 24); const maxPagesToShow=2; let
@@ -140,7 +140,7 @@
                                 (let i=startPage; i <=endPage; i++) { %>
                                 <li class="page-item <%= (i === currentPage) ? 'active' : '' %>">
                                     <a class="page-link"
-                                        href="/category/<%= categories._id %>?page=<%= i %>&pageSize=24&category=<%= selectedCategory %>">
+                                        href="/category/<%= categories._id %>?page=<%= i %>&pageSize=24&category=<%= encodeURIComponent(selectedCategory) %>">
                                         <%= i %>
                                     </a>
                                 </li>
@@ -154,7 +154,7 @@
                                     <!-- Next Button -->
                                     <li class="page-item <%= (currentPage === totalPages) ? 'disabled' : '' %>">
                                         <a class="page-link"
-                                            href="/category/<%= categories._id %>?page=<%= currentPage + 1 %>&pageSize=24&category=<%= selectedCategory %>">Next</a>
+                                            href="/category/<%= categories._id %>?page=<%= currentPage + 1 %>&pageSize=24&category=<%= encodeURIComponent(selectedCategory) %>">Next</a>
                                     </li>
                         </ul>
                     </nav>

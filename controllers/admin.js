@@ -14,6 +14,11 @@ module.exports.renderAdminPage = async (req, res) => {
         const deliveredOrder = await orderModel.countDocuments({ status: "delivered" });
         const totalSales = await orderModel.aggregate([
             {
+                $match: {
+                    status: { $nin: ["canceled", "pending"] }
+                }
+            },
+            {
                 $group: {
                     _id: null,
                     totalSales: { $sum: "$grandTotal" }
