@@ -145,6 +145,10 @@
                                                             <span class="badge bg-success">
                                                                 <%= order.status %>
                                                             </span>
+                                                            <% } else if(order.status=="canceled" ) { %>
+                                                                <span class="badge bg-danger">
+                                                                    <%= order.status %>
+                                                                </span>
                                                             <% } else { %>
                                                                 <span class="badge bg-info">
                                                                     <%= order.status %>

@@ -34,11 +34,15 @@
                             <span class="badge rounded-pill text-bg-warning fs-6">
                                 <%= order.status %>
                             </span>
-                            <%} else {%>
-                                <span class="badge rounded-pill text-bg-info fs-6">
+                            <%} else if(order.status=="canceled" ) {%>
+                                <span class="badge rounded-pill text-bg-danger fs-6">
                                     <%= order.status %>
                                 </span>
-                                <%} %>
+                                <%} else {%>
+                                    <span class="badge rounded-pill text-bg-info fs-6">
+                                        <%= order.status %>
+                                    </span>
+                                    <%} %>
                 </div>
             </div>
 
