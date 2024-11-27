@@ -212,6 +212,10 @@
     cursor: pointer;
 }
 
+.description {
+    white-space: pre-line;
+}
+
 /* Target the scrollbar */
 ::-webkit-scrollbar {
     width: 5px;

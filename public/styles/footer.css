@@ -53,12 +53,13 @@
     height: 16px;
     margin: 0 10px;
     padding-top: 9px;
-    transition: all 0.4s ease 0s;
+    transition: all 0.3s ease 0s;
     width: 40px;
 }
 
 .contact-social ul li a:hover {
     color: #FAB702;
+    /* color: #6241e6; */
 }
 
 .social-icons {
