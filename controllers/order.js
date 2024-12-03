@@ -51,16 +51,27 @@ module.exports.orderSummary = async (req, res) => {
 
         const orderItems = await Promise.all(
             cartData.map(async (item) => {
-                const product = await productModel.findById(item.productId, { productName: 1, mainImage: 1 });
+                const product = await productModel.findById(item.productId, { productName: 1, mainImage: 1, taxRate: 1, taxType: 1 });
+
+                const taxAmount = product.taxType === "exclusive"
+                    ? (Number(item.quantity) * Number(item.price) * Number(product.taxRate)) / 100
+                    : (Number(item.quantity) * Number(item.price)) * (product.taxRate / (100 + product.taxRate));
+
+                const total = product.taxType === "exclusive"
+                    ? (Number(item.quantity) * Number(item.price)) + taxAmount
+                    : (Number(item.quantity) * Number(item.price));
 
                 return {
                     productId: product._id,
                     productName: product.productName,
                     mainImage: product.mainImage,
+                    taxRate: product.taxRate,
+                    taxType: product.taxType,
+                    taxAmount: taxAmount.toFixed(2),
                     instruction: item.instruction,
                     quantity: Number(item.quantity),
                     price: Number(item.price),
-                    total: Number(item.quantity) * Number(item.price)
+                    total: total
                 };
             })
         );
@@ -69,7 +80,7 @@ module.exports.orderSummary = async (req, res) => {
         const userAddresses = userDetails.addresses;
         const cookieValue = req.cookies.orderCompletion || "";
 
-        const grandTotal = orderItems.reduce((acc, item) => acc + item.total, 0);
+        const grandTotal = orderItems.reduce((acc, item) => acc + item.total, 0).toFixed(2);
 
         res.render("order/order-summary.ejs", { orderItems, grandTotal, userAddresses, cookieValue });
     } catch (error) {
@@ -93,7 +104,7 @@ module.exports.completeOrder = async (req, res) => {
 
         let address;
 
-        const grandTotal = orderDetails.orderItems.reduce((acc, item) => acc + item.total, 0);
+        const grandTotal = orderDetails.orderItems.reduce((acc, item) => acc + item.total, 0).toFixed(2);
 
         if (orderDetails.address.selectedAddressId) {
 

@@ -98,7 +98,7 @@ module.exports.getSubCategory = async (req, res) => {
 
 module.exports.addNewProduct = async (req, res) => {
     try {
-        const { productName, category, subCategory, price, stock, description, sku, tags, moq } = req.body;
+        const { productName, category, subCategory, price, taxRate, taxType, stock, description, sku, tags, moq } = req.body;
 
         if (!productName || !category || !price || !sku) {
             // Delete uploaded image if required fields are missing
@@ -131,6 +131,8 @@ module.exports.addNewProduct = async (req, res) => {
             productName,
             description,
             price,
+            taxType,
+            taxRate: Number(taxRate),
             mainImage: req.file ? req.file.path : null,
             tags: tagsArray,
         });

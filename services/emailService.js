@@ -180,12 +180,21 @@ const sendOrderSummaryMail = async (clientMail, fullName, orderNumber, orderItem
         // Dynamically create order items rows
         let orderItemsHtml = '';
         orderItems.forEach(item => {
+            const taxAmount = item.taxType === "Exclusive"
+                ? (Number(item.quantity) * Number(item.price) * Number(item.taxRate)) / 100
+                : (Number(item.quantity) * Number(item.price)) * (item.taxRate / (100 + item.taxRate));
+            const total = item.taxType === "Exclusive"
+                ? (Number(item.quantity) * Number(item.price)) + taxAmount
+                : (Number(item.quantity) * Number(item.price));
             orderItemsHtml += `
                 <tr>
                     <td>${item.productName}</td>
                     <td>${item.price}</td>
+                    <td>${item.taxRate}</td>
+                    <td>${item.taxType}</td>
+                    <td>${item.taxAmount.toFixed(2)}</td>
                     <td>${item.quantity}</td>
-                    <td>${item.price * item.quantity}</td>
+                    <td>${total.toFixed(2)}</td>
                 </tr>
             `;
         });
@@ -223,6 +232,9 @@ const sendOrderSummaryMail = async (clientMail, fullName, orderNumber, orderItem
                                 <tr>
                                     <th>Product Name</th>
                                     <th>Price</th>
+                                    <th>Tax Rate</th>
+                                    <th>Tax Type</th>
+                                    <th>Tax Amount</th>
                                     <th>Quantity</th>
                                     <th>Total</th>
                                 </tr>
@@ -232,7 +244,7 @@ const sendOrderSummaryMail = async (clientMail, fullName, orderNumber, orderItem
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <td colspan="3" style="text-align:right;">Grand Total:</td>
+                                    <td colspan="6" style="text-align:right;">Grand Total:</td>
                                     <td class="grand-total">${grandTotal}</td>
                                 </tr>
                             </tfoot>

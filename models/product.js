@@ -96,7 +96,7 @@ const productSchema = new mongoose.Schema(
     taxType: {
       type: String,
       required: true,
-      default: "inclusive"
+      default: "exclusive"
     },
     taxRate: {
       type: Number,

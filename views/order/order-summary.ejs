@@ -33,6 +33,9 @@
                             <th>Product</th>
                             <th>Product Name</th>
                             <th>Price</th>
+                            <th>Tax Rate</th>
+                            <th>Tax Type</th>
+                            <th>Tax Amount</th>
                             <th>Quantity</th>
                             <th>Total</th>
                         </tr>
@@ -52,18 +55,29 @@
                                     </td>
                                     <td data-label="Price">&#8377; <%= item.price %>
                                     </td>
+                                    <td data-label="taxRate">
+                                        <%= item.taxRate %>
+                                    </td>
+                                    <td data-label="taxType">
+                                        <%= item.taxType.charAt(0).toUpperCase() + item.taxType.slice(1).toLowerCase()
+                                            %>
+                                    </td>
+                                    <td data-label="taxAmount">
+                                        <%= item.taxAmount %>
+                                    </td>
                                     <td data-label="Quantity">
                                         <%= item.quantity %>
                                     </td>
-                                    <td data-label="Total" class="item-total">&#8377; <%= item.total %>
+                                    <td data-label="Total" class="item-total">&#8377; <%= item.total.toFixed(2) %>
                                     </td>
-                                    <td data-label="instruction" class="instruction" style="display: none;"><%= item.instruction %>
+                                    <td data-label="instruction" class="instruction" style="display: none;">
+                                        <%= item.instruction %>
                                     </td>
                                 </tr>
                                 <% }) %>
                                     <% } else { %>
                                         <tr>
-                                            <td colspan="5" class="text-center" style="font-size: 20px;">No Items</td>
+                                            <td colspan="8" class="text-center" style="font-size: 20px;">No Items</td>
                                         </tr>
                                         <% } %>
                     </tbody>
@@ -291,7 +305,10 @@
                             const productId = $(this).find('.product-id').text().trim();
                             const productName = $(this).find('td:eq(2)').text().trim();
                             const price = parseFloat($(this).find('td:eq(3)').text().replace('₹', '').trim());
-                            const quantity = parseInt($(this).find('td:eq(4)').text().trim());
+                            const taxRate = parseInt($(this).find('td:eq(4)').text().trim());
+                            const taxType = $(this).find('td:eq(5)').text().trim();
+                            const taxAmount = parseFloat($(this).find('td:eq(6)').text().trim());
+                            const quantity = parseInt($(this).find('td:eq(7)').text().trim());
                             const instruction = $(this).find('.instruction').text().trim();
                             const total = parseFloat($(this).find('.item-total').text().replace('₹', '').trim());
 
@@ -300,6 +317,9 @@
                                 productName: productName,
                                 instruction: instruction,
                                 price: price,
+                                taxRate: taxRate,
+                                taxType: taxType,
+                                taxAmount: taxAmount,
                                 quantity: quantity,
                                 total: total
                             });
