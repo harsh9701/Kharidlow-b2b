@@ -36,7 +36,7 @@ body {
 .category-card-main {
     padding: 5px;
     display: flex;
-    justify-content: start;
+    justify-content: center;
     overflow-x: scroll;
     scroll-behavior: smooth;
     -ms-overflow-style: none;
