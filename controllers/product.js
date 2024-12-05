@@ -365,6 +365,60 @@ module.exports.deleteProduct = async (req, res) => {
     }
 };
 
+module.exports.deleteMultipleProducts = async (req, res) => {
+    try {
+        const { productIds } = req.body;
+
+        if (!Array.isArray(productIds) || productIds.length === 0) {
+            return res.status(400).json({ success: false, message: 'No products selected.' });
+        }
+
+        // Check and remove products from all carts
+        await Promise.all(
+            productIds.map(async (productId) => {
+                const cartWithProduct = await cartModel.find({ 'items.productId': productId });
+
+                if (cartWithProduct.length > 0) {
+                    // Product is in someone's cart, remove it from all carts
+                    await cartModel.updateMany(
+                        { 'items.productId': productId },
+                        { $pull: { items: { productId: productId } } }
+                    );
+                }
+            })
+        );
+
+        // Delete product images and products
+        await Promise.all(
+            productIds.map(async (productId) => {
+                const product = await productModel.findById(productId);
+
+                if (!product) {
+                    return; // Skip if product doesn't exist
+                }
+
+                // Delete product images
+                const imagesToDelete = [product.mainImage, ...product.productImages];
+                for (const image of imagesToDelete) {
+                    try {
+                        await deleteCloudinaryImage(image);
+                    } catch (error) {
+                        console.error(`Failed to delete image for product ${productId}:`, error);
+                    }
+                }
+
+                // Delete the product
+                await productModel.findByIdAndDelete(productId);
+            })
+        );
+
+        res.status(200).json({ success: true, message: 'Products deleted successfully.' });
+    } catch (error) {
+        console.error('Error deleting products:', error);
+        res.status(500).json({ success: false, message: 'Internal server error.' });
+    }
+};
+
 module.exports.addReview = async (req, res) => {
     try {
         if (!(req.session.user && req.session.user.isAuthenticated)) {

@@ -30,14 +30,16 @@
                     <div class="card_body">
                         <div class="row d-flex">
                             <div class="col-sm-4 createSegment">
-                                <a class="btn dim_button create_new"><a href="/product/new"
+                                <!-- <a class="btn dim_button create_new"><a href="/product/new"
                                         class="d-flex justify-content-start flex-row mb-3 mx-4"
                                         style="text-decoration: none;"><i class="fa-solid fa-shirt fs-2"></i><i
-                                            class="fa-solid fa-plus fs-6"></i></a></a>
+                                            class="fa-solid fa-plus fs-6"></i></a></a> -->
+                                <button class="btn btn-danger" id="deleteSelectedBtn" data-bs-toggle="tooltip"
+                                    title="Multiple Delete"><i class="fa-solid fa-trash-can"></i></button>
                             </div>
                             <div class="col-sm-8 add_flex">
                                 <div class="form-group searchInput">
-                                    <label for="email">Search:</label>
+                                    <label for="filterbox">Search:</label>
                                     <input type="search" class="form-control" name="" id="filterbox"
                                         placeholder="Search Order">
                                 </div>
@@ -48,22 +50,27 @@
                                 class="table cust-datatable dataTable no-footer">
                                 <thead>
                                     <tr>
-                                        <th style="min-width: 50px;">S. No.</th>
-                                        <th style="min-width: 50px;">Product Name</th>
-                                        <th style="min-width: 50px;">SKU</th>
-                                        <th style="min-width: 50px;">Category</th>
-                                        <th style="min-width: 50px;">Price</th>
-                                        <th style="min-width: 50px;">MOQ</th>
-                                        <th style="min-width: 50px;">Stock</th>
-                                        <th style="min-width: 50px;">Actions</th>
+                                        <th><input type="checkbox" id="selectAll"></th> <!-- Select All Checkbox -->
+                                        <th>S.No.</th>
+                                        <th>Product Name</th>
+                                        <th>SKU</th>
+                                        <th>Category</th>
+                                        <th>Price</th>
+                                        <th>MOQ</th>
+                                        <th>Stock</th>
+                                        <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <% if(products.length> 0) { %>
+                                    <% if (products.length> 0) { %>
                                         <% products.forEach((product, index)=> { %>
                                             <tr>
                                                 <td>
-                                                    <%= index+1 %>
+                                                    <input type="checkbox" class="product-checkbox"
+                                                        value="<%= product._id %>">
+                                                </td>
+                                                <td>
+                                                    <%= index + 1 %>
                                                 </td>
                                                 <td>
                                                     <%= product.productName %>
@@ -86,18 +93,17 @@
                                                     <div class="btn-group" role="group">
                                                         <a href="/product/<%= product._id %>"
                                                             class="btn btn-sm btn-info" data-bs-toggle="tooltip"
-                                                            data-bs-placement="top" title="View on browser">
+                                                            title="View on browser">
                                                             <i class="fa-solid fa-eye"></i>
                                                         </a>
                                                         <a href="/admin/manage/products/<%= product._id %>"
                                                             class="btn btn-sm btn-primary" data-bs-toggle="tooltip"
-                                                            data-bs-placement="top" title="Update">
+                                                            title="Update">
                                                             <i class="fa-solid fa-pencil"></i>
                                                         </a>
                                                         <a href="javascript:void(0);" class="btn btn-sm btn-danger"
                                                             onclick="deleteProduct('<%= product._id %>')"
-                                                            data-bs-toggle="tooltip" data-bs-placement="top"
-                                                            title="Delete">
+                                                            data-bs-toggle="tooltip" title="Delete">
                                                             <i class="fa-solid fa-trash-can"></i>
                                                         </a>
                                                     </div>
@@ -137,9 +143,11 @@
                             "aTargets": ['nosort']
                         }],
                         columnDefs: [
-                            { type: 'date-dd-mm-yyyy', aTargets: [5] }
+                            { type: 'date-dd-mm-yyyy', aTargets: [5] },
+                            { targets: [0], orderable: false }
                         ],
                         "aoColumns": [
+                            null,
                             null,
                             null,
                             null,
@@ -171,6 +179,7 @@
                     $("#loadingSpinner").hide();
                 }
 
+                // Single product delete
                 function deleteProduct(productId) {
                     Swal.fire({
                         title: 'Are you sure?',
@@ -217,6 +226,63 @@
                         }
                     });
                 }
+
+                // Multiple Product Delete
+                $(document).ready(function () {
+                    // Select all checkboxes
+                    $('#selectAll').change(function () {
+                        $('.product-checkbox').prop('checked', $(this).prop('checked'));
+                    });
+
+                    // Handle "Delete Selected" button click
+                    $('#deleteSelectedBtn').click(function () {
+                        const selectedProducts = $('.product-checkbox:checked')
+                            .map(function () {
+                                return this.value; // Get the _id of selected products
+                            })
+                            .get();
+
+                        if (selectedProducts.length === 0) {
+                            Swal.fire('No Products Selected', 'Please select products to delete.', 'info');
+                            return;
+                        }
+
+                        Swal.fire({
+                            title: 'Are you sure?',
+                            text: `You are about to delete ${selectedProducts.length} product(s). This action cannot be undone.`,
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Yes, delete them!'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                showLoader();
+                                $.ajax({
+                                    url: '/admin/delete/products', // Backend endpoint for bulk deletion
+                                    type: 'DELETE',
+                                    contentType: 'application/json',
+                                    data: JSON.stringify({ productIds: selectedProducts }),
+                                    success: function (response) {
+                                        hideLoader();
+                                        if (response.success) {
+                                            Swal.fire('Deleted!', 'The selected products have been deleted.', 'success').then(() => {
+                                                location.reload();
+                                            });
+                                        } else {
+                                            Swal.fire('Error!', response.message, 'error');
+                                        }
+                                    },
+                                    error: function (xhr, status, error) {
+                                        hideLoader();
+                                        console.error('Error deleting products:', error);
+                                        Swal.fire('Error!', 'An error occurred while deleting the products.', 'error');
+                                    }
+                                });
+                            }
+                        });
+                    });
+                });
             </script>
 </body>
 
