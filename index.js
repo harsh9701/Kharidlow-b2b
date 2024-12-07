@@ -30,7 +30,11 @@ app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    cookie: { maxAge: 1000 * 60 * 60 * 24 }
+    cookie: {
+        maxAge: 1000 * 60 * 60 * 24,
+        sameSite: "none",
+        secure: true
+    }
 }));
 
 app.set("view engine", "ejs");

@@ -226,11 +226,34 @@ body {
     color: #fff;
 }
 
+.videos-scroll-container {
+    display: flex;
+    overflow-x: auto;
+    gap: 15px;
+    padding: 10px 0;
+    scroll-behavior: smooth;
+}
+
+.video-card {
+    flex: 1 1 calc(33.33% - 15px);
+    /* For 3 videos on large screens */
+    max-width: calc(33.33% - 15px);
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.video-card iframe {
+    width: 100%;
+    height: 225px;
+    border: none;
+    border-radius: 8px;
+}
 
 /* Target the scrollbar */
 ::-webkit-scrollbar {
     width: 5px;
-    height: 8px;
+    height: 6px;
     background-color: #f1f1f1;
 }
 
@@ -291,6 +314,15 @@ body {
 
     .cta-section h5 {
         font-size: 1.1rem;
+    }
+
+    .video-card {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    .videos-scroll-container {
+        gap: 10px;
     }
 }
 
