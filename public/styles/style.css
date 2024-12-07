@@ -230,7 +230,6 @@ body {
     display: flex;
     overflow-x: auto;
     gap: 15px;
-    padding: 10px 0;
     scroll-behavior: smooth;
 }
 
