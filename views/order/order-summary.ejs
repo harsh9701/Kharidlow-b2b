@@ -33,10 +33,10 @@
                             <th>Product</th>
                             <th>Product Name</th>
                             <th>Price</th>
+                            <th>Quantity</th>
                             <th>Tax Rate</th>
                             <th>Tax Type</th>
                             <th>Tax Amount</th>
-                            <th>Quantity</th>
                             <th>Total</th>
                         </tr>
                     </thead>
@@ -55,6 +55,9 @@
                                     </td>
                                     <td data-label="Price">&#8377; <%= item.price %>
                                     </td>
+                                    <td data-label="Quantity">
+                                        <%= item.quantity %>
+                                    </td>
                                     <td data-label="Tax Rate">
                                         <%= item.taxRate %>
                                     </td>
@@ -64,9 +67,6 @@
                                     </td>
                                     <td data-label="Tax Amount">
                                         <%= item.taxAmount %>
-                                    </td>
-                                    <td data-label="Quantity">
-                                        <%= item.quantity %>
                                     </td>
                                     <td data-label="Total" class="item-total">&#8377; <%= item.total.toFixed(2) %>
                                     </td>
@@ -305,10 +305,10 @@
                             const productId = $(this).find('.product-id').text().trim();
                             const productName = $(this).find('td:eq(2)').text().trim();
                             const price = parseFloat($(this).find('td:eq(3)').text().replace('₹', '').trim());
-                            const taxRate = parseInt($(this).find('td:eq(4)').text().trim());
-                            const taxType = $(this).find('td:eq(5)').text().trim();
-                            const taxAmount = parseFloat($(this).find('td:eq(6)').text().trim());
-                            const quantity = parseInt($(this).find('td:eq(7)').text().trim());
+                            const quantity = parseInt($(this).find('td:eq(4)').text().trim());
+                            const taxRate = parseInt($(this).find('td:eq(5)').text().trim());
+                            const taxType = $(this).find('td:eq(6)').text().trim();
+                            const taxAmount = parseFloat($(this).find('td:eq(7)').text().trim());
                             const instruction = $(this).find('.instruction').text().trim();
                             const total = parseFloat($(this).find('.item-total').text().replace('₹', '').trim());
 
@@ -317,10 +317,10 @@
                                 productName: productName,
                                 instruction: instruction,
                                 price: price,
+                                quantity: quantity,
                                 taxRate: taxRate,
                                 taxType: taxType,
                                 taxAmount: taxAmount,
-                                quantity: quantity,
                                 total: total
                             });
                         });
