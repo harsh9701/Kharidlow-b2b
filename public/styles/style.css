@@ -249,6 +249,17 @@ body {
     border-radius: 8px;
 }
 
+.tshirt-product {
+    width: 60%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.tshirt-product img {
+    border-radius: 20px;
+}
+
 /* Target the scrollbar */
 ::-webkit-scrollbar {
     width: 5px;
@@ -322,6 +333,10 @@ body {
 
     .videos-scroll-container {
         gap: 10px;
+    }
+
+    .tshirt-product {
+        width: 95%;
     }
 }
 
