@@ -120,3 +120,19 @@ module.exports.renderSearchResultPage = async (req, res) => {
         return res.status(500).send(error.message);
     }
 };
+
+module.exports.renderShippingInfoPage = (req, res) => {
+    try {
+        res.render("shipping-information.ejs");
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+module.exports.renderReturnRefundPolicyPage = (req, res) => {
+    try {
+        res.render("return-refund-policy.ejs");
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};

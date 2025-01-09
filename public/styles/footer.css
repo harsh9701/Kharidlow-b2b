@@ -57,7 +57,8 @@
     width: 40px;
 }
 
-.contact-social ul li a:hover {
+.contact-social ul li a:hover,
+.hover-effect:hover {
     color: #FAB702;
     /* color: #6241e6; */
 }
@@ -103,7 +104,7 @@ footer div {
     margin: auto;
 }
 
-h6 > a {
+h6>a {
     text-decoration: none;
     color: inherit;
 }

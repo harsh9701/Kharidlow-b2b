@@ -1,10 +1,12 @@
 const express = require("express");
 const router = express.Router();
 
-const { renderLandingPage, cartCount, renderCategoryWiseListingPage, renderSearchResultPage } = require("../controllers/main");
+const { renderLandingPage, cartCount, renderCategoryWiseListingPage, renderSearchResultPage, renderShippingInfoPage, renderReturnRefundPolicyPage } = require("../controllers/main");
 const { userLogout, renderForgetPasswordPage, renderResetPasswordPage, forgetPassword, resetPassword } = require("../controllers/user");
 
 router.get("/", renderLandingPage);
+router.get("/shipping-info", renderShippingInfoPage);
+router.get("/return-refunds", renderReturnRefundPolicyPage);
 router.get("/search", renderSearchResultPage);
 router.get("/logout", userLogout);
 router.get("/category/:id", renderCategoryWiseListingPage);
