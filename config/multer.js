@@ -1,8 +1,7 @@
 const multer = require("multer");
 const path = require("path");
-const fs = require("fs");
-const { storage } = require("../config/cloudinary");
 
+// File filter to allow only specific image types
 const fileFilter = (req, file, cb) => {
     const allowedTypes = /jpeg|jpg|png|webp/;
     const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
@@ -14,6 +13,8 @@ const fileFilter = (req, file, cb) => {
         return cb(new Error("Unsupported image format"), false);
     }
 };
+
+const storage = multer.memoryStorage();
 
 const upload = multer({
     storage: storage,

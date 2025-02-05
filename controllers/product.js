@@ -1,7 +1,7 @@
 const categoryModel = require("../models/generaldata");
 const productModel = require("../models/product");
 const cartModel = require("../models/cart");
-const { deleteCloudinaryImage } = require("../utils/helper");
+const { deleteCloudinaryImage, uploadImagesUsingFirebase, deleteImagesUsingFirebase } = require("../utils/helper");
 const mongoose = require("mongoose");
 
 module.exports.renderAddProductPage = (req, res) => {
@@ -100,20 +100,17 @@ module.exports.addNewProduct = async (req, res) => {
     try {
         const { productName, category, subCategory, price, taxRate, taxType, stock, description, sku, tags, moq } = req.body;
 
+        if (!req.file) {
+            return res.status(400).json({ success: false, message: "Product image is mandatory" });
+        }
+
         if (!productName || !category || !price || !sku) {
-            // Delete uploaded image if required fields are missing
-            if (req.file && req.file.path) {
-                await deleteCloudinaryImage(req.file.path);
-            }
             return res.status(400).json({ success: false, message: "Missing required fields" });
         }
 
         const isProductExist = await productModel.findOne({ sku });
+
         if (isProductExist) {
-            // Delete uploaded image if SKU already exists
-            if (req.file && req.file.path) {
-                await deleteCloudinaryImage(req.file.path);
-            }
             return res.status(400).json({ success: false, message: "This SKU already exists" });
         }
 
@@ -121,6 +118,8 @@ module.exports.addNewProduct = async (req, res) => {
         if (tags) {
             tagsArray = tags.split(',').map(tag => tag.trim());
         }
+
+        const imageUrl = await uploadImagesUsingFirebase(req.file);
 
         const newProduct = await productModel.create({
             category,
@@ -133,23 +132,12 @@ module.exports.addNewProduct = async (req, res) => {
             price,
             taxType,
             taxRate: Number(taxRate),
-            mainImage: req.file ? req.file.path : null,
+            mainImage: imageUrl,
             tags: tagsArray,
         });
 
         return res.status(200).json({ success: true, message: "Product Created Successfully" });
     } catch (err) {
-        console.error('Error occurred while adding product:', err);
-
-        // Delete the uploaded image in case of an error
-        if (req.file && req.file.path) {
-            try {
-                await deleteCloudinaryImage(req.file.path);
-            } catch (error) {
-                return res.status(500).json({ success: false, message: 'Failed to delete image' });
-            }
-        }
-
         return res.status(500).json({ success: false, message: "Internal server error" });
     }
 };
@@ -224,31 +212,40 @@ module.exports.updateProduct = async (req, res) => {
     try {
         const productId = req.params.productId;
         const updatedProductData = req.body;
-        const mainImage = req.files.mainImage ? req.files.mainImage[0].path : null;
-        const additionalImages = req.files.productImages || [];
-
         const product = await productModel.findById(productId, { mainImage: 1, productImages: 1 });
+
         if (!product) {
-            if (mainImage) {
-                try {
-                    await deleteCloudinaryImage(mainImage);
-                } catch (error) {
-                    return res.status(500).json({ success: false, message: 'Failed to delete image' });
-                }
-            }
             return res.status(404).json({ success: false, message: "Product Not Found" });
         }
 
         const tagsArray = updatedProductData.tags ? updatedProductData.tags.split(',').map(tag => tag.trim()) : [];
 
         let productImages = [...product.productImages];
+        let mainImage = product.mainImage;
 
-        // Only push new images if the total count will not exceed 5
-        if (additionalImages.length > 0) {
-            const totalImagesCount = Number(productImages.length) + Number(additionalImages.length);
+        // Handle Main Image Replacement
+        if (req.files.mainImage) {
+            // Delete old mainImage if a new one is uploaded
+            if (product.mainImage) {
+                await deleteImagesUsingFirebase(product.mainImage);
+            }
+
+            // Upload new main image
+            mainImage = await uploadImagesUsingFirebase(req.files.mainImage[0]);
+        }
+
+        // Handle Additional Images (Max 5)
+        if (req.files.productImages && req.files.productImages.length > 0) {
+            const totalImagesCount = productImages.length + req.files.productImages.length;
 
             if (totalImagesCount <= 5) {
-                productImages = productImages.concat(additionalImages.map(file => file.path));
+                // Delete all old images before replacing them
+                if (productImages.length > 0) {
+                    await deleteImagesUsingFirebase(productImages);
+                }
+
+                // Upload new product images
+                productImages = await Promise.all(req.files.productImages.map(file => uploadImagesUsingFirebase(file)));
             } else {
                 return res.status(400).json({
                     success: false,
@@ -257,6 +254,7 @@ module.exports.updateProduct = async (req, res) => {
             }
         }
 
+        // Update Product Data
         const updateData = {
             productName: updatedProductData.productName,
             description: updatedProductData.description,
@@ -267,28 +265,17 @@ module.exports.updateProduct = async (req, res) => {
             taxType: updatedProductData.taxType,
             taxRate: updatedProductData.taxRate,
             tags: tagsArray,
-            mainImage: mainImage ? mainImage : product.mainImage,
+            mainImage,
             productImages
         };
 
         const updatedProduct = await productModel.findByIdAndUpdate(productId, updateData, { new: true });
 
-        if (updatedProduct) {
-            // Delete old main image if it's being replaced
-            if (mainImage && product.mainImage) {
-                try {
-                    await deleteCloudinaryImage(product.mainImage);
-                } catch (error) {
-                    return res.status(500).json({ success: false, message: 'Failed to delete image' });
-                }
-            }
-        }
-
-        res.status(200).send({ success: true, message: 'Product updated successfully', product: updatedProduct });
+        res.status(200).json({ success: true, message: "Product updated successfully", product: updatedProduct });
 
     } catch (error) {
-        console.error('Error updating product:', error);
-        res.status(500).send({ success: false, message: 'Internal server error', error: error.message });
+        console.error("Error updating product:", error);
+        res.status(500).json({ success: false, message: "Internal server error", error: error.message });
     }
 };
 
@@ -311,7 +298,7 @@ module.exports.deleteProductImage = async (req, res) => {
             return res.status(404).json({ success: false, message: 'Product not found.' });
         } else {
             try {
-                await deleteCloudinaryImage(imageName);
+                await deleteImagesUsingFirebase(imageName);
             } catch (error) {
                 return res.status(500).json({ success: false, message: 'Failed to delete image' });
             }
@@ -349,7 +336,7 @@ module.exports.deleteProduct = async (req, res) => {
         const imagesToDelete = [product.mainImage, ...product.productImages];
         for (const image of imagesToDelete) {
             try {
-                await deleteCloudinaryImage(image);
+                await deleteImagesUsingFirebase(image);
             } catch (error) {
                 return res.status(500).json({ success: false, message: 'Failed to delete image' });
             }
@@ -401,7 +388,7 @@ module.exports.deleteMultipleProducts = async (req, res) => {
                 const imagesToDelete = [product.mainImage, ...product.productImages];
                 for (const image of imagesToDelete) {
                     try {
-                        await deleteCloudinaryImage(image);
+                        await deleteImagesUsingFirebase(image);
                     } catch (error) {
                         console.error(`Failed to delete image for product ${productId}:`, error);
                     }
