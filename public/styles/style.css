@@ -41,7 +41,7 @@ body {
     scroll-behavior: smooth;
     -ms-overflow-style: none;
     scrollbar-width: none;
-    gap: 20px;
+    gap: 15px;
 }
 
 .category-card {
@@ -51,8 +51,8 @@ body {
 }
 
 .card-img-top {
-    width: 140px;
-    height: 140px;
+    width: 120px;
+    height: 120px;
     border-radius: 50%;
     border: 1.5px solid #6868686a;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
@@ -71,7 +71,7 @@ body {
 .card-title {
     color: #000;
     padding: 5px;
-    font-size: 1.3rem;
+    font-size: 1.1rem;
 }
 
 .recent-products-container {
@@ -181,7 +181,7 @@ body {
 .title-style {
     margin-bottom: 20px;
     font-weight: bold;
-    font-size: 2rem;
+    font-size: 1.7rem;
     color: #343a40;
 }
 
@@ -309,13 +309,17 @@ body {
         height: 250px;
     }
 
+    .title-style {
+        font-size: 1.6rem;
+    }
+
     .card-img-top {
-        width: 150px;
-        height: 150px;
+        width: 100px;
+        height: 100px;
     }
 
     .card-title {
-        font-size: 1rem;
+        font-size: 0.8rem;
     }
 
     .cta-section h1 {
@@ -348,8 +352,12 @@ body {
 
 @media (max-width: 469px) {
     .card-img-top {
-        width: 120px;
-        height: 120px;
+        width: 90px;
+        height: 90px;
+    }
+
+    .title-style {
+        font-size: 1.4rem;
     }
 
     .recent-card-img {
@@ -378,8 +386,8 @@ body {
     }
 
     .card-img-top {
-        width: 100px;
-        height: 100px;
+        width: 80px;
+        height: 80px;
     }
 
     .add-to-cart-btn-card {

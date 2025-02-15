@@ -3,31 +3,83 @@ const cartModel = require("../models/cart");
 const generalDataModel = require("../models/generaldata");
 const productModel = require("../models/product");
 
+// module.exports.renderLandingPage = async (req, res) => {
+//     try {
+//         const category = await generalDataModel.find({}, { subcategories: 0 })
+//             .sort({ createdAt: -1 });
+
+//         const recentProducts = await productModel.find({}, { productName: 1, price: 1, moq: 1, mainImage: 1 })
+//             .sort({ createdAt: -1 })
+//             .limit(12);
+
+//         const under99Products = await productModel.aggregate([
+//             { $match: { price: { $lte: 99 } } },
+//             { $sample: { size: 36 } },
+//             {
+//                 $project: {
+//                     productName: 1,
+//                     price: 1,
+//                     moq: 1,
+//                     mainImage: 1
+//                 }
+//             }
+//         ]);
+
+//         const bagsProducts = await productModel.find(
+//             { category: new mongoose.Types.ObjectId("66fe8456c94255633c708a26") },
+//             { productName: 1, price: 1, moq: 1, mainImage: 1 }
+//         ).limit(12);
+
+//         console.log(bagsProducts);
+
+//         res.render("index.ejs", { category, recentProducts, under99Products });
+//     } catch (error) {
+//         return res.status(500).json({ message: error.message });
+//     }
+// };
+
 module.exports.renderLandingPage = async (req, res) => {
     try {
-        const category = await generalDataModel.find({}, { subcategories: 0 })
-            .sort({ createdAt: -1 });
+        const [category, recentProducts, under99Products, bagsProducts, footwearProducts] = await Promise.all([
+            generalDataModel.find({}, { subcategories: 0 }).sort({ createdAt: -1 }).lean(),
 
-        const recentProducts = await productModel.find({}, { productName: 1, price: 1, moq: 1, mainImage: 1 })
-            .sort({ createdAt: -1 })
-            .limit(12);
+            productModel.find({}, { productName: 1, price: 1, moq: 1, mainImage: 1 })
+                .sort({ createdAt: -1 })
+                .limit(12)
+                .lean(),
 
-        const under99Products = await productModel.aggregate([
-            { $match: { price: { $lte: 99 } } },
-            { $sample: { size: 36 } },
-            {
-                $project: {
-                    productName: 1,
-                    price: 1,
-                    moq: 1,
-                    mainImage: 1
+            productModel.aggregate([
+                { $match: { price: { $lte: 99 } } },
+                { $sample: { size: 36 } },
+                {
+                    $project: {
+                        productName: 1,
+                        price: 1,
+                        moq: 1,
+                        mainImage: 1
+                    }
                 }
-            }
+            ]),
+
+            productModel.find(
+                { category: new mongoose.Types.ObjectId("66fe8456c94255633c708a26") },
+                { productName: 1, price: 1, moq: 1, mainImage: 1 }
+            )
+                .limit(12)
+                .lean(),
+
+            productModel.find(
+                { category: new mongoose.Types.ObjectId("66fe8456c94255633c708a28") },
+                { productName: 1, price: 1, moq: 1, mainImage: 1 }
+            )
+                .limit(12)
+                .lean()
         ]);
 
-        res.render("index.ejs", { category, recentProducts, under99Products });
+        return res.render("index.ejs", { category, recentProducts, under99Products, bagsProducts, footwearProducts });
+
     } catch (error) {
-        return res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: "Internal Server Error", error: error.message });
     }
 };
 
