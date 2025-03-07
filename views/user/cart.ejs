@@ -95,7 +95,7 @@
                                         <!-- Bootstrap Alert for Minimum Cart Value Warning -->
                                         <div class="alert alert-warning mt-3" id="min-value-alert"
                                             style="display: none;">
-                                            Your order must be at least ₹2500 to proceed.
+                                            Your order must be at least ₹5000 to proceed.
                                         </div>
                                     </div>
                                     <form action="/user/order/summary" method="POST">
@@ -147,7 +147,7 @@
                         $('#cartData').val(JSON.stringify(cartData));
 
                         // Check if total is below minimum value and toggle alert and button state
-                        const minimumCartValue = 2500;
+                        const minimumCartValue = 5000;
                         if (total < minimumCartValue) {
                             $('#min-value-alert').show(); // Show Bootstrap alert
                             $('.checkout-btn').prop('disabled', true);

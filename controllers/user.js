@@ -54,10 +54,10 @@ module.exports.userLogin = async (req, res) => {
     try {
         const { email, password } = req.body;
 
-        const userExists = await userModel.findOne({ email: email });
+        const userExists = await userModel.findOne({ email: email }, { password: 1 });
 
         if (!userExists) {
-            return res.status(404).json({ message: "User not found" });
+            return res.status(404).json({ message: "Invalid credentials" });
         }
         bcrypt.compare(password, userExists.password, function (err, result) {
             if (err) {
@@ -79,7 +79,7 @@ module.exports.userLogin = async (req, res) => {
                         return res.status(500).json({ message: "Failed to login" });
                     }
                 } else {
-                    return res.status(404).json({ message: "Wrong Password" });
+                    return res.status(404).json({ message: "Invalid credentials" });
                 }
             }
         });
@@ -132,7 +132,7 @@ module.exports.forgetPassword = async (req, res) => {
     try {
         const user = await userModel.findOne({ email });
         if (!user) {
-            return res.status(404).json({ message: 'User not found with this email' });
+            return res.status(404).json({ message: 'User not found' });
         }
 
         const resetToken = uuidv4();
