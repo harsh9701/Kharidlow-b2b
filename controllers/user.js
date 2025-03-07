@@ -54,7 +54,7 @@ module.exports.userLogin = async (req, res) => {
     try {
         const { email, password } = req.body;
 
-        const userExists = await userModel.findOne({ email: email }, { password: 1 });
+        const userExists = await userModel.findOne({ email });
 
         if (!userExists) {
             return res.status(404).json({ message: "Invalid credentials" });
