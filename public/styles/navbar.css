@@ -180,10 +180,12 @@ body {
     padding: 0.5rem;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
     margin-top: 0.5rem;
-    min-width: 200px;
+    width: inherit;
 }
 
 .dropdown-item {
+    font-size: 0.95rem;
+    line-height: 0.85rem;
     color: var(--text-light);
     padding: 0.6rem 1rem;
     border-radius: 4px;
@@ -211,6 +213,10 @@ body {
 .home-link,
 .brand-name {
     display: none;
+}
+
+.navbar-collapse {
+    width: inherit !important;
 }
 
 /* ------Brand Logo designing------- */
@@ -274,7 +280,6 @@ body {
 /* Mobile styling */
 @media (max-width: 1124px) {
     .search-form {
-        width: 80%;
         width: 420px;
     }
 
@@ -301,7 +306,7 @@ body {
     }
 
     .nav-link {
-        padding: 0.7rem 1rem;
+        padding: 0.4rem 1rem;
         border-radius: 4px;
         margin: 0.2rem 0;
     }
@@ -315,6 +320,7 @@ body {
 
     .search-form {
         margin-bottom: 1rem;
+        width: inherit !important;
     }
 
     .home-link,
