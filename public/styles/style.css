@@ -1,5 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
 
+:root {
+    --primary-color: #6241e6;
+    --secondary-color: #856cea;
+    --light-purple: #abbdff86;
+    --dark-color: #07081b;
+    --text-color: #343a40;
+    --bg-light: #f8f9fa;
+    --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    --border-radius: 10px;
+    --transition: all 0.3s ease;
+}
+
 body {
     font-family: "Nunito", sans-serif;
     font-optical-sizing: auto;
@@ -26,6 +38,84 @@ body {
 .carousel-item img {
     height: 400px;
     object-fit: fill;
+}
+
+.custom-caption {
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 15px;
+    border-radius: var(--border-radius);
+    max-width: 80%;
+    right: 10%;
+    left: 10%;
+    bottom: 20px;
+}
+
+.text-shadow {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+.custom-indicators {
+    bottom: -5px;
+}
+
+.custom-indicators button {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    opacity: 0.6;
+}
+
+.custom-indicators button.active {
+    opacity: 1;
+}
+
+/* USP Section */
+.usp-section {
+    background-color: var(--bg-light);
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 10px;
+}
+
+.usp-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+}
+
+.usp-item i {
+    font-size: 24px;
+    color: var(--primary-color);
+    margin-right: 10px;
+}
+
+.usp-item span {
+    font-weight: 600;
+}
+
+/* Section Titles */
+.title-style {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-color);
+    margin-bottom: 30px;
+    position: relative;
+    text-align: center;
+    padding-bottom: 15px;
+}
+
+.title-style::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background-color: var(--primary-color);
+    border-radius: 2px;
 }
 
 .category-scroll,
@@ -133,31 +223,45 @@ body {
 }
 
 .how-it-works {
-    margin: 10px;
-    padding: 10px;
-    border-radius: 20px;
+    padding: 1.5rem 0.6rem;
+    border-radius: 12px;
     background-color: #cbd0feaa;
+}
+
+.how-title-style {
+    margin-bottom: 2rem;
+    font-size: 1.75rem;
 }
 
 .how-it-works-row {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
+    gap: 1rem;
 }
 
 .how-it-works-row .col-md-3 {
     background-color: #abbdff86;
-    margin: 3px;
-    padding: 3px;
-    border: 0.2px solid #d6d5d5;
-    border-radius: 14px;
-    cursor: default;
-    transition: all 0.3s;
+    padding: 1.25rem;
+    border-radius: 10px;
+    transition: transform 0.2s ease;
+    flex: 0 0 calc(25% - 1rem);
+    max-width: calc(25% - 1rem);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .how-it-works-row .col-md-3:hover {
-    font-size: 1.03rem;
-    margin: 3px;
-    padding: 3px;
+    transform: translateY(-3px);
+}
+
+.step h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.step p {
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
 }
 
 .map-container {
@@ -176,13 +280,6 @@ body {
     width: 100%;
     height: 100%;
     border: 0;
-}
-
-.title-style {
-    margin-bottom: 20px;
-    font-weight: bold;
-    font-size: 1.7rem;
-    color: #343a40;
 }
 
 .under99-card-main {
@@ -289,6 +386,13 @@ body {
     }
 }
 
+@media (max-width: 992px) {
+    .how-it-works-row .col-md-3 {
+        flex: 0 0 calc(33.333% - 1rem);
+        max-width: calc(33.333% - 1rem);
+    }
+}
+
 @media only screen and (max-width: 991px) {
 
     .category-scroll,
@@ -311,6 +415,8 @@ body {
 
     .title-style {
         font-size: 1.6rem;
+        padding-bottom: 10px;
+        margin-bottom: 15px;
     }
 
     .card-img-top {
@@ -341,6 +447,23 @@ body {
 
     .tshirt-product {
         width: 95%;
+    }
+
+    .usp-section {
+        display: none;
+    }
+
+    .category-scroll {
+        margin-top: 15px;
+    }
+
+    .how-it-works-row .col-md-3 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    .title-style {
+        font-size: 1.5rem;
     }
 }
 
