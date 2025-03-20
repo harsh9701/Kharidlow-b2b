@@ -88,6 +88,28 @@ body {
     height: 3rem;
 }
 
+/* Target the scrollbar */
+::-webkit-scrollbar {
+    width: 5px;
+    height: 6px;
+    background-color: #f1f1f1;
+}
+
+/* Handle of the scrollbar */
+::-webkit-scrollbar-thumb {
+    background-color: #856cea;
+    border-radius: 10px;
+}
+
+/* Hover effect for the scrollbar handle */
+::-webkit-scrollbar-thumb:hover {
+    background-color: #6241e6;
+}
+
+/* Change scrollbar corner when both horizontal and vertical scrollbars appear */
+::-webkit-scrollbar-corner {
+    background-color: #f1f1f1;
+}
 
 @media (max-width: 576px) {
     .table thead {

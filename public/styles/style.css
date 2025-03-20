@@ -185,8 +185,8 @@ body {
     font-size: 1rem;
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;
     /* if text long then ... append after text */
+    text-overflow: ellipsis;
 }
 
 .recent-product-card {
