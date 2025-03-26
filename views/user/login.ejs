@@ -82,6 +82,29 @@
             font-weight: 600;
             text-decoration: underline;
         }
+
+        /* Target the scrollbar */
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 6px;
+            background-color: #f1f1f1;
+        }
+
+        /* Handle of the scrollbar */
+        ::-webkit-scrollbar-thumb {
+            background-color: #856cea;
+            border-radius: 10px;
+        }
+
+        /* Hover effect for the scrollbar handle */
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: #6241e6;
+        }
+
+        /* Change scrollbar corner when both horizontal and vertical scrollbars appear */
+        ::-webkit-scrollbar-corner {
+            background-color: #f1f1f1;
+        }
     </style>
 </head>
 
@@ -102,7 +125,8 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text inp-txt"><i class="fas fa-user"></i></span>
                         </div>
-                        <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email"
+                            required>
                     </div>
                 </div>
                 <div class="form-group">
@@ -111,7 +135,8 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text inp-txt"><i class="fas fa-lock"></i></span>
                         </div>
-                        <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
+                        <input type="password" class="form-control" id="password" name="password"
+                            placeholder="Enter your password" required>
                     </div>
                 </div>
                 <button type="submit" class="btn btn-primary login-btn btn-block">Login</button>
