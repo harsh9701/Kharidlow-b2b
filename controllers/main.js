@@ -40,7 +40,7 @@ const productModel = require("../models/product");
 
 module.exports.renderLandingPage = async (req, res) => {
     try {
-        const [category, recentProducts, under99Products, bagsProducts] = await Promise.all([
+        const [category, recentProducts, under99Products, bagsProducts, stationeryItems] = await Promise.all([
             generalDataModel.find({}, { subcategories: 0 }).sort({ createdAt: -1 }).lean(),
 
             productModel.find({}, { productName: 1, price: 1, moq: 1, mainImage: 1 })
@@ -61,15 +61,34 @@ module.exports.renderLandingPage = async (req, res) => {
                 }
             ]),
 
-            productModel.find(
-                { category: new mongoose.Types.ObjectId("66fe8456c94255633c708a26") },
-                { productName: 1, price: 1, moq: 1, mainImage: 1 }
-            )
-                .limit(12)
-                .lean()
+            productModel.aggregate([
+                { $match: { category: new mongoose.Types.ObjectId("66fe8456c94255633c708a26") } },
+                { $sample: { size: 36 } },
+                {
+                    $project: {
+                        productName: 1,
+                        price: 1,
+                        moq: 1,
+                        mainImage: 1
+                    }
+                }
+            ]),
+
+            productModel.aggregate([
+                { $match: { category: new mongoose.Types.ObjectId("67d573aaefcccb671f2d11a5") } },
+                { $sample: { size: 20 } },
+                {
+                    $project: {
+                        productName: 1,
+                        price: 1,
+                        moq: 1,
+                        mainImage: 1
+                    }
+                }
+            ])
         ]);
 
-        return res.render("index.ejs", { category, recentProducts, under99Products, bagsProducts });
+        return res.render("index.ejs", { category, recentProducts, under99Products, bagsProducts, stationeryItems });
 
     } catch (error) {
         return res.status(500).json({ message: "Internal Server Error", error: error.message });
