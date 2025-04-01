@@ -15,7 +15,7 @@ module.exports.renderAddProductPage = (req, res) => {
 
 module.exports.renderListingPage = async (req, res) => {
     const page = parseInt(req.query.page) || 1;
-    const pageSize = parseInt(req.query.pageSize) || 24;
+    const pageSize = parseInt(req.query.pageSize) || 48;
     const currentPage = parseInt(req.query.page) || 1;
     const categoryFilter = req.query.category || req.body.category;
 

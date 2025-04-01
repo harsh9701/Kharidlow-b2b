@@ -114,7 +114,7 @@ module.exports.renderCategoryWiseListingPage = async (req, res) => {
     try {
         const categoryId = req.params.id;
         const page = parseInt(req.query.page) || 1;
-        const pageSize = parseInt(req.query.pageSize) || 24;
+        const pageSize = parseInt(req.query.pageSize) || 48;
         const currentPage = parseInt(req.query.page) || 1;
         const categoryFilter = req.query.category || req.body.category;
 
@@ -153,7 +153,7 @@ module.exports.renderCategoryWiseListingPage = async (req, res) => {
 
 module.exports.renderSearchResultPage = async (req, res) => {
     const page = parseInt(req.query.page) || 1;
-    const pageSize = parseInt(req.query.pageSize) || 24;
+    const pageSize = parseInt(req.query.pageSize) || 48;
     const currentPage = parseInt(req.query.page) || 1;
     const searchTerm = req.query.searchTerm;
 

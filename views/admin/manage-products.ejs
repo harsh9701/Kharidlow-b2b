@@ -53,11 +53,11 @@
                                         <th><input type="checkbox" id="selectAll"></th> <!-- Select All Checkbox -->
                                         <th>S.No.</th>
                                         <th>Product Name</th>
+                                        <th>Created At</th>
                                         <th>SKU</th>
                                         <th>Category</th>
                                         <th>Price</th>
                                         <th>MOQ</th>
-                                        <th>Stock</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
@@ -76,6 +76,9 @@
                                                     <%= product.productName %>
                                                 </td>
                                                 <td>
+                                                    <%= new Date(product.createdAt).toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' }) %>
+                                                </td>
+                                                <td>
                                                     <%= product.sku %>
                                                 </td>
                                                 <td>
@@ -85,9 +88,6 @@
                                                 </td>
                                                 <td>
                                                     <%= product.moq %>
-                                                </td>
-                                                <td>
-                                                    <%= product.stock %>
                                                 </td>
                                                 <td style="min-width: 200px;">
                                                     <div class="btn-group" role="group">

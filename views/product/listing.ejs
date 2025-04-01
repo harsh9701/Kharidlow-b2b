@@ -125,10 +125,10 @@
                             <!-- Previous Button -->
                             <li class="page-item <%= (currentPage === 1) ? 'disabled' : '' %>">
                                 <a class="page-link"
-                                    href="/product?page=<%= currentPage - 1 %>&pageSize=24&category=<%= selectedCategory %>">Previous</a>
+                                    href="/product?page=<%= currentPage - 1 %>&pageSize=48&category=<%= selectedCategory %>">Previous</a>
                             </li>
 
-                            <% const totalPages=Math.ceil(totalProducts / 24); const maxPagesToShow=2; let
+                            <% const totalPages=Math.ceil(totalProducts / 48); const maxPagesToShow=2; let
                                 startPage=Math.max(currentPage - 2, 1); let endPage=Math.min(currentPage + 2,
                                 totalPages); if (endPage - startPage < maxPagesToShow - 1) { if (startPage===1) {
                                 endPage=Math.min(startPage + maxPagesToShow - 1, totalPages); } else if
@@ -136,7 +136,7 @@
                                 (let i=startPage; i <=endPage; i++) { %>
                                 <li class="page-item <%= (i === currentPage) ? 'active' : '' %>">
                                     <a class="page-link"
-                                        href="/product?page=<%= i %>&pageSize=24&category=<%= selectedCategory %>">
+                                        href="/product?page=<%= i %>&pageSize=48&category=<%= selectedCategory %>">
                                         <%= i %>
                                     </a>
                                 </li>
@@ -150,7 +150,7 @@
                                     <!-- Next Button -->
                                     <li class="page-item <%= (currentPage === totalPages) ? 'disabled' : '' %>">
                                         <a class="page-link"
-                                            href="/product?page=<%= currentPage + 1 %>&pageSize=24&category=<%= selectedCategory %>">Next</a>
+                                            href="/product?page=<%= currentPage + 1 %>&pageSize=48&category=<%= selectedCategory %>">Next</a>
                                     </li>
                         </ul>
                     </nav>
