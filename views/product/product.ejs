@@ -55,7 +55,12 @@
                     <p class="text-muted">Category: <span class="badge badge-info">
                             <%= productDetails.subCategory %>
                         </span></p>
-                    <p class="fs-5"><strong>Price: &#8377;<%= productDetails.price %></strong></p>
+                    <p class="fs-5"><strong>Price: &#8377;<%= productDetails.price %>
+                                <% if(productDetails.taxType=="inclusive" ) { %> <span style="font-size: 14px;">(Inc.
+                                        GST@<%= productDetails.taxRate %>%)</span>
+                                    <% } else { %> <span style="font-size: 14px;">(Excl. GST@<%= productDetails.taxRate
+                                                %>%)</span>
+                                        <% } %></strong></p>
 
                     <!-- Quantity Controls -->
                     <div class="quantity-control my-3">

@@ -39,7 +39,8 @@
                         </div>
                         <div class="card-body">
                             <p><strong>Name:</strong>
-                                <%= customer.fullName.charAt(0).toUpperCase() + customer.fullName.slice(1).toLowerCase(); %>
+                                <%= customer.fullName.charAt(0).toUpperCase() +
+                                    customer.fullName.slice(1).toLowerCase(); %>
                             </p>
                             <p><strong>Contact:</strong>
                                 <%= customer.contactNo %>
@@ -88,14 +89,19 @@
                                                         <span class="badge rounded-pill text-bg-warning">
                                                             <%= order.status %>
                                                         </span>
-                                                        <%} else {%>
-                                                            <span class="badge rounded-pill text-bg-info">
+                                                        <%} else if(order.status=="canceled" ) {%>
+                                                            <span class="badge rounded-pill text-bg-danger">
                                                                 <%= order.status %>
                                                             </span>
-                                                            <%} %>
-                                                            <br>
-                                                <span class="text-muted">Date: <%= new
-                                                        Date(order.createdAt).toLocaleDateString() %></span>
+                                                            <%} else {%>
+                                                                <span class="badge rounded-pill text-bg-info">
+                                                                    <%= order.status %>
+                                                                </span>
+                                                                <%} %>
+                                                                    <br>
+                                                                    <span class="text-muted">Date: <%= new
+                                                                            Date(order.createdAt).toLocaleDateString()
+                                                                            %></span>
                                             </li>
                                             <% }); %>
                                                 <% } else { %>
@@ -117,7 +123,7 @@
         <!-- Include Admin Sidebar -->
         <%- include("../includes/admin-sidebar.ejs"); %>
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
