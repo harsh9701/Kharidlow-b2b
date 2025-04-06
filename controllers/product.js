@@ -68,7 +68,7 @@ module.exports.renderProductPage = async (req, res) => {
             });
         const suggestedProducts = await productModel.aggregate([
             { $match: { subCategory: productDetails.subCategory } },
-            { $sample: { size: 12 } },
+            { $sample: { size: 32 } },
             { $project: { productName: 1, price: 1, moq: 1, mainImage: 1 } }
         ]);
         res.render("product/product.ejs", { productDetails, suggestedProducts });
