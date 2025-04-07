@@ -200,8 +200,12 @@
 
                 <div class="mb-3">
                     <label for="taxRate" class="form-label">Tax Rate (%)</label>
-                    <input type="number" class="form-control" id="taxRate" name="taxRate" value="<%= product.taxRate %>"
-                        required>
+                    <select class="form-select" id="taxRate" name="taxRate" required>
+                        <option value="0" <%=product.taxRate==0 ? 'selected' : '' %>>0%</option>
+                        <option value="5" <%=product.taxRate==5 ? 'selected' : '' %>>5%</option>
+                        <option value="12" <%=product.taxRate==12 ? 'selected' : '' %>>12%</option>
+                        <option value="18" <%=product.taxRate==18 ? 'selected' : '' %>>18%</option>
+                    </select>
                 </div>
 
                 <div class="mb-3">
@@ -373,16 +377,20 @@
                                     confirmButtonText: 'OK',
                                     timer: 4000 // Optional: Auto-close after 4 seconds
                                 }).then(() => {
-                                    window.location.href = '/admin/manage/products';
+                                    window.location.href = '/admin/manage/products/<%= product._id %>';
                                 });
                             },
                             error: function (xhr, status, error) {
+                                const response = JSON.parse(xhr.responseText);
+                                const errorMessage = response.message || "An error occurred while updating the product. Please try again.";
                                 hideLoader();
                                 Swal.fire({
                                     icon: 'error',
                                     title: 'Error',
-                                    text: 'An error occurred while updating the product. Please try again.',
+                                    text: errorMessage,
                                     confirmButtonText: 'OK'
+                                }).then(() => {
+                                    window.location.href = '/admin/manage/products/<%= product._id %>';
                                 });
                             }
                         });

@@ -8,7 +8,6 @@ module.exports.renderAddProductPage = (req, res) => {
     try {
         res.render("product/add-product.ejs");
     } catch (error) {
-        console.log(error.message);
         return res.status(500).send(error.message);
     }
 };
@@ -102,6 +101,10 @@ module.exports.addNewProduct = async (req, res) => {
 
         if (!req.file) {
             return res.status(400).json({ success: false, message: "Product image is mandatory" });
+        }
+
+        if (price < 1 || stock < 1 || moq < 1) {
+            return res.status(400).json({ success: false, message: "Price, stock & MOQ should be greater than 0" });
         }
 
         if (!productName || !category || !price || !sku) {
@@ -218,6 +221,10 @@ module.exports.updateProduct = async (req, res) => {
             return res.status(404).json({ success: false, message: "Product Not Found" });
         }
 
+        if (updatedProductData.price < 1 || updatedProductData.stock < 1 || updatedProductData.moq < 1) {
+            return res.status(400).json({ success: false, message: "Price, stock & MOQ should be greater than 0" });
+        }
+
         const tagsArray = updatedProductData.tags ? updatedProductData.tags.split(',').map(tag => tag.trim()) : [];
 
         let productImages = [...product.productImages];
@@ -240,12 +247,15 @@ module.exports.updateProduct = async (req, res) => {
 
             if (totalImagesCount <= 5) {
                 // Delete all old images before replacing them
-                if (productImages.length > 0) {
-                    await deleteImagesUsingFirebase(productImages);
-                }
+                // if (productImages.length > 0) {
+                //     await deleteImagesUsingFirebase(productImages);
+                // }
 
                 // Upload new product images
-                productImages = await Promise.all(req.files.productImages.map(file => uploadImagesUsingFirebase(file)));
+                const newUploadedImages = await Promise.all(req.files.productImages.map(file => uploadImagesUsingFirebase(file)));
+
+                // Append to existing productImages array
+                productImages = [...productImages, ...newUploadedImages];
             } else {
                 return res.status(400).json({
                     success: false,
@@ -274,7 +284,6 @@ module.exports.updateProduct = async (req, res) => {
         res.status(200).json({ success: true, message: "Product updated successfully", product: updatedProduct });
 
     } catch (error) {
-        console.error("Error updating product:", error);
         res.status(500).json({ success: false, message: "Internal server error", error: error.message });
     }
 };
@@ -307,7 +316,6 @@ module.exports.deleteProductImage = async (req, res) => {
         return res.status(200).json({ success: true, message: 'Image deleted successfully.' });
 
     } catch (error) {
-        console.error('Error during image deletion:', error);
         return res.status(500).json({ success: false, message: 'Server error. Please try again later.' });
     }
 };
@@ -347,7 +355,6 @@ module.exports.deleteProduct = async (req, res) => {
 
         res.status(200).json({ success: true, message: 'Product deleted successfully.' });
     } catch (error) {
-        console.error('Error deleting product:', error);
         res.status(500).json({ success: false, message: 'Internal server error.' });
     }
 };
@@ -401,7 +408,6 @@ module.exports.deleteMultipleProducts = async (req, res) => {
 
         res.status(200).json({ success: true, message: 'Products deleted successfully.' });
     } catch (error) {
-        console.error('Error deleting products:', error);
         res.status(500).json({ success: false, message: 'Internal server error.' });
     }
 };
@@ -434,7 +440,6 @@ module.exports.addReview = async (req, res) => {
 
         return res.status(200).json({ success: true, message: 'Review submitted successfully' });
     } catch (error) {
-        console.error(error);
         res.status(500).json({ success: false, message: 'Internal server error.' });
     }
 
