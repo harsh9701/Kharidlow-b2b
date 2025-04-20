@@ -25,6 +25,9 @@
                         order.userId.fullName.slice(1).toLowerCase(); %>
                 </div>
                 <div class="fullName">Contact: <%= order.userId.contactNo %>
+                        <a href="https://wa.me/91<%= order.userId.contactNo %>" target="_blank">
+                            <i class="fa-brands fa-whatsapp"></i>
+                        </a>
                 </div>
                 <div class="fullName">Status:
                     <% if(order.status=="delivered" ) { %>

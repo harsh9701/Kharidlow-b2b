@@ -55,13 +55,18 @@
                                                     <%= index+1 %>
                                                 </td>
                                                 <td>
-                                                    <%= customer.fullName.charAt(0).toUpperCase() + customer.fullName.slice(1).toLowerCase(); %>
+                                                    <%= customer.fullName.charAt(0).toUpperCase() +
+                                                        customer.fullName.slice(1).toLowerCase(); %>
                                                 </td>
                                                 <td>
                                                     <%= customer.email %>
                                                 </td>
                                                 <td>
                                                     <%= customer.contactNo %>
+                                                        <a href="https://wa.me/91<%= item.userId.contactNo %>"
+                                                            target="_blank">
+                                                            <i class="fa-brands fa-whatsapp"></i>
+                                                        </a>
                                                 </td>
                                                 <td>
                                                     <%= customer.orderCount %>
