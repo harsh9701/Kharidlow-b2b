@@ -9,7 +9,7 @@
         </div>
 
         <div>
-            <h5 class="brand-name" data-text="KharidLow">KharidLow&nbsp;</h5>
+            <h5 class="brand-name" data-text="KharidLow">KharidLow&nbsp;&nbsp;</h5>
         </div>
 
         <!-- Mobile-only cart icon -->
@@ -41,12 +41,13 @@
             <ul class="navbar-nav">
                 <li class="nav-item">
                     <a class="nav-link home-link" href="/">
-                        <i class="fa-solid fa-house"></i> 
+                        <i class="fa-solid fa-house"></i>
                         <span>Home</span>
                     </a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
                         <i class="fa-solid fa-layer-group"></i>
                         <span>Categories</span>
                         <i class="fa-solid fa-chevron-down dropdown-icon"></i>
@@ -64,61 +65,119 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/product">
-                        <i class="fa-solid fa-tag"></i> 
+                        <i class="fa-solid fa-tag"></i>
                         <span>New Arrival</span>
                     </a>
                 </li>
                 <!-- Conditional links based on user login status -->
                 <% if (user) { %>
-                    <% if(user.role==="admin") { %>
+                    <% if(user.role==="admin" ) { %>
                         <li class="nav-item">
                             <a class="nav-link" href="/admin/manage">
                                 <i class="fa-regular fa-user"></i>
                                 <span>Admin</span>
                             </a>
                         </li>
-                    <% } else { %>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/user/orders">
-                                <i class="fa-solid fa-dolly"></i>
-                                <span>Orders</span>
-                            </a>
-                        </li>
-                    <% } %>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/user/account">
-                            <i class="fa-regular fa-user"></i>
-                            <span>Profile</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/logout">
-                            <i class="fa-solid fa-arrow-right-from-bracket"></i> 
-                            <span>Logout</span>
-                        </a>
-                    </li>
-                <% } else { %>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/user/login">
-                            <i class="fa-solid fa-arrow-right-to-bracket"></i> 
-                            <span>Login</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/user/register">
-                            <i class="fa-solid fa-user-plus"></i>
-                            <span>Register</span>
-                        </a>
-                    </li>
-                <% } %>
-                <!-- Desktop-only cart button -->
-                <li class="nav-item cart-desktop d-none d-lg-block">
-                    <a href="/user/cart" class="nav-link cart-btn">
-                        <i class="fa-solid fa-cart-shopping"></i>
-                        <span class="cart-badge">0</span>
-                    </a>
-                </li>
+                        <% } else { %>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/user/orders">
+                                    <i class="fa-solid fa-dolly"></i>
+                                    <span>Orders</span>
+                                </a>
+                            </li>
+                            <% } %>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/user/account">
+                                        <i class="fa-regular fa-user"></i>
+                                        <span>Profile</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/logout">
+                                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                                        <span>Logout</span>
+                                    </a>
+                                </li>
+                                <% } else { %>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="/user/login">
+                                            <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                                            <span>Login</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="/user/register">
+                                            <i class="fa-solid fa-user-plus"></i>
+                                            <span>Register</span>
+                                        </a>
+                                    </li>
+                                    <% } %>
+                                        <!-- Desktop-only cart button -->
+                                        <li class="nav-item cart-desktop d-none d-lg-block">
+                                            <a href="/user/cart" class="nav-link cart-btn">
+                                                <i class="fa-solid fa-cart-shopping"></i>
+                                                <span class="cart-badge">0</span>
+                                            </a>
+                                        </li>
             </ul>
         </div>
     </div>
 </nav>
+
+<!-- Bottom Navbar (Mobile) -->
+<div class="bottom-navbar">
+    <div class="bottom-nav-item">
+        <a href="/" class="bottom-nav-link">
+            <i class="fa-solid fa-house"></i>
+            <span>Home</span>
+        </a>
+    </div>
+    <div class="bottom-nav-item">
+        <a href="#" class="bottom-nav-link" id="bottom-search-toggle">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <span>Search</span>
+        </a>
+    </div>
+    <div class="bottom-nav-item">
+        <a href="/user/cart" class="bottom-nav-link">
+            <i class="fa-solid fa-cart-shopping"></i>
+            <span class="bottom-cart-badge">0</span>
+            <span>Cart</span>
+        </a>
+    </div>
+</div>
+
+<!-- Mobile Search Overlay -->
+<div class="mobile-search-overlay" id="mobileSearchOverlay">
+    <form action="/search" class="mobile-search-form" role="search">
+        <div class="input-group">
+            <input class="form-control mobile-search-input" type="search" name="searchTerm"
+                placeholder="Search for products..." aria-label="Search">
+            <button class="btn mobile-search-btn" type="submit">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+            <button type="button" class="btn mobile-search-close" id="mobileSearchClose">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- Add this script at the end of your body tag -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const searchToggle = document.getElementById('bottom-search-toggle');
+        const searchOverlay = document.getElementById('mobileSearchOverlay');
+        const searchClose = document.getElementById('mobileSearchClose');
+
+        searchToggle.addEventListener('click', function (e) {
+            e.preventDefault();
+            searchOverlay.classList.add('active');
+            document.querySelector('.mobile-search-input').focus();
+        });
+
+        searchClose.addEventListener('click', function () {
+            searchOverlay.classList.remove('active');
+        });
+    });
+</script>
