@@ -19,7 +19,7 @@
         !function (f, b, e, v, n, t, s) {
             if (f.fbq) return; n = f.fbq = function () {
                 n.callMethod ?
-                n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+                    n.callMethod.apply(n, arguments) : n.queue.push(arguments)
             };
             if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
             n.queue = []; t = b.createElement(e); t.async = !0;
@@ -43,6 +43,16 @@
         <!-- Sliding Banner -->
         <div id="bannerCarousel" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <a href="/product">
+                        <img src="https://res.cloudinary.com/dfx61hywd/image/upload/v1746100222/App_Banner_x9gl3g.png"
+                            class="d-block w-100" alt="Banner 2">
+                        <div class="carousel-caption custom-caption">
+                            <h2 class="fw-bold text-shadow">Exclusive App Offer</h2>
+                            <p class="d-none d-md-block">Order From App & Get Rs 300 Off</p>
+                        </div>
+                    </a>
+                </div>
                 <div class="carousel-item">
                     <a href="/product">
                         <img src="https://res.cloudinary.com/dfx61hywd/image/upload/v1736419667/new-arrival_l6w9oz.jpg"
@@ -73,7 +83,7 @@
                         </div>
                     </a>
                 </div>
-                <div class="carousel-item active">
+                <div class="carousel-item">
                     <a href="/category/66fe840cc94255633c708a22?category=Women%27s%20Bottom%20Wear">
                         <img src="https://res.cloudinary.com/dfx61hywd/image/upload/v1738152186/promotion_2_qrbetp.jpg"
                             class="d-block w-100" alt="Banner 3">

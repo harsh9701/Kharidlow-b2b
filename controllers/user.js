@@ -9,7 +9,9 @@ module.exports.userRegister = async (req, res) => {
     try {
         const { fullName, email, password, contactNo } = req.body;
 
-        const user = await userModel.findOne({ email });
+        const userEmail = email.toLowerCase();
+        
+        const user = await userModel.findOne({ email: userEmail });
 
         if (user) {
             return res
@@ -22,7 +24,7 @@ module.exports.userRegister = async (req, res) => {
                 const createdUser = await userModel.create({
                     fullName,
                     password: hash,
-                    email,
+                    email: userEmail,
                     contactNo
                 });
 
