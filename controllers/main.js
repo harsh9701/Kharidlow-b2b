@@ -200,3 +200,11 @@ module.exports.renderReturnRefundPolicyPage = (req, res) => {
         res.status(500).send(error.message);
     }
 };
+
+module.exports.renderPrivacyPolicyPage = (req, res) => {
+    try {
+        res.render("privacy-policy.ejs");
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Privacy Policy - Kharidlow</title>
+    <link rel="icon" type="image/x-icon" href="assets/Kharidlow.ico" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+    <link rel="stylesheet" href="/styles/style.css" />
+    <link rel="stylesheet" href="/styles/navbar.css" />
+    <link rel="stylesheet" href="/styles/footer.css" />
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .shipping-container {
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 2rem 0;
+        }
+
+        .shipping-content-container {
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            width: 100%;
+            position: relative;
+        }
+
+        .shipping-content-container h3 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: #007bff;
+            font-weight: bold;
+        }
+
+        .shipping-content-container h4 {
+            margin-top: 1.5rem;
+            color: #444;
+        }
+
+        .shipping-content-container p {
+            font-size: 1rem;
+            color: #555;
+            margin-bottom: 1rem;
+        }
+
+        .shipping-content-container ul {
+            margin: 1rem 0;
+            padding-left: 20px;
+        }
+
+        .shipping-content-container ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .highlight {
+            color: #007bff;
+            font-weight: bold;
+        }
+
+        @media (max-width: 576px) {
+            .shipping-content-container {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <%- include("includes/navbar.ejs") %>
+
+        <div class="shipping-container">
+            <div class="shipping-content-container">
+                <h3>Privacy Policy</h3>
+                <p>Welcome to <span class="highlight">Kharidlow</span>. We respect your privacy and are committed to
+                    protecting your personal data. This Privacy Policy explains how we collect, use, and share your
+                    information.</p>
+
+                <h4>1. Information We Collect</h4>
+                <ul>
+                    <li><b>Personal Data:</b> Name, email, phone number, company name, shipping/billing address, payment
+                        details.</li>
+                    <li><b>Usage Data:</b> IP address, browser type, device details, pages visited, time spent, etc.
+                    </li>
+                </ul>
+
+                <h4>2. How We Use Your Information</h4>
+                <ul>
+                    <li>To process and fulfill your orders.</li>
+                    <li>To improve our services and user experience.</li>
+                    <li>To send order confirmations and updates.</li>
+                    <li>To respond to customer service requests.</li>
+                    <li>To send promotional messages (only with your consent).</li>
+                </ul>
+
+                <h4>3. Sharing Your Information</h4>
+                <ul>
+                    <li>We do <b>not sell</b> your data to any third party.</li>
+                    <li>We may share information with trusted third parties (e.g. payment gateways, shipping providers).
+                    </li>
+                    <li>We may disclose data to comply with legal obligations.</li>
+                </ul>
+
+                <h4>4. Cookies & Tracking</h4>
+                <p>We use cookies to improve your browsing experience and gather analytics data. You can manage cookie
+                    preferences through your browser settings.</p>
+
+                <h4>5. Data Security</h4>
+                <p>Your data is protected with secure encryption protocols. However, no online transmission is
+                    completely secure, and we encourage you to safeguard your login credentials.</p>
+
+                <h4>6. Your Rights</h4>
+                <ul>
+                    <li>Access or update your personal information.</li>
+                    <li>Request deletion of your data.</li>
+                    <li>Opt-out of marketing communications.</li>
+                </ul>
+
+                <h4>7. Third-Party Links</h4>
+                <p>Our website may include links to third-party websites. We are not responsible for their privacy
+                    practices.</p>
+
+                <h4>8. Children’s Privacy</h4>
+                <p>We do not knowingly collect data from individuals under 18 years of age.</p>
+
+                <h4>9. Changes to This Policy</h4>
+                <p>We may update this policy periodically. Any changes will be posted here with the revised date.</p>
+
+                <h4>10. Contact Us</h4>
+                <p>For any privacy-related queries, contact us at:</p>
+                <ul>
+                    <li>Email: <span class="highlight">support@kharidlow.com</span></li>
+                    <li>Phone/WhatsApp: <span class="highlight">+91 7982525575 / 8700711482</span></li>
+                </ul>
+
+                <p>Thank you for trusting <span class="highlight">kharidlow.com</span>.</p>
+            </div>
+        </div>
+
+        <%- include("includes/footer.ejs") %>
+
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
