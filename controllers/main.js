@@ -208,3 +208,11 @@ module.exports.renderPrivacyPolicyPage = (req, res) => {
         res.status(500).send(error.message);
     }
 };
+
+module.exports.renderAboutUsPage = (req, res) => {
+    try {
+        res.render("about-us.ejs");
+    } catch(error) {
+        res.status(500).send(error.message);
+    }
+}
