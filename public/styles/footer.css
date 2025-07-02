@@ -40,7 +40,7 @@
 }
 
 .contact-social {
-    margin-top: 20px;
+    margin-top: 10px;
 }
 
 .contact-social>ul {
@@ -102,6 +102,10 @@ footer div {
 
 .margin-auto {
     margin: auto;
+}
+
+.play-store-icon {
+    margin-top: 11px;
 }
 
 h6>a {
