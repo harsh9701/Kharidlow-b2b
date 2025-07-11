@@ -116,11 +116,15 @@ module.exports.renderCategoryWiseListingPage = async (req, res) => {
         const page = parseInt(req.query.page) || 1;
         const pageSize = parseInt(req.query.pageSize) || 48;
         const currentPage = parseInt(req.query.page) || 1;
+
         const categoryFilter = req.query.category || req.body.category;
+        const minPrice = parseFloat(req.query.minPrice);
+        const maxPrice = parseFloat(req.query.maxPrice);
 
         const skip = (page - 1) * pageSize;
 
         let filter = { category: categoryId };
+
         if (categoryFilter) {
             filter.subCategory = categoryFilter;
         }
@@ -135,6 +139,14 @@ module.exports.renderCategoryWiseListingPage = async (req, res) => {
             return res.status(400).render("error.ejs", { message: "Invalid category ID" });
         }
 
+        if (!isNaN(minPrice) && !isNaN(maxPrice)) {
+            filter.price = { $gte: minPrice, $lte: maxPrice };
+        } else if (!isNaN(minPrice)) {
+            filter.price = { $gte: minPrice };
+        } else if (!isNaN(maxPrice)) {
+            filter.price = { $lte: maxPrice };
+        }
+
         const products = await productModel.find(filter)
             .sort({ createdAt: -1 })
             .skip(skip)
@@ -145,7 +157,7 @@ module.exports.renderCategoryWiseListingPage = async (req, res) => {
         const totalPages = Math.ceil(totalProducts / pageSize);
         const categories = isCategoryExist;
 
-        res.render("product/category-wise-listing.ejs", { products, totalProducts, currentPage, totalPages, categories, selectedCategory: categoryFilter || '' });
+        res.render("product/category-wise-listing.ejs", { products, totalProducts, currentPage, totalPages, categories, selectedCategory: categoryFilter || '', minPrice: req.query.minPrice || '', maxPrice: req.query.maxPrice || '' });
     } catch (error) {
         return res.status(500).send(error.message);
     }
@@ -212,7 +224,7 @@ module.exports.renderPrivacyPolicyPage = (req, res) => {
 module.exports.renderAboutUsPage = (req, res) => {
     try {
         res.render("about-us.ejs");
-    } catch(error) {
+    } catch (error) {
         res.status(500).send(error.message);
     }
 }

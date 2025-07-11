@@ -23,7 +23,7 @@
         <div class="products-header">
             <div class="container">
                 <div class="text-center">
-                    <h1></i>New Arrivals</h1>
+                    <h1>New Arrivals</h1>
                 </div>
             </div>
         </div>
@@ -237,10 +237,16 @@
                     });
                 });
 
+                function isValidPriceInput(value) {
+                    // Must not be empty, must be a number, must be >= 0, must not start with a dot
+                    const pattern = /^[0-9]\d*(\.\d{1,2})?$/;
+                    return pattern.test(value) && parseFloat(value) >= 0;
+                }
+
                 // throw an error when negative value recevied in price filter
                 $('#minPrice').on('change', function () {
-                    const minPrice = parseFloat($(this).val());
-                    if (minPrice < 0) {
+                    const value = $(this).val();
+                    if (!isValidPriceInput(value)) {
                         swal("Oops!", "Price should be positive", "error");
                         $(this).val('');
                     } else {
@@ -249,8 +255,8 @@
                 });
 
                 $('#maxPrice').on('change', function () {
-                    const maxPrice = parseFloat($(this).val());
-                    if (maxPrice < 0) {
+                    const value = $(this).val();
+                    if (!isValidPriceInput(value)) {
                         swal("Oops!", "Price should be positive", "error");
                         $(this).val('');
                     } else {
@@ -372,7 +378,7 @@
                 });
 
                 updateActiveFilters();
-                
+
             </script>
 </body>
 

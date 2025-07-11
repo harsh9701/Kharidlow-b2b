@@ -23,7 +23,6 @@ module.exports.renderListingPage = async (req, res) => {
 
     const skip = (page - 1) * pageSize;
 
-    // Filter Object
     let filter = {};
 
     if (categoryFilter) {

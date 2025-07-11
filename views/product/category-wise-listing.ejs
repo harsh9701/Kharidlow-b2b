@@ -38,70 +38,106 @@
     <!-- include navbar -->
     <%- include("../includes/navbar.ejs") %>
 
+        <!-- Header Section -->
+        <div class="products-header">
+            <div class="container">
+                <div class="text-center">
+                    <h1>
+                        <%= categories.name %> Items
+                    </h1>
+                </div>
+            </div>
+        </div>
+
         <!-- Main Container -->
         <div class="container mt-2">
             <div class="row">
 
-                <!-- Sidebar Filters -->
-                <aside class="col-lg-3 col-md-4 category-bar">
-                    <div class="filter-sidebar">
-                        <div class="filter-sidebar-bigscreen">
-                            <% if(categories && categories.subcategories.length> 0) { %>
-                                <h4>Categories</h4>
-                                <ul class="list-unstyled">
-                                    <li><a href="/category/<%= categories._id %>"><i
-                                                class="fa-solid fa-location-arrow"></i> All <%= categories.name %>
-                                                items</a>
-                                    </li>
-                                </ul>
-                                <% categories.subcategories.forEach((category)=> { %>
-                                    <ul class="list-unstyled">
-                                        <li><a
-                                                href="/category/<%= categories._id %>?category=<%= encodeURIComponent(category.name) %>"><i
-                                                    class="fa-solid fa-location-arrow"></i>
-                                                <%= category.name %>
-                                            </a></li>
-                                    </ul>
-                                    <% }) %>
-                                        <% } %>
+                <!-- Mobile Filter Toggle -->
+                <div class="col-12 d-lg-none">
+                    <div class="mobile-filter-toggle">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="mb-0"><i class="fas fa-filter me-2"></i>Filters</h5>
+                            <button class="btn btn-outline-secondary btn-sm" id="toggleFilters">
+                                <i class="fas fa-sliders-h me-2"></i>Show Filters
+                            </button>
                         </div>
-                        <div class="filter-sidebar-smallscreen">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">Category: <span id="selectedCategoryMobile">All
+                                    Products</span></small>
+                            <small class="text-muted" id="activePriceFilterMobile"></small>
+                        </div>
+                    </div>
+                </div>
 
-                            <div class="d-flex justify-content-between filter-content">
-                                <h5>Filter by Category</h5>
-                                <h6>Selected: <span id="selectedcategory">All <%= categories.name %> items</span></h6>
-                            </div>
-                            <form action="/category/<%= categories._id %>">
-                                <select class="form-select w-100 my-2" name="category">
-                                    <option value="" selected>All <%= categories.name %> items</option>
-                                    <% if(categories && categories.subcategories.length> 0) { %>
-                                        <% categories.subcategories.forEach((category)=> { %>
-                                            <option value="<%= category.name %>">
+                <!-- Sidebar Filters -->
+                <aside class="col-lg-3 col-md-4">
+                    <div class="filters-container" id="filtersContainer">
+                        <div class="filter-header">
+                            <i class="fas fa-filter me-2"></i>Filter Products
+                        </div>
+
+                        <!-- Category Filter -->
+                        <div class="filter-section">
+                            <h5><i class="fas fa-tags me-2"></i>Categories</h5>
+                            <ul class="category-list">
+                                <li>
+                                    <a href="/category/<%= categories._id %>" class="category-link">
+                                        <i class="fas fa-th-large"></i>
+                                        All <%= categories.name %> items
+                                    </a>
+                                </li>
+                                <% if(categories && categories.subcategories.length> 0) { %>
+                                    <% categories.subcategories.forEach((category)=> { %>
+                                        <li>
+                                            <a href="/category/<%= categories._id %>?category=<%= encodeURIComponent(category.name) %>"
+                                                class="category-link">
+                                                <i class="fa-solid fa-location-arrow"></i>
                                                 <%= category.name %>
-                                            </option>
-                                            <% }) %>
-                                                <% } %>
-                                </select>
-                                <button type="submit" class="btn btn-primary filter-btn w-100">Apply</button>
-                            </form>
+                                            </a>
+                                        </li>
+                                        <% }) %>
+                                            <% } %>
+                            </ul>
+                        </div>
+
+                        <!-- Price Filter -->
+                        <div class="filter-section">
+                            <h5>Price Range</h5>
+                            <div class="price-inputs">
+                                <input type="number" class="price-input" id="minPrice" value="<%= minPrice %>"
+                                    placeholder="Min ₹" min="0">
+                                <input type="number" class="price-input" id="maxPrice" value="<%= maxPrice %>"
+                                    placeholder="Max ₹" min="0">
+                            </div>
+                            <!-- <div class="price-presets">
+                                <span class="price-preset" data-min="0" data-max="500">Under ₹500</span>
+                                <span class="price-preset" data-min="500" data-max="1000">₹500-1K</span>
+                                <span class="price-preset" data-min="1000" data-max="2000">₹1K-2K</span>
+                                <span class="price-preset" data-min="2000" data-max="5000">₹2K-5K</span>
+                                <span class="price-preset" data-min="5000" data-max="">₹5K+</span>
+                            </div> -->
+                            <button type="button" class="btn filter-btn w-100 mb-2" id="applyPriceFilter">
+                                <i class="fas fa-check me-2"></i>Apply Filter
+                            </button>
+                            <div class="text-center">
+                                <a href="#" class="clear-filters" id="clearPriceFilter">
+                                    <i class="fas fa-times me-1"></i>Clear Price Filter
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Clear All Filters -->
+                        <div class="filter-section">
+                            <button type="button" class="btn btn-outline-secondary w-100" id="clearAllFilters">
+                                <i class="fas fa-refresh me-2"></i>Clear All Filters
+                            </button>
                         </div>
                     </div>
                 </aside>
 
                 <!-- Product Listing Grid -->
                 <div class="col-lg-9 col-md-8">
-                    <div class="d-flex justify-content-center align-items-center mb-3">
-                        <h2 class="new-arrival">
-                            <%= categories.name %> Items
-                        </h2>
-                        <!-- <select class="form-select w-auto">
-                            <option>Default Sorting</option>
-                            <option>Price: Low to High</option>
-                            <option>Price: High to Low</option>
-                            <option>Newest</option>
-                        </select> -->
-                    </div>
-
                     <!-- Product Grid -->
                     <div id="product-list" class="row">
                         <% if(products && products.length> 0) { %>
@@ -140,7 +176,7 @@
                             <!-- Previous Button -->
                             <li class="page-item <%= (currentPage === 1) ? 'disabled' : '' %>">
                                 <a class="page-link"
-                                    href="/category/<%= categories._id %>?page=<%= currentPage - 1 %>&pageSize=48&category=<%= encodeURIComponent(selectedCategory) %>">Previous</a>
+                                    href="/category/<%= categories._id %>?page=<%= currentPage - 1 %>&pageSize=48&category=<%= encodeURIComponent(selectedCategory) %>&minPrice=<%= minPrice || '' %>&maxPrice=<%= maxPrice || '' %>">Previous</a>
                             </li>
 
                             <% const totalPages=Math.ceil(totalProducts / 48); const maxPagesToShow=2; let
@@ -151,7 +187,7 @@
                                 (let i=startPage; i <=endPage; i++) { %>
                                 <li class="page-item <%= (i === currentPage) ? 'active' : '' %>">
                                     <a class="page-link"
-                                        href="/category/<%= categories._id %>?page=<%= i %>&pageSize=48&category=<%= encodeURIComponent(selectedCategory) %>">
+                                        href="/category/<%= categories._id %>?page=<%= i %>&pageSize=48&category=<%= encodeURIComponent(selectedCategory) %>&minPrice=<%= minPrice || '' %>&maxPrice=<%= maxPrice || '' %>">
                                         <%= i %>
                                     </a>
                                 </li>
@@ -165,7 +201,7 @@
                                     <!-- Next Button -->
                                     <li class="page-item <%= (currentPage === totalPages) ? 'disabled' : '' %>">
                                         <a class="page-link"
-                                            href="/category/<%= categories._id %>?page=<%= currentPage + 1 %>&pageSize=48&category=<%= encodeURIComponent(selectedCategory) %>">Next</a>
+                                            href="/category/<%= categories._id %>?page=<%= currentPage + 1 %>&pageSize=48&category=<%= encodeURIComponent(selectedCategory) %>&minPrice=<%= minPrice || '' %>&maxPrice=<%= maxPrice || '' %>">Next</a>
                                     </li>
                         </ul>
                     </nav>
@@ -183,6 +219,14 @@
             <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
             <script>
                 $(document).ready(function () {
+                    // Mobile filter toggle
+                    $('#toggleFilters').on('click', function () {
+                        $('#filtersContainer').toggleClass('show');
+                        const isVisible = $('#filtersContainer').hasClass('show');
+                        $(this).html(isVisible ? '<i class="fas fa-times me-2"></i>Hide Filters' : '<i class="fas fa-sliders-h me-2"></i>Show Filters');
+                    });
+
+                    //Add to cart
                     $('.add-to-cart-btn').on('click', function (event) {
                         event.preventDefault();
 
@@ -214,38 +258,147 @@
                     });
                 });
 
-                $(document).ready(function () {
-                    // Function to get the query parameter value by name
-                    function getParameterByName(name) {
-                        const url = window.location.href;
-                        name = name.replace(/[\[\]]/g, "\\$&");
-                        const regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-                            results = regex.exec(url);
-                        if (!results) return null;
-                        if (!results[2]) return '';
-                        return decodeURIComponent(results[2].replace(/\+/g, " "));
-                    }
+                function isValidPriceInput(value) {
+                    // Must not be empty, must be a number, must be >= 0, must not start with a dot
+                    const pattern = /^[0-9]\d*(\.\d{1,2})?$/;
+                    return pattern.test(value) && parseFloat(value) >= 0;
+                }
 
-                    // Get the category parameter from the URL
-                    const category = getParameterByName('category');
-
-                    // Update the span and select option based on the category value
-                    if (category) {
-                        // Update the text in the span
-                        $('#selectedcategory').text(category);
-
-                        // Select the corresponding option in the dropdown
-                        $('select[name="category"] option').each(function () {
-                            if ($(this).val() === category) {
-                                $(this).prop('selected', true);
-                            }
-                        });
+                // throw an error when negative value recevied in price filter
+                $('#minPrice').on('change', function () {
+                    const value = $(this).val();
+                    if (!isValidPriceInput(value)) {
+                        swal("Oops!", "Price should be positive", "error");
+                        $(this).val('');
                     } else {
-                        // Default to "All Product"
-                        $('#selectedcategory').text('All <%= categories.name %> items');
-                        $('select[name="category"] option[value=""]').prop('selected', true);
+                        checkPriceRange(); // check min vs max
                     }
                 });
+
+                $('#maxPrice').on('change', function () {
+                    const value = $(this).val();
+                    if (!isValidPriceInput(value)) {
+                        swal("Oops!", "Price should be positive", "error");
+                        $(this).val('');
+                    } else {
+                        checkPriceRange(); // check min vs max
+                    }
+                });
+
+                // Function to check if minPrice > maxPrice
+                function checkPriceRange() {
+                    const min = parseFloat($('#minPrice').val());
+                    const max = parseFloat($('#maxPrice').val());
+
+                    if (!isNaN(min) && !isNaN(max) && min > max) {
+                        swal("Invalid Range", "Min Price should not be greater than Max Price", "error");
+                        // Optionally clear both inputs or only one
+                        $('#minPrice').val('');
+                        $('#maxPrice').val('');
+                    }
+                }
+
+                // Function to get the query parameter value by name
+                function getParameterByName(name) {
+                    const url = window.location.href;
+                    name = name.replace(/[\[\]]/g, "\\$&");
+                    const regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+                        results = regex.exec(url);
+                    if (!results) return null;
+                    if (!results[2]) return '';
+                    return decodeURIComponent(results[2].replace(/\+/g, " "));
+                }
+
+                // Get the category parameter from the URL
+                const category = getParameterByName('category');
+                const minPrice = getParameterByName('minPrice');
+                const maxPrice = getParameterByName('maxPrice');
+
+                // Update category display and active state
+                if (category) {
+                    $('#selectedCategoryMobile').text(category);
+                    $('.category-link').each(function () {
+                        if ($(this).attr('href').includes(`category=${encodeURIComponent(category)}`)) {
+                            $(this).addClass('active');
+                        }
+                    });
+                } else {
+                    $('#selectedCategoryMobile').text('All Products');
+                    $('.category-link[href="/product"]').addClass('active');
+                }
+
+                // Update price inputs with URL values
+                if (minPrice) {
+                    $('#minPrice').val(minPrice);
+                }
+                if (maxPrice) {
+                    $('#maxPrice').val(maxPrice);
+                }
+
+                // Update active filters display
+                function updateActiveFilters() {
+                    let filters = [];
+                    if (category) filters.push(`Category: ${category}`);
+                    if (minPrice || maxPrice) {
+                        let priceFilter = 'Price: ';
+                        if (minPrice && maxPrice) {
+                            priceFilter += `₹${minPrice} - ₹${maxPrice}`;
+                        } else if (minPrice) {
+                            priceFilter += `₹${minPrice}+`;
+                        } else if (maxPrice) {
+                            priceFilter += `Up to ₹${maxPrice}`;
+                        }
+                        filters.push(priceFilter);
+                    }
+
+                    const filterText = filters.length > 0 ? `Active: ${filters.join(', ')}` : '';
+                    $('#activeFilters').text(filterText);
+                    $('#activePriceFilterMobile').text(filters.find(f => f.includes('Price:')) || '');
+                }
+
+                // Apply Price Filter
+                $('#applyPriceFilter').on('click', function () {
+                    const min = $('#minPrice').val();
+                    const max = $('#maxPrice').val();
+
+                    const url = new URL(window.location.href);
+                    if (min !== '') {
+                        url.searchParams.set('minPrice', min);
+                    } else {
+                        url.searchParams.delete('minPrice');
+                    }
+                    if (max !== '') {
+                        url.searchParams.set('maxPrice', max);
+                    } else {
+                        url.searchParams.delete('maxPrice');
+                    }
+
+                    window.location.href = url.toString();
+                });
+
+                // Clear Price Filter
+                $('#clearPriceFilter').on('click', function (e) {
+                    e.preventDefault();
+
+                    const url = new URL(window.location.href);
+                    url.searchParams.delete('minPrice');
+                    url.searchParams.delete('maxPrice');
+
+                    window.location.href = url.toString();
+                });
+
+                // Clear All Filters
+                $('#clearAllFilters').on('click', function () {
+                    const url = new URL(window.location.href);
+
+                    // Optional: Add any filter keys you might use
+                    const filterKeys = ['category', 'minPrice', 'maxPrice'];
+                    filterKeys.forEach(key => url.searchParams.delete(key));
+
+                    window.location.href = url.pathname; // Removes all params, loads base URL
+                });
+
+                updateActiveFilters();
 
             </script>
 
