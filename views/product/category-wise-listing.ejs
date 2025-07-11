@@ -80,25 +80,27 @@
                         <!-- Category Filter -->
                         <div class="filter-section">
                             <h5><i class="fas fa-tags me-2"></i>Categories</h5>
-                            <ul class="category-list">
-                                <li>
-                                    <a href="/category/<%= categories._id %>" class="category-link">
-                                        <i class="fas fa-th-large"></i>
-                                        All <%= categories.name %> items
-                                    </a>
-                                </li>
-                                <% if(categories && categories.subcategories.length> 0) { %>
-                                    <% categories.subcategories.forEach((category)=> { %>
-                                        <li>
-                                            <a href="/category/<%= categories._id %>?category=<%= encodeURIComponent(category.name) %>"
-                                                class="category-link">
-                                                <i class="fa-solid fa-location-arrow"></i>
-                                                <%= category.name %>
-                                            </a>
-                                        </li>
-                                        <% }) %>
-                                            <% } %>
-                            </ul>
+                            <div class="scrollable-category-list">
+                                <ul class="category-list">
+                                    <li>
+                                        <a href="/category/<%= categories._id %>" class="category-link">
+                                            <i class="fas fa-th-large"></i>
+                                            All <%= categories.name %> items
+                                        </a>
+                                    </li>
+                                    <% if(categories && categories.subcategories.length> 0) { %>
+                                        <% categories.subcategories.forEach((category)=> { %>
+                                            <li>
+                                                <a href="/category/<%= categories._id %>?category=<%= encodeURIComponent(category.name) %>"
+                                                    class="category-link">
+                                                    <i class="fa-solid fa-location-arrow"></i>
+                                                    <%= category.name %>
+                                                </a>
+                                            </li>
+                                            <% }) %>
+                                                <% } %>
+                                </ul>
+                            </div>
                         </div>
 
                         <!-- Price Filter -->

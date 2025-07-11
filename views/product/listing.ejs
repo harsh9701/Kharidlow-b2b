@@ -59,25 +59,27 @@
                         <!-- Category Filter -->
                         <div class="filter-section">
                             <h5><i class="fas fa-tags me-2"></i>Categories</h5>
-                            <ul class="category-list">
-                                <li>
-                                    <a href="/product" class="category-link">
-                                        <i class="fas fa-th-large"></i>
-                                        All Products
-                                    </a>
-                                </li>
-                                <% if(categories && categories.length> 0) { %>
-                                    <% categories.forEach((category)=> { %>
-                                        <li>
-                                            <a href="/product?category=<%= encodeURIComponent(category.subCategory) %>"
-                                                class="category-link">
-                                                <i class="fa-solid fa-location-arrow"></i>
-                                                <%= category.subCategory %>
-                                            </a>
-                                        </li>
-                                        <% }) %>
-                                            <% } %>
-                            </ul>
+                            <div class="scrollable-category-list">
+                                <ul class="category-list">
+                                    <li>
+                                        <a href="/product" class="category-link">
+                                            <i class="fas fa-th-large"></i>
+                                            All Products
+                                        </a>
+                                    </li>
+                                    <% if(categories && categories.length> 0) { %>
+                                        <% categories.forEach((category)=> { %>
+                                            <li>
+                                                <a href="/product?category=<%= encodeURIComponent(category.subCategory) %>"
+                                                    class="category-link">
+                                                    <i class="fa-solid fa-location-arrow"></i>
+                                                    <%= category.subCategory %>
+                                                </a>
+                                            </li>
+                                            <% }) %>
+                                                <% } %>
+                                </ul>
+                            </div>
                         </div>
 
                         <!-- Price Filter -->
