@@ -15,14 +15,27 @@ module.exports.renderAddProductPage = (req, res) => {
 module.exports.renderListingPage = async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const pageSize = parseInt(req.query.pageSize) || 48;
-    const currentPage = parseInt(req.query.page) || 1;
+    const currentPage = page;
+
     const categoryFilter = req.query.category || req.body.category;
+    const minPrice = parseFloat(req.query.minPrice);
+    const maxPrice = parseFloat(req.query.maxPrice);
 
     const skip = (page - 1) * pageSize;
 
+    // Filter Object
     let filter = {};
+
     if (categoryFilter) {
         filter.subCategory = categoryFilter;
+    }
+
+    if (!isNaN(minPrice) && !isNaN(maxPrice)) {
+        filter.price = { $gte: minPrice, $lte: maxPrice };
+    } else if (!isNaN(minPrice)) {
+        filter.price = { $gte: minPrice };
+    } else if (!isNaN(maxPrice)) {
+        filter.price = { $lte: maxPrice };
     }
 
     try {
@@ -34,7 +47,7 @@ module.exports.renderListingPage = async (req, res) => {
 
         const totalProducts = await productModel.countDocuments(filter);
 
-        const categories = await productModel.aggregate([
+        const unsortedCategories = await productModel.aggregate([
             {
                 $group: {
                     _id: "$subCategory"
@@ -48,9 +61,11 @@ module.exports.renderListingPage = async (req, res) => {
             }
         ]);
 
+        const categories = unsortedCategories.sort((a, b) => a.subCategory.localeCompare(b.subCategory));
+
         const totalPages = Math.ceil(totalProducts / pageSize);
 
-        res.render("product/listing.ejs", { products, totalProducts, currentPage, totalPages, categories, selectedCategory: categoryFilter || '' });
+        res.render("product/listing.ejs", { products, totalProducts, currentPage, totalPages, categories, selectedCategory: categoryFilter || '', minPrice: req.query.minPrice || '', maxPrice: req.query.maxPrice || '' });
 
     } catch (error) {
         return res.status(500).send(error.message);

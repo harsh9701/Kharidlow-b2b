@@ -1,5 +1,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
 
+:root {
+    --primary-color: #6241e6;
+    --secondary-color: #07081b;
+    --product-color: #3c3c405a;
+    --accent-color: #e74c3c;
+    --success-color: #27ae60;
+    --warning-color: #f39c12;
+    --light-bg: #f8f9fa;
+    --dark-text: #2c3e50;
+    --light-text: #7f8c8d;
+    --border-color: #e0e6ed;
+    --shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+    --shadow-hover: 0 5px 25px rgba(0, 0, 0, 0.15);
+}
+
 body {
     font-family: "Nunito", sans-serif;
     font-optical-sizing: auto;
@@ -8,20 +23,24 @@ body {
     background-color: #f9f9f9;
 }
 
+/* Header Section */
+.products-header {
+    /* background: linear-gradient(90deg, var(--product-color) 0%, var(--product-color) 90%); */
+    color: var(--dark-text);
+    padding: 0.5rem 0;
+    /* margin-bottom: 1rem; */
+}
+
+.products-header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--dark-text)
+}
+
 .product-card img {
     height: 200px;
     object-fit: cover;
-}
-
-.filter-sidebar {
-    background-color: #f0f3f1;
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 12px;
-}
-
-.filter-sidebar h5 {
-    margin-bottom: 20px;
 }
 
 .product-card {
@@ -46,10 +65,12 @@ body {
 
 .filter-btn {
     background-color: #6241e6;
+    color: #fff;
 }
 
 .filter-btn:hover {
     background-color: #735eca;
+    color: #fff;
 }
 
 .add-to-cart-btn:hover {
@@ -59,33 +80,6 @@ body {
 
 .pagination a {
     margin: 0 5px;
-}
-
-.list-unstyled li a {
-    text-decoration: none;
-    color: #07081b;
-    font-size: 1.1rem;
-    font-weight: 600;
-    transition: ease-in-out 0.15s;
-}
-
-.list-unstyled li a:hover {
-    color: rgb(98, 65, 230);
-}
-
-.filter-sidebar-smallscreen {
-    display: none;
-}
-
-.new-arrival {
-    margin-top: 0.6rem;
-    font-weight: bold;
-    font-size: 2rem;
-    color: #343a40;
-}
-
-.category-bar {
-    margin-top: 4.38rem;
 }
 
 .page-link {
@@ -98,6 +92,157 @@ body {
 
 .page-item.active .page-link {
     background-color: #6241e6 !important;
+}
+
+/* Filter Sidebar */
+.filters-container {
+    background: white;
+    border-radius: 15px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    margin-bottom: 2rem;
+}
+
+.filter-header {
+    background: var(--secondary-color);
+    color: white;
+    padding: 1.1rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.filter-section {
+    padding: 0.6rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.filter-section:last-child {
+    border-bottom: none;
+}
+
+.filter-section h5 {
+    color: var(--secondary-color);
+    font-weight: 600;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+}
+
+/* Category Links */
+.category-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.category-list li {
+    margin-bottom: 0.5rem;
+}
+
+.category-link {
+    display: flex;
+    align-items: center;
+    padding: 0.4rem 0.3rem;
+    text-decoration: none;
+    color: var(--dark-text);
+    font-weight: 600;
+    background: var(--light-bg);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+}
+
+.category-link:hover,
+.category-link.active {
+    background: var(--secondary-color);
+    color: white;
+    transform: translateX(5px);
+    border-color: var(--secondary-color);
+}
+
+.category-link i {
+    margin-right: 0.7rem;
+    width: 16px;
+}
+
+/* Price Filter */
+.price-inputs {
+    display: flex;
+    gap: 0.8rem;
+    margin-bottom: 0.5rem;
+}
+
+.price-input {
+    flex: 1;
+    padding: 0.4rem 0.7rem;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 0.9rem;
+    transition: border-color 0.3s ease;
+    width: 1px;
+}
+
+.price-input:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+}
+
+/* .price-presets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.price-preset {
+    background: var(--light-bg);
+    border: 2px solid var(--border-color);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: var(--dark-text);
+}
+
+.price-preset:hover,
+.price-preset.active {
+    background: var(--secondary-color);
+    color: white;
+    border-color: var(--secondary-color);
+    transform: translateY(-2px);
+} */
+
+.clear-filters {
+    color: var(--accent-color);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.clear-filters:hover {
+    color: #c0392b;
+    text-decoration: underline;
+}
+
+/* Mobile Filter Toggle */
+.mobile-filter-toggle {
+    background: white;
+    border-radius: 15px;
+    box-shadow: var(--shadow);
+    padding: 0.7rem 1rem;
+    margin-bottom: 1rem;
+    margin-top: -15px;
+    display: none;
+}
+
+.active-filters {
+    background: rgba(52, 152, 219, 0.1);
+    color: var(--secondary-color);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
 }
 
 /* Target the scrollbar */
@@ -124,21 +269,40 @@ body {
 }
 
 @media only screen and (max-width: 768px) {
-    .filter-sidebar-bigscreen {
-        display: none;
+    .products-header h1 {
+        font-size: 1.5rem;
     }
 
-    .filter-sidebar-smallscreen {
+    .mobile-filter-toggle {
         display: block;
     }
 
-    .new-arrival {
-        margin-top: 0.5rem;
-        margin-bottom: -0.3rem;
+    .filters-container {
+        display: none;
     }
 
-    .category-bar {
-        margin-top: 0.15rem;
+    .filters-container.show {
+        display: block;
+    }
+
+    .price-input {
+        width: inherit;
+    }
+}
+
+@media (max-width: 576px) {
+    .price-inputs {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .price-presets {
+        justify-content: center;
+    }
+
+    .price-preset {
+        font-size: 0.8rem;
+        padding: 0.4rem 0.8rem;
     }
 }
 
@@ -161,6 +325,10 @@ body {
 
     .page-link {
         font-size: 0.6rem !important;
+    }
+
+    .products-header {
+        padding: 0.4rem 0;
     }
 }
 
