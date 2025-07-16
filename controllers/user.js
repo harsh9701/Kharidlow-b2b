@@ -200,7 +200,7 @@ module.exports.renderCartPage = async (req, res) => {
             return res.status(401).redirect("/user/login");
         }
         const userId = req.session.user.userId;
-        const cartItems = await cartModel.find({ userId }).populate("items.productId", "_id productName price mainImage moq").exec();
+        const cartItems = await cartModel.find({ userId }).populate("items.productId", "_id subCategory productName price mainImage moq").exec();
         let items;
         if (cartItems.length != 0) {
             items = cartItems[0].items;

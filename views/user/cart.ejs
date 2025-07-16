@@ -44,7 +44,7 @@
                                             <%= item.productId.price %>
                                         </span></p>
                                     <div class="quantity-control d-flex align-items-center">
-                                        <label for="quantity" class="mr-2 quantity">Qty: &nbsp; </label>
+                                        <label class="mr-2 quantity">Qty: &nbsp; </label>
                                         <span type="button" class="decrement-btn"><i
                                                 class="fa-solid fa-minus"></i></span>
                                         <input type="number" class="form-control mx-2 quantity-input"
@@ -56,6 +56,8 @@
                                                 class="fa-solid fa-plus"></i></span>
                                         <input type="hidden" class="form-control ml-2 product-id"
                                             data-product-id="<%= item.productId._id %>">
+                                        <input type="hidden" class="form-control ml-2 subCategory"
+                                            data-subCategory="<%= item.productId.subCategory %>">
                                     </div>
 
                                     <div class="customization-instructions m-2">
@@ -97,6 +99,13 @@
                                             style="display: none;">
                                             Your order must be at least ₹5000 to proceed.
                                         </div>
+                                        <div class="alert alert-warning mt-3" id="min-value-glasswareItem"
+                                            style="display: none;">
+                                            For glassware items, a minimum purchase of ₹10,000 is required to proceed.
+                                        </div>
+                                        <div class="alert alert-secondary" id="totalOfGlasswareItems"
+                                            style="display: none;">
+                                        </div>
                                     </div>
                                     <form action="/user/order/summary" method="POST">
                                         <input type="hidden" name="cartData" id="cartData">
@@ -117,17 +126,28 @@
             <script>
                 $(document).ready(function () {
 
+                    let IsGlasswareItemExist = false;
+                    let totalOfGlasswareItems = 0;
+                    
                     function updateCartSummary() {
                         let subtotal = 0;
+                        let sumOfGlasswareItems = 0;
                         let cartData = [];
 
                         $('.quantity-input').each(function () {
                             const quantity = parseInt($(this).val());
                             const price = parseFloat($(this).data('price'));
                             const productId = $(this).siblings('.product-id').data('product-id');
+                            const subCategory = $(this).siblings('.subCategory').data('subcategory');
                             const instruction = $(`textarea[data-product-id="${productId}"]`).val() || '';
 
                             subtotal += quantity * price;
+
+                            if (subCategory == "Glassware") {
+                                IsGlasswareItemExist = true;
+                                sumOfGlasswareItems += quantity * price;
+                                totalOfGlasswareItems = sumOfGlasswareItems;
+                            }
 
                             cartData.push({
                                 productId: productId,
@@ -147,13 +167,27 @@
                         $('#cartData').val(JSON.stringify(cartData));
 
                         // Check if total is below minimum value and toggle alert and button state
-                        const minimumCartValue = 5000;
-                        if (total < minimumCartValue) {
-                            $('#min-value-alert').show(); // Show Bootstrap alert
-                            $('.checkout-btn').prop('disabled', true);
+                        if (!IsGlasswareItemExist) {
+                            const minimumCartValue = 5000;
+                            if (total < minimumCartValue) {
+                                $('#min-value-alert').show(); // Show Bootstrap alert
+                                $('.checkout-btn').prop('disabled', true);
+                            } else {
+                                $('#min-value-alert').hide(); // Hide Bootstrap alert
+                                $('.checkout-btn').prop('disabled', false);
+                            }
                         } else {
-                            $('#min-value-alert').hide(); // Hide Bootstrap alert
-                            $('.checkout-btn').prop('disabled', false);
+                            if (totalOfGlasswareItems < 10000) {
+                                $('#min-value-glasswareItem').show(); // Show Bootstrap alert
+                                $('#totalOfGlasswareItems').show(); // Show Bootstrap alert
+                                $('#totalOfGlasswareItems').text("Glassware Total: ₹" + totalOfGlasswareItems);
+                                $('.checkout-btn').prop('disabled', true);
+                            } else {
+                                $('#min-value-glasswareItem').hide(); // Hide Bootstrap alert
+                                $('#totalOfGlasswareItems').show(); // Show Bootstrap alert
+                                $('#totalOfGlasswareItems').text("Glassware Total: ₹" + totalOfGlasswareItems);
+                                $('.checkout-btn').prop('disabled', false);
+                            }
                         }
                     }
 
