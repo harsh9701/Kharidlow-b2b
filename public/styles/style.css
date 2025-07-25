@@ -222,7 +222,7 @@ body {
     background-color: #060fbd;
 }
 
-.how-it-works {
+/* .how-it-works {
     padding: 1.5rem 0.6rem;
     border-radius: 12px;
     background-color: #cbd0feaa;
@@ -262,7 +262,7 @@ body {
 .step p {
     font-size: 0.9rem;
     margin-bottom: 0.5rem;
-}
+} */
 
 .map-container {
     position: relative;
