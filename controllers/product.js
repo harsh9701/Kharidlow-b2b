@@ -1,7 +1,7 @@
 const categoryModel = require("../models/generaldata");
 const productModel = require("../models/product");
 const cartModel = require("../models/cart");
-const { deleteCloudinaryImage, uploadImagesUsingFirebase, deleteImagesUsingFirebase } = require("../utils/helper");
+const { uploadImagesUsingFirebase, deleteImagesUsingFirebase } = require("../utils/helper");
 const mongoose = require("mongoose");
 
 module.exports.renderAddProductPage = (req, res) => {

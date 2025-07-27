@@ -1,5 +1,4 @@
 const bucket = require("../config/firebase");
-const { cloudinary } = require("../config/cloudinary");
 
 const extractPublicId = (url) => {
     const parts = url.split('/');
@@ -7,17 +6,6 @@ const extractPublicId = (url) => {
     const publicId = fileWithExtension.split('.')[0];
     const folderPath = parts.slice(7, parts.length - 1).join('/');
     return folderPath ? `${folderPath}/${publicId}` : publicId;
-};
-
-// Helper function to delete Cloudinary image
-const deleteCloudinaryImage = async (imagePath) => {
-    try {
-        const public_id = extractPublicId(imagePath);
-        await cloudinary.uploader.destroy(public_id);
-    } catch (error) {
-        console.error("Error deleting image from Cloudinary:", error);
-        throw new Error('Failed to delete image');
-    }
 };
 
 // Helper function to upload images using firebase
@@ -105,4 +93,4 @@ const formatAmount = (amount) => {
     }
 }
 
-module.exports = { deleteCloudinaryImage, uploadImagesUsingFirebase, deleteImagesUsingFirebase, formatAmount };
+module.exports = { uploadImagesUsingFirebase, deleteImagesUsingFirebase, formatAmount };
