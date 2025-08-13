@@ -1,9 +1,14 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const orderSchema = new mongoose.Schema({
+const invoiceSchema = new mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
+        required: true,
+    },
+    orderId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Order",
         required: true,
     },
     orderNumber: {
@@ -11,15 +16,13 @@ const orderSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
+    issueDate: {
+        type: Date,
+        default: Date.now
+    },
     orderItems: [
         {
-            productId: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'Product',
-                required: true,
-            },
             productName: { type: String, required: true },
-            instruction: { type: String },
             price: { type: Number, required: true },
             taxRate: { type: Number, required: true },
             taxType: { type: String, required: true },
@@ -41,37 +44,9 @@ const orderSchema = new mongoose.Schema({
         company: { type: String },
         gstNo: { type: String },
         altContact: { type: String }
-    },
-    paymentMethod: {
-        type: String,
-    },
-    trackingId: {
-        type: String,
-    },
-    trackingUrl: {
-        type: String,
-    },
-    cancellationReason: {
-        type: String,
-    },
-    taxRate: {
-        type: Number
-    },
-    shippingPrice: {
-        type: Number,
-        default: 0.0,
-    },
-    status: {
-        type: String,
-        enum: ['pending', 'accepted', 'dispatched', 'delivered', 'canceled'],
-        default: 'pending',
-    },
-    isInvoiceCreated: {
-        type: Boolean,
-        default: false
     }
 }, { timestamps: true });
 
-const Order = mongoose.model('Order', orderSchema);
+const invoice = mongoose.model("Invoice", invoiceSchema);
 
-module.exports = Order;
+module.exports = invoice;

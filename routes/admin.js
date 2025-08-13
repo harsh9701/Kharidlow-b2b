@@ -3,13 +3,16 @@ const router = express.Router();
 const upload = require("../config/multer");
 const { isAdmin } = require("../middleware/auth");
 
-const { renderAdminPage, renderManageCustomerPage, renderManageOrderPage, renderManageProductPage, renderViewOrderPage, updateOrderStatus, renderViewCustomerPage, renderUpdateProductPage, renderCartAnalysisPage, sendAbandonedCartEmailService } = require("../controllers/admin");
+const { renderAdminPage, renderManageCustomerPage, renderManageOrderPage, renderManageProductPage, renderViewOrderPage, updateOrderStatus, renderViewCustomerPage, renderUpdateProductPage, renderCartAnalysisPage, sendAbandonedCartEmailService, renderFinalizeBillPage, finalizeBill, renderInvoice } = require("../controllers/admin");
 const { updateProduct, deleteProductImage, deleteProduct, deleteMultipleProducts } = require("../controllers/product");
 
 router.get("/cartanalysis", isAdmin, renderCartAnalysisPage);
 router.get("/manage", isAdmin, renderAdminPage);
 router.put("/manage/orders/update", isAdmin, updateOrderStatus);
+router.post("/manage/orders/finalize-bill", isAdmin, finalizeBill);
+router.get("/manage/orders/invoice/:orderNumber", isAdmin, renderInvoice);
 router.get("/manage/orders/:orderId", isAdmin, renderViewOrderPage);
+router.get("/manage/orders/:orderId/finalize", isAdmin, renderFinalizeBillPage);
 router.get("/manage/orders", isAdmin, renderManageOrderPage);
 router.get("/manage/customers/:customerId", isAdmin, renderViewCustomerPage);
 router.get("/manage/customers", isAdmin, renderManageCustomerPage);

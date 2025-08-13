@@ -48,6 +48,14 @@
                                     </span>
                                     <%} %>
                 </div>
+                <% if(order.isInvoiceCreated){ %>
+                    <div class="fullName">View Invoice: 
+                        <a href="/admin/manage/orders/invoice/<%= order.orderNumber %>" class="btn btn-sm"
+                            data-bs-toggle="tooltip" data-bs-placement="top" title="View">
+                            <i class="fa-solid fa-eye"></i>
+                        </a>
+                    </div>
+                    <% } %>
             </div>
 
             <hr class="hr-line">
@@ -113,6 +121,14 @@
                             <%= order.shippingAddress.area %>, <%= order.shippingAddress.state %>,
                                     <%= order.shippingAddress.pincode %>
                 </div>
+                <div>
+                    <% if(!order.isInvoiceCreated){ %>
+                        <a href="/admin/manage/orders/<%= order._id %>/finalize" class="btn btn-dark">Finalize the
+                            Bill</a>
+                        <% } else { %>
+                            <button class="btn btn-dark" disabled>Invoice Created</button>
+                            <% } %>
+                </div>
             </div>
         </div>
 
@@ -137,6 +153,14 @@
 
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
             <script>
+                // Initialize Bootstrap tooltips in plain JavaScript
+                document.addEventListener("DOMContentLoaded", () => {
+                    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+                    tooltipTriggerList.forEach((tooltipTriggerEl) => {
+                        new bootstrap.Tooltip(tooltipTriggerEl);
+                    });
+                });
+
                 function openImageModal(imageSrc, productName) {
                     // Update the modal image source and product name
                     document.getElementById('modalImage').src = imageSrc;

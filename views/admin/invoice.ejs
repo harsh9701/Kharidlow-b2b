@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Invoice - <%= order.orderNumber %>
+    </title>
+    <link rel="icon" type="image/x-icon" href="/assets/Kharidlow.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+
+    <style>
+        body {
+            background: #f4f6f8;
+            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .invoice-container {
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.05);
+            max-width: 900px;
+            margin: auto;
+        }
+
+        .invoice-header {
+            border-bottom: 2px solid #dee2e6;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .invoice-title {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .company-logo {
+            max-height: 80px;
+        }
+
+        .table th {
+            background-color: #f1f3f5;
+        }
+
+        .grand-total {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #0d6efd;
+        }
+
+        /* Print styles */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .invoice-container {
+                box-shadow: none;
+                margin: 0;
+                padding: 20px;
+                border-radius: 0;
+            }
+
+            .btn-print {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="invoice-container">
+        <!-- Header -->
+        <div class="invoice-header d-flex justify-content-between align-items-center flex-wrap">
+            <div class="d-flex align-items-center mb-3 mb-md-0">
+                <!-- Company Logo -->
+                <img src="/assets/Kharidlow.png" alt="Company Logo" class="company-logo me-3">
+                <!-- Company Info -->
+                <div>
+                    <h4 class="mb-1">NITVI FASHION PVT LTD</h4>
+                    <p class="mb-0">
+                        Plot No- 85, Block No-25-A-460-A-4, Mahabir Block, Bhola Nath Nagar, Shahdara, Delhi-110032<br>
+                        Phone: 9999726050 | Email: support@kharidlow.com<br>
+                        GSTIN: 07AAJCN0782E1ZH | State: 07-Delhi
+                    </p>
+                </div>
+            </div>
+            <div class="d-flex justify-content-end w-100">
+                <button class="btn btn-primary btn-print" onclick="window.print()">🖨 Print Invoice</button>
+            </div>
+        </div>
+
+        <!-- Invoice Details -->
+        <div class="mb-4">
+            <h5>Invoice Details</h5>
+            <p class="mb-1"><strong>Order Number:</strong>
+                <%= order.orderNumber %>
+            </p>
+            <p class="mb-0"><strong>Date:</strong>
+                <%= new Date(order.issueDate).toLocaleDateString() %>
+            </p>
+        </div>
+
+        <!-- Billing Info -->
+        <div class="mb-4">
+            <h5>Billing & Shipping Address</h5>
+            <p class="mb-0">
+                <%= order.shippingAddress.flatNo %>, <%= order.shippingAddress.streetNo %>, <%=
+                            order.shippingAddress.area %><br>
+                            <%= order.shippingAddress.state %> - <%= order.shippingAddress.pincode %><br>
+                                    <%= order.shippingAddress.company %>
+            </p>
+        </div>
+
+        <!-- Order Items -->
+        <h5>Order Items</h5>
+        <div class="table-responsive">
+            <table class="table table-bordered table-sm align-middle">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Product</th>
+                        <th>Qty</th>
+                        <th>Price (₹)</th>
+                        <th>Tax Type</th>
+                        <th>Tax %</th>
+                        <th>Tax Amount (₹)</th>
+                        <th>Total (₹)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% order.orderItems.forEach((item, index)=> { %>
+                        <tr>
+                            <td>
+                                <%= index + 1 %>
+                            </td>
+                            <td>
+                                <%= item.productName %>
+                            </td>
+                            <td>
+                                <%= item.quantity %>
+                            </td>
+                            <td>
+                                <%= item.price.toFixed(2) %>
+                            </td>
+                            <td>
+                                <%= item.taxType %>
+                            </td>
+                            <td>
+                                <%= item.taxRate %>
+                            </td>
+                            <td>
+                                <%= item.taxAmount.toFixed(2) %>
+                            </td>
+                            <td>
+                                <%= item.total.toFixed(2) %>
+                            </td>
+                        </tr>
+                        <% }) %>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Grand Total -->
+        <div class="text-end mt-4">
+            <div class="grand-total">Grand Total: ₹<%= order.grandTotal.toFixed(2) %>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const orderModel = require("../models/order");
+const invoiceModel = require("../models/invoice");
 const userModel = require("../models/user");
 const productModel = require("../models/product");
 const cartModel = require("../models/cart");
@@ -205,5 +206,95 @@ module.exports.sendAbandonedCartEmailService = async (req, res) => {
         res.status(200).json({ success: true, message: "Email alert for abandoned cart sent successfully!" });
     } catch (error) {
         res.status(500).send(error.message);
+    }
+};
+
+module.exports.renderFinalizeBillPage = async (req, res) => {
+    try {
+        const orderId = req.params.orderId;
+        const orderDetail = await orderModel.findById(orderId)
+            .populate({
+                path: 'userId',
+                select: 'fullName contactNo'
+            })
+            .populate({
+                path: 'orderItems.productId',
+                select: 'mainImage'
+            });
+        if (orderDetail) {
+            return res.render("admin/finalize-bill.ejs", { order: orderDetail });
+        } else {
+            return res.status(404).render("error.ejs");
+        }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+module.exports.finalizeBill = async (req, res) => {
+    try {
+        const { items, grandTotal, orderId } = req.body;
+
+        const isOrderExist = await orderModel.findById(orderId);
+
+        if (!isOrderExist) {
+            return res.status(400).render("error.ejs", { message: "Order doesn't exist" });
+        }
+
+        if (isOrderExist.isInvoiceCreated) {
+            return res.status(400).json({ message: "Invoice Already Generated" });
+        }
+
+        const customerId = isOrderExist.userId;
+        const orderNumber = isOrderExist.orderNumber;
+        const shippingAddress = isOrderExist.shippingAddress;
+
+        const orderItems = items.map((item) => {
+            return {
+                productName: item.productName,
+                price: item.price,
+                taxRate: item.gstRate,
+                taxType: item.gstType,
+                taxAmount: item.gstType.toLowerCase() == "inclusive"
+                    ? Math.abs(((item.price * item.qty) * item.gstRate) / (100 + item.gstRate)).toFixed(2)
+                    : Math.abs(((item.price * item.qty) * item.gstRate) / 100).toFixed(2),
+                quantity: item.qty,
+                total: item.itemTotal,
+            }
+        });
+
+        const invoice = new invoiceModel({
+            userId: customerId,
+            orderId,
+            orderNumber,
+            orderItems,
+            grandTotal,
+            shippingAddress
+        });
+
+        const invoiceCreated = await invoice.save();
+
+        if (!invoiceCreated) {
+            return res.status(400).json({ message: "Error while create invoice" });
+        }
+
+        isOrderExist.isInvoiceCreated = true;
+
+        await isOrderExist.save();
+
+        return res.status(200).json({ message: "Invoice created" });
+
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+};
+
+module.exports.renderInvoice = async (req, res) => {
+    try {
+        const orderNumber = req.params.orderNumber;
+        const invoice = await invoiceModel.find({ orderNumber });
+        res.render("admin/invoice.ejs", { order: invoice[0] });
+    } catch (err) {
+        res.status(500).send(err);
     }
 };
