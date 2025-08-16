@@ -95,39 +95,41 @@
         </div>
 
         <!-- Invoice Details -->
-        <div class="mb-4">
-            <h5>Invoice Details</h5>
-            <p class="mb-1"><strong>Order Number:</strong>
-                <%= order.orderNumber %>
-            </p>
-            <p class="mb-0"><strong>Date:</strong>
-                <%= new Date(order.issueDate).toLocaleDateString() %>
-            </p>
-        </div>
+        <div class="d-flex justify-content-between">
+            <div class="mb-4">
+                <h5>Invoice Details</h5>
+                <p class="mb-1"><strong>Order Number:</strong>
+                    <%= order.orderNumber %>
+                </p>
+                <p class="mb-0"><strong>Invoice Date:</strong>
+                    <%= new Date(order.issueDate).toLocaleDateString() %>
+                </p>
+            </div>
 
-        <!-- Billing Info -->
-        <div class="mb-4">
-            <h5>Billing & Shipping Address</h5>
-            <p class="mb-0">
-                <%= order.shippingAddress.flatNo %>, <%= order.shippingAddress.streetNo %>, <%=
-                            order.shippingAddress.area %><br>
-                            <%= order.shippingAddress.state %> - <%= order.shippingAddress.pincode %><br>
-                                    <%= order.shippingAddress.company %>
-            </p>
+            <!-- Billing Info -->
+            <div class="mb-4">
+                <h5>Billing & Shipping Address</h5>
+                <p class="mb-0">
+                    <%= order.shippingAddress.flatNo %>, <%= order.shippingAddress.streetNo %>, <%=
+                                order.shippingAddress.area %><br>
+                                <%= order.shippingAddress.state %> - <%= order.shippingAddress.pincode %><br>
+                                        <%= order.shippingAddress.company %>
+                </p>
+            </div>
         </div>
 
         <!-- Order Items -->
         <h5>Order Items</h5>
         <div class="table-responsive">
-            <table class="table table-bordered table-sm align-middle">
+            <table class="table table-bordered table-sm align-middle text-center">
                 <thead>
                     <tr>
                         <th>#</th>
                         <th>Product</th>
                         <th>Qty</th>
                         <th>Price (₹)</th>
-                        <th>Tax Type</th>
-                        <th>Tax %</th>
+                        <th>Taxable Amount (₹)</th>
+                        <th>Tax (%)</th>
                         <th>Tax Amount (₹)</th>
                         <th>Total (₹)</th>
                     </tr>
@@ -148,10 +150,10 @@
                                 <%= item.price.toFixed(2) %>
                             </td>
                             <td>
-                                <%= item.taxType %>
+                                <%= Number(item.quantity) * Number(item.price.toFixed(2)) %>
                             </td>
                             <td>
-                                <%= item.taxRate %>
+                                <% if(item.taxType.toLowerCase()=="inclusive" ){ %>Incl. <% } else { %>Excl. <% } %> (<%= item.taxRate %>%)
                             </td>
                             <td>
                                 <%= item.taxAmount.toFixed(2) %>
