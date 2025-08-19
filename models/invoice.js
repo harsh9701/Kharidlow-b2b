@@ -35,6 +35,13 @@ const invoiceSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    discount: {
+        type: Object
+    },
+    finalTotal: {
+        type: Number,
+        required: true
+    },
     shippingAddress: {
         flatNo: { type: String },
         streetNo: { type: String },

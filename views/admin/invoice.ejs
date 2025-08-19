@@ -168,10 +168,35 @@
         </div>
 
         <!-- Grand Total -->
-        <div class="text-end mt-4">
+        <!-- <div class="text-end mt-4">
             <div class="grand-total">Grand Total: ₹<%= order.grandTotal.toFixed(2) %>
             </div>
+        </div> -->
+
+        <!-- Grand Total & Discount -->
+        <div class="text-end mt-4">
+            <% if(order.discount && order.discount.value> 0){ %>
+                <div>
+                    <span class="fw-bold">Subtotal:</span> ₹<%= order.grandTotal.toFixed(2) %>
+                </div>
+                <div class="text-success">
+                    <span class="fw-bold">Discount:</span>
+                    <% if(order.discount.type==="percent" ){ %>
+                        <%= order.discount.value %>% (-₹<%= Number(order.discount.amount).toFixed(2) %>)
+                                <% } else { %>
+                                    -₹<%= Number(order.discount.amount).toFixed(2) %>
+                                        <% } %>
+                </div>
+                <div class="grand-total mt-2">
+                    Final Total: ₹<%= order.finalTotal.toFixed(2) %>
+                </div>
+                <% } else { %>
+                    <div class="grand-total">
+                        Grand Total: ₹<%= order.grandTotal.toFixed(2) %>
+                    </div>
+                    <% } %>
         </div>
+
     </div>
 
 </body>

@@ -27,7 +27,7 @@ module.exports.renderAdminPage = async (req, res) => {
             }
         ]);
 
-        const lastFiveOrders = await orderModel.find({}, { orderNumber: 1, userId: 1, status: 1, grandTotal: 1, _id: 1 }).sort({ createdAt: -1 }).limit(5).populate("userId", "fullName");
+        const lastFiveOrders = await orderModel.find({}, { orderNumber: 1, userId: 1, status: 1, grandTotal: 1, isInvoiceCreated: 1, _id: 1 }).sort({ createdAt: -1 }).limit(5).populate("userId", "fullName");
         const lastFiveUser = await userModel.find({}, { fullName: 1, email: 1, orderCount: 1, contactNo: 1 }).sort({ createdAt: -1 }).limit(5);
         const lastFiveProduct = await productModel.find({}, { productName: 1, price: 1, stock: 1, moq: 1, subCategory: 1 }).sort({ createdAt: -1 }).limit(5);
 
@@ -233,7 +233,7 @@ module.exports.renderFinalizeBillPage = async (req, res) => {
 
 module.exports.finalizeBill = async (req, res) => {
     try {
-        const { items, grandTotal, orderId } = req.body;
+        const { items, grandTotal, discount, finalTotal, orderId } = req.body;
 
         const isOrderExist = await orderModel.findById(orderId);
 
@@ -241,7 +241,9 @@ module.exports.finalizeBill = async (req, res) => {
             return res.status(400).render("error.ejs", { message: "Order doesn't exist" });
         }
 
-        if (isOrderExist.isInvoiceCreated) {
+        const isInvoiceExist = await invoiceModel.findOne({orderId});
+
+        if (isOrderExist.isInvoiceCreated || isInvoiceExist) {
             return res.status(400).json({ message: "Invoice Already Generated" });
         }
 
@@ -269,6 +271,8 @@ module.exports.finalizeBill = async (req, res) => {
             orderNumber,
             orderItems,
             grandTotal,
+            discount,
+            finalTotal,
             shippingAddress
         });
 
@@ -279,6 +283,7 @@ module.exports.finalizeBill = async (req, res) => {
         }
 
         isOrderExist.isInvoiceCreated = true;
+        isOrderExist.invoiceId = invoiceCreated._id;
 
         await isOrderExist.save();
 
@@ -291,8 +296,8 @@ module.exports.finalizeBill = async (req, res) => {
 
 module.exports.renderInvoice = async (req, res) => {
     try {
-        const orderNumber = req.params.orderNumber;
-        const invoice = await invoiceModel.find({ orderNumber });
+        const orderId = req.params.orderId;
+        const invoice = await invoiceModel.find({ orderId });
         res.render("admin/invoice.ejs", { order: invoice[0] });
     } catch (err) {
         res.status(500).send(err);

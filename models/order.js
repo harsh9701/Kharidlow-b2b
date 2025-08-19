@@ -69,6 +69,10 @@ const orderSchema = new mongoose.Schema({
     isInvoiceCreated: {
         type: Boolean,
         default: false
+    },
+    invoiceId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Invoice"
     }
 }, { timestamps: true });
 

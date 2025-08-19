@@ -22,7 +22,9 @@
                         <div class="grid">
                             <div class="card">
                                 <h5>Total Sales <i class="fa-solid fa-circle-info fs-5" data-bs-toggle="tooltip"
-                                    data-bs-placement="top" title="This total only includes sales from completed and active orders, excluding those marked as 'Pending' or 'Canceled"></i></h5>
+                                        data-bs-placement="top"
+                                        title="This total only includes sales from completed and active orders, excluding those marked as 'Pending' or 'Canceled"></i>
+                                </h5>
                                 <p>&#8377;<%= (data && (data.totalSales)) ? data.totalSales : 0 %>
                                 </p>
                                 <i class="fa-solid fa-chart-line"></i>
@@ -68,6 +70,7 @@
                                         <th>Customer</th>
                                         <th>Status</th>
                                         <th>Total</th>
+                                        <th>Invoice Created</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
@@ -104,6 +107,13 @@
                                                                             <% } %>
                                                         </td>
                                                         <td>&#8377;<%= order.grandTotal %>
+                                                        </td>
+                                                        <td>
+                                                            <% if(order.isInvoiceCreated){ %>
+                                                                <i class="fa-solid fa-check"></i>
+                                                                <% }else{ %>
+                                                                    <i class="fa-solid fa-xmark"></i>
+                                                                    <% } %>
                                                         </td>
                                                         <td class="text-center"><a
                                                                 href="/admin/manage/orders/<%= order._id %>"
@@ -271,7 +281,7 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
         <script>
-            $(document).ready(function() {
+            $(document).ready(function () {
                 $('[data-bs-toggle="tooltip"]').tooltip();
             });
         </script>

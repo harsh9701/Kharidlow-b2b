@@ -707,7 +707,8 @@
                 let appliedDiscount = { type: null, value: 0, amount: 0 };
 
                 function calculateTotals() {
-                    let discountAmount, grandTotal = 0;
+                    let discountAmount = 0; 
+                    let grandTotal = 0;
                     const items = [];
                     const orderId = "<%=order._id%>";
 
@@ -736,7 +737,8 @@
                         discountAmount = (grandTotal * appliedDiscount.value) / 100;
                     }
 
-                    let finalTotal = grandTotal - discountAmount;
+                    let finalTotal = 0;
+                    finalTotal = grandTotal - discountAmount;
                     if (finalTotal < 0) finalTotal = 0;
 
                     document.getElementById("grandTotal").textContent = finalTotal.toFixed(2);
@@ -758,9 +760,21 @@
                 document.getElementById("applyDiscount").addEventListener("click", function () {
                     const type = document.getElementById("discountType").value;
                     const value = parseFloat(document.getElementById("discountValue").value);
+                    const totalAmount = document.getElementById("grandTotal").textContent;
 
                     if (isNaN(value) || value <= 0) {
                         swal("Oops!", "Enter a valid discount value.", "warning");
+                        return;
+                    }
+
+                    if (type == "percent" && value > 20) {
+                        swal("Oops!", "Discount is not more than 20%", "warning");
+                        return;
+                    }
+
+                    const flatDiscount = Number(totalAmount/4);
+                    if (type == "flat" && value > flatDiscount) {
+                        swal("Oops!", "Discount is too high", "warning");
                         return;
                     }
 

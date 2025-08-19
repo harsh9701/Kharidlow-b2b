@@ -11,7 +11,7 @@ router.get("/cartanalysis", isAdmin, renderCartAnalysisPage);
 router.get("/manage", isAdmin, renderAdminPage);
 router.put("/manage/orders/update", isAdmin, updateOrderStatus);
 router.post("/manage/orders/finalize-bill", isAdmin, finalizeBill);
-router.get("/manage/orders/invoice/:orderNumber", isAdmin, renderInvoice);
+router.get("/manage/orders/invoice/:orderId", isAdmin, renderInvoice);
 router.get("/manage/orders/:orderId", isAdmin, renderViewOrderPage);
 router.get("/manage/orders/:orderId/finalize", isAdmin, renderFinalizeBillPage);
 router.get("/manage/orders", isAdmin, renderManageOrderPage);

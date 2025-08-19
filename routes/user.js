@@ -5,10 +5,12 @@ const { isAuthenticated } = require("../middleware/auth");
 const { userRegister, renderRegisterPage, renderLoginPage, userLogin, renderCartPage, renderUserAccountPage, updatePassword } = require("../controllers/user");
 const { addToCart, removeFromCart } = require("../controllers/product");
 const { orderSummary, completeOrder, renderOrdersPage, renderOrderViewPage } = require("../controllers/order");
+const { renderInvoice } = require("../controllers/admin");
 
 router.get("/account", isAuthenticated, renderUserAccountPage);
 router.get("/orders", isAuthenticated, renderOrdersPage);
 router.get("/orders/:orderId", isAuthenticated, renderOrderViewPage);
+router.get("/orders/:orderId/invoice", isAuthenticated, renderInvoice);
 router.get("/register", renderRegisterPage);
 router.get("/login", renderLoginPage);
 router.get("/cart", isAuthenticated, renderCartPage);
