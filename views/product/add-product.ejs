@@ -6,191 +6,672 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Product - Kharidlow</title>
     <link rel="icon" type="image/x-icon" href="/assets/Kharidlow.ico">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/styles/adminHeader.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+
     <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            --secondary-gradient: linear-gradient(135deg, #17a2b8 0%, #6f42c1 100%);
+            --warning-gradient: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
+            --shadow-light: 0 8px 30px rgba(0, 0, 0, 0.12);
+            --shadow-hover: 0 15px 40px rgba(0, 0, 0, 0.18);
+            --border-radius: 16px;
+        }
+
+        * {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
         body {
-            background-color: #f8f9fa;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         .add-product-container {
             margin-top: 50px;
-            padding: 30px;
-            border-radius: 10px;
-            background-color: #ffffff;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            max-width: 700px;
+            padding: 40px;
+            border-radius: var(--border-radius);
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-light);
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            animation: slideInUp 0.6s ease-out;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         h2 {
             margin-bottom: 30px;
+            font-weight: 700;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            font-size: 2.2rem;
+            animation: fadeInDown 0.8s ease-out 0.2s both;
         }
 
-        .form-control {
-            background-color: #f1f1f1;
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .file-upload {
-            background-color: #6c757d;
-            color: white;
-            cursor: pointer;
+        .form-group {
+            margin-bottom: 1.5rem;
+            animation: fadeInLeft 0.6s ease-out both;
+        }
+
+        .form-group:nth-child(1) {
+            animation-delay: 0.3s;
+        }
+
+        .form-group:nth-child(2) {
+            animation-delay: 0.4s;
+        }
+
+        .form-group:nth-child(3) {
+            animation-delay: 0.5s;
+        }
+
+        .form-group:nth-child(4) {
+            animation-delay: 0.6s;
+        }
+
+        .form-group:nth-child(5) {
+            animation-delay: 0.7s;
+        }
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .form-control,
+        .form-select,
+        textarea {
+            background: rgba(248, 249, 250, 0.8);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            padding: 12px 16px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .form-control:focus,
+        .form-select:focus,
+        textarea:focus {
+            background: rgba(255, 255, 255, 0.95);
+            border-color: #28a745;
+            box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .form-control:hover,
+        .form-select:hover,
+        textarea:hover {
+            background: rgba(255, 255, 255, 0.9);
+            transform: translateY(-1px);
+        }
+
+        label {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 8px;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .submit-btn {
-            background-color: #28a745;
+            background: var(--primary-gradient);
+            border: none;
             color: white;
+            font-weight: 600;
+            padding: 15px 30px;
+            border-radius: 12px;
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out 0.8s both;
+            width: 100%;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .submit-btn:hover::before {
+            left: 100%;
         }
 
         .submit-btn:hover {
-            background-color: #218838;
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
         }
 
+        .submit-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .file-upload {
+            background: var(--secondary-gradient);
+            color: white;
+            cursor: pointer;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 16px;
+            transition: all 0.3s ease;
+        }
+
+        .file-upload:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Progress indicator */
+        .progress-indicator {
+            height: 4px;
+            background: #e9ecef;
+            border-radius: 2px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--primary-gradient);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* File preview styles */
+        .file-preview {
+            text-align: center;
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        .file-preview img {
+            max-width: 200px;
+            max-height: 200px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border: 3px solid #28a745;
+        }
+
+        /* Enhanced error styling */
+        .text-danger {
+            font-size: 13px;
+            margin-top: 5px;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-5px);
+            }
+
+            75% {
+                transform: translateX(5px);
+            }
+        }
+
+        /* Card hover effect */
+        .add-product-container:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        /* Loading animation */
+        .loading-pulse {
+            animation: pulse 1.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulse {
+            from {
+                transform: scale(1);
+            }
+
+            to {
+                transform: scale(1.05);
+            }
+        }
+
+        /* Success animation */
+        .success-animation {
+            animation: successBounce 0.6s ease-out;
+        }
+
+        @keyframes successBounce {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Icon animations */
+        .fa-box {
+            animation: bounceIn 0.8s ease-out 0.1s both;
+        }
+
+        @keyframes bounceIn {
+            0% {
+                transform: scale(0.3);
+                opacity: 0;
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            70% {
+                transform: scale(0.9);
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Row animation stagger */
+        .form-row .form-group:first-child {
+            animation-delay: 0.4s;
+        }
+
+        .form-row .form-group:last-child {
+            animation-delay: 0.5s;
+        }
+
+        /* Validation states */
+        .is-valid {
+            border-color: #28a745 !important;
+            box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25) !important;
+        }
+
+        .is-invalid {
+            border-color: #dc3545 !important;
+            box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+        }
+
+        .is-typing {
+            border-color: #17a2b8 !important;
+            box-shadow: 0 0 0 0.2rem rgba(23, 162, 184, 0.25) !important;
+        }
+
+        /* Form sections */
+        .form-section {
+            background: rgba(248, 249, 250, 0.3);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            border-left: 4px solid #28a745;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #28a745;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Responsive improvements */
         @media (max-width: 576px) {
             .add-product-container {
-                padding: 20px;
+                padding: 25px;
+                margin: 20px;
             }
+
+            h2 {
+                font-size: 1.8rem;
+            }
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-gradient);
+            border-radius: 4px;
+        }
+
+        /* Tag input enhancement */
+        .tag-input {
+            position: relative;
+        }
+
+        .tag-input::after {
+            content: 'Separate tags with commas';
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 12px;
+            color: #6c757d;
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        .tag-input input:focus::after {
+            opacity: 0;
         }
     </style>
 </head>
 
 <body>
-
     <!-- Include Navbar -->
     <%- include("../includes/admin-header.ejs") %>
 
-        <div class="container add-product-container">
-            <h2 class="text-center">Add a New Product</h2>
-            <form id="addProductForm" enctype="multipart/form-data">
-                <div class="form-group">
-                    <label for="productName">Product Name</label>
-                    <input type="text" class="form-control" id="productName" name="productName"
-                        placeholder="Enter product name" required>
+        <div class="container d-flex justify-content-center">
+            <div class="add-product-container w-100">
+                <!-- Progress indicator -->
+                <div class="progress-indicator">
+                    <div class="progress-bar" id="progressBar"></div>
                 </div>
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label for="category">Category</label>
-                        <select class="form-control" id="category" name="category" required>
-                            <option value="">Select a category</option>
-                        </select>
+
+                <h2><i class="fa-solid fa-box me-3"></i>Add New Product</h2>
+
+                <form id="addProductForm" enctype="multipart/form-data">
+
+                    <!-- Basic Information Section -->
+                    <div class="form-section">
+                        <div class="section-title"><i class="fa-solid fa-info-circle me-2"></i>Basic Information</div>
+
+                        <div class="form-group">
+                            <label for="productName"><i class="fa-solid fa-tag me-2"></i>Product Name</label>
+                            <input type="text" class="form-control" id="productName" name="productName"
+                                placeholder="Enter product name" required>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label for="category"><i class="fa-solid fa-folder me-2"></i>Category</label>
+                                <select class="form-control" id="category" name="category" required>
+                                    <option value="">Select a category</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="subCategory"><i class="fa-solid fa-folder-open me-2"></i>Sub
+                                    Category</label>
+                                <select class="form-control" id="subCategory" name="subCategory" required>
+                                    <option value="">Select a sub category</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="description"><i class="fa-solid fa-file-text me-2"></i>Description</label>
+                            <textarea class="form-control" id="description" name="description" rows="4"
+                                placeholder="Enter detailed product description" required></textarea>
+                        </div>
                     </div>
-                    <div class="form-group col-md-6">
-                        <label for="subCategory">Sub Category</label>
-                        <select class="form-control" id="subCategory" name="subCategory" required>
-                            <option value="">Select a sub category</option>
-                        </select>
+
+                    <!-- Pricing & Inventory Section -->
+                    <div class="form-section">
+                        <div class="section-title"><i class="fa-solid fa-chart-line me-2"></i>Pricing & Inventory</div>
+
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label for="price"><i class="fa-solid fa-rupee-sign me-2"></i>Price</label>
+                                <input type="number" class="form-control" id="price" name="price"
+                                    placeholder="Enter product price" required min="0" step="0.01">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="stock"><i class="fa-solid fa-boxes me-2"></i>Stock Quantity</label>
+                                <input type="number" class="form-control" id="stock" name="stock"
+                                    placeholder="Enter available stock" required min="0">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label for="sku"><i class="fa-solid fa-barcode me-2"></i>SKU (Stock Keeping
+                                    Unit)</label>
+                                <input type="text" class="form-control" id="sku" name="sku" placeholder="Enter SKU"
+                                    required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="moq"><i class="fa-solid fa-shopping-cart me-2"></i>MOQ (Minimum Order
+                                    Quantity)</label>
+                                <input type="number" class="form-control" id="moq" name="moq"
+                                    placeholder="Minimum order quantity" required min="1">
+                            </div>
+                        </div>
                     </div>
-                </div>
 
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label for="price">Price</label>
-                        <input type="number" class="form-control" id="price" name="price"
-                            placeholder="Enter product price" required>
+                    <!-- Tax Information Section -->
+                    <div class="form-section">
+                        <div class="section-title"><i class="fa-solid fa-calculator me-2"></i>Tax Information</div>
+
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label for="taxRate"><i class="fa-solid fa-percent me-2"></i>Tax Rate</label>
+                                <select class="form-control" id="taxRate" name="taxRate" required>
+                                    <option value="">Select a Tax Rate</option>
+                                    <option value="5">5%</option>
+                                    <option value="12">12%</option>
+                                    <option value="18">18%</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="taxType"><i class="fa-solid fa-cogs me-2"></i>Tax Type</label>
+                                <select class="form-control" id="taxType" name="taxType" required>
+                                    <option value="">Select a Tax Type</option>
+                                    <option value="exclusive">Exclusive</option>
+                                    <option value="inclusive">Inclusive</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="form-group col-md-6">
-                        <label for="stock">Stock Quantity</label>
-                        <input type="number" class="form-control" id="stock" name="stock"
-                            placeholder="Enter available stock" required>
+                    <!-- Additional Information Section -->
+                    <div class="form-section">
+                        <div class="section-title"><i class="fa-solid fa-plus-circle me-2"></i>Additional Information
+                        </div>
+
+                        <div class="form-group tag-input">
+                            <label for="tags"><i class="fa-solid fa-hashtag me-2"></i>Tags</label>
+                            <input type="text" class="form-control" id="tags" name="tags"
+                                placeholder="e.g. electronics, mobile, accessories">
+                            <small class="form-text text-muted">Separate multiple tags with commas</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="productImage"><i class="fa-solid fa-camera me-2"></i>Product Image</label>
+                            <input type="file" class="form-control file-upload" id="productImage" name="productImage"
+                                accept=".jpg,.jpeg,.png,.webp" required>
+                            <div class="file-preview mt-3 d-none" id="filePreview">
+                                <img id="previewImg" src="" alt="Product Preview"
+                                    style="max-width: 200px; max-height: 200px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 3px solid #28a745;">
+                            </div>
+                            <small id="fileError" class="text-danger d-none">Invalid file format. Please upload .jpeg,
+                                .jpg, .png, or .webp files only.</small>
+                        </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label for="description">Description</label>
-                    <textarea class="form-control" id="description" name="description" rows="5"
-                        placeholder="Enter product description" required></textarea>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label for="taxRate">Tax Rate</label>
-                        <select class="form-control" id="taxRate" name="taxRate" required>
-                            <option value="">Select a Tax Rate</option>
-                            <option value="5">5%</option>
-                            <option value="12">12%</option>
-                            <option value="18">18%</option>
-                        </select>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="taxType">Tax Type</label>
-                        <select class="form-control" id="taxType" name="taxType" required>
-                            <option value="">Select a Tax Type</option>
-                            <option value="exclusive">Exclusive</option>
-                            <option value="inclusive">Inclusive</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="sku">SKU (Stock Keeping Unit)</label>
-                    <input type="text" class="form-control" id="sku" name="sku" placeholder="Enter SKU" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="moq">MOQ (Minimum Order Quantity)</label>
-                    <input type="number" class="form-control" id="moq" name="moq" placeholder="Minimum order quantity" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="tags">Tags (comma separated)</label>
-                    <input type="text" class="form-control" id="tags" name="tags"
-                        placeholder="e.g. electronics, mobile, accessories">
-                </div>
-
-                <div class="form-group">
-                    <label for="productImage">Product Image</label>
-                    <input type="file" class="form-control-file file-upload" id="productImage" name="productImage"
-                        required>
-                    <small id="fileError" class="text-danger d-none">Invalid file format. Please upload .jpeg, .jpg,
-                        .png, or .webp files only.</small>
-                </div>
-
-                <button type="submit" class="btn btn-block submit-btn" id="submitBtn">
-                    <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-                    Add Product
-                </button>
-            </form>
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn submit-btn" id="submitBtn">
+                        <span class="spinner-border spinner-border-sm d-none me-2" role="status"
+                            aria-hidden="true"></span>
+                        <i class="fa-solid fa-plus me-2"></i>
+                        <span class="btn-text">Add Product</span>
+                    </button>
+                </form>
+            </div>
         </div>
 
         <!-- Include Admin Sidebar -->
         <%- include("../includes/admin-sidebar.ejs"); %>
 
             <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
             <script>
+                // Progress bar animation
+                function updateProgressBar() {
+                    const formInputs = $('#addProductForm input[required], #addProductForm select[required], #addProductForm textarea[required]');
+                    let filledInputs = 0;
+
+                    formInputs.each(function () {
+                        if ($(this).val().trim() !== '') {
+                            filledInputs++;
+                        }
+                    });
+
+                    const progress = (filledInputs / formInputs.length) * 100;
+                    $('#progressBar').css('width', progress + '%');
+                }
+
+                // Update progress on input changes
+                $(document).on('input change', '#addProductForm input, #addProductForm select, #addProductForm textarea', updateProgressBar);
+
                 // Fetch categories from the server on page load
                 $(document).ready(function () {
                     fetchCategories();
+                    updateProgressBar();
 
                     // Fetch sub-categories when a category is selected
                     $("#category").on("change", function () {
                         const selectedCategory = $(this).val();
+                        const subCategorySelect = $("#subCategory");
+
+                        // Add loading effect
+                        $(this).addClass('loading-pulse');
+                        setTimeout(() => $(this).removeClass('loading-pulse'), 300);
+
                         if (selectedCategory) {
+                            // Show loading in subcategory dropdown
+                            subCategorySelect.html('<option value="">Loading subcategories...</option>');
                             fetchSubCategories(selectedCategory);
                         } else {
-                            $("#subCategory").html('<option value="">Select a sub category</option>');
+                            subCategorySelect.html('<option value="">Select a sub category</option>');
                         }
+                        updateProgressBar();
                     });
 
                     // Validate file format on file input change
                     $("#productImage").on("change", function () {
+                        const file = this.files[0];
                         const filePath = this.value;
                         const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.webp)$/i;
                         const fileError = $("#fileError");
+                        const filePreview = $("#filePreview");
+                        const previewImg = $("#previewImg");
 
                         // Check if file extension is valid
                         if (!allowedExtensions.exec(filePath)) {
                             fileError.removeClass("d-none");
+                            filePreview.addClass("d-none");
                             this.value = ''; // Clear the input
                         } else {
                             fileError.addClass("d-none");
+
+                            if (file) {
+                                const reader = new FileReader();
+                                reader.onload = function (e) {
+                                    previewImg.attr('src', e.target.result);
+                                    filePreview.removeClass("d-none");
+                                }
+                                reader.readAsDataURL(file);
+                            }
                         }
                     });
+                });
+
+                // Enhanced form validation with visual feedback
+                $(document).on('blur', '#addProductForm input, #addProductForm select, #addProductForm textarea', function () {
+                    const field = $(this);
+                    if (field.prop('required') && field.val().trim() === '') {
+                        field.addClass('is-invalid');
+                        field.parent().addClass('shake');
+                        setTimeout(() => field.parent().removeClass('shake'), 500);
+                    } else {
+                        field.removeClass('is-invalid').addClass('is-valid');
+                    }
+                    updateProgressBar();
+                });
+
+                // Add typing animation effect
+                $(document).on('input', 'input[type="text"], input[type="number"], textarea', function () {
+                    $(this).addClass('is-typing');
+                    clearTimeout($(this).data('timeout'));
+                    $(this).data('timeout', setTimeout(() => {
+                        $(this).removeClass('is-typing');
+                    }, 500));
                 });
 
                 // Handle form submission
@@ -200,10 +681,15 @@
                     let formData = new FormData(this);
                     const submitBtn = $("#submitBtn");
                     const spinner = $(".spinner-border");
+                    const btnText = $(".btn-text");
 
-                    // Show loader and disable button
+                    // Enhanced loading animation
                     spinner.removeClass("d-none");
-                    submitBtn.prop("disabled", true).text("Adding...");
+                    submitBtn.prop("disabled", true).addClass('loading-pulse');
+                    btnText.text("Adding Product...");
+
+                    // Animate progress bar to 100%
+                    $('#progressBar').css('width', '100%');
 
                     $.ajax({
                         url: '/product/new',
@@ -212,22 +698,38 @@
                         contentType: false,
                         processData: false,
                         success: function (response) {
-                            swal("Good Job!", "Product added successfully!", "success");
-                            $("#addProductForm")[0].reset();
+                            // Success animation
+                            submitBtn.addClass('success-animation');
+                            swal("Success!", "Product added successfully!", "success");
+
+                            // Reset form with animation
+                            setTimeout(() => {
+                                $("#addProductForm")[0].reset();
+                                $("#filePreview").addClass("d-none");
+                                $('.form-control, .form-select, textarea').removeClass('is-valid is-invalid');
+                                $("#subCategory").html('<option value="">Select a sub category</option>');
+                                updateProgressBar();
+                            }, 1000);
                         },
                         error: function (xhr, status, error) {
                             const response = JSON.parse(xhr.responseText);
                             const errorMessage = response.message || "An unexpected error occurred.";
-                            swal("Something Went Wrong", errorMessage, "error");
+
+                            // Error animation
+                            submitBtn.addClass('shake');
+                            setTimeout(() => submitBtn.removeClass('shake'), 500);
+
+                            swal("Error", errorMessage, "error");
                         },
                         complete: function () {
-                            // Hide loader and enable button
-                            spinner.addClass("d-none");
-                            submitBtn.prop("disabled", false).text("Add Product");
+                            setTimeout(() => {
+                                spinner.addClass("d-none");
+                                submitBtn.prop("disabled", false).removeClass('loading-pulse success-animation');
+                                btnText.text("Add Product");
+                            }, 1000);
                         }
                     });
                 });
-
 
                 function fetchCategories() {
                     $.ajax({
@@ -241,6 +743,7 @@
                         },
                         error: function (err) {
                             console.error("Error fetching categories:", err);
+                            swal("Error", "Failed to load categories", "error");
                         }
                     });
                 }
@@ -258,9 +761,16 @@
                         },
                         error: function (err) {
                             console.error("Error fetching sub-categories:", err);
+                            const subCategoryDropdown = $("#subCategory");
+                            subCategoryDropdown.html('<option value="">Error loading subcategories</option>');
                         }
                     });
                 }
+
+                // Initialize page
+                $(document).ready(function () {
+                    $('.add-product-container').css('opacity', '0').animate({ 'opacity': '1' }, 800);
+                });
             </script>
 </body>
 

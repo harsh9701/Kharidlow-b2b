@@ -298,3 +298,11 @@ module.exports.renderInvoice = async (req, res) => {
         res.status(500).send(err);
     }
 };
+
+module.exports.renderAddUserPage = async (req, res) => {
+    try {
+        return res.render("admin/add-user.ejs");
+    } catch (error) {
+        return res.status(500).send(error);
+    }
+}

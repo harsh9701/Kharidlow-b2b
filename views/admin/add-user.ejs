@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add User - Kharidlow</title>
+    <link rel="icon" type="image/x-icon" href="/assets/Kharidlow.ico">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/styles/adminHeader.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .add-user-container {
+            margin-top: 50px;
+            padding: 30px;
+            border-radius: 12px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            max-width: 700px;
+        }
+
+        h2 {
+            margin-bottom: 25px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-control {
+            background-color: #f9f9f9;
+        }
+
+        .submit-btn {
+            background-color: #007bff;
+            color: white;
+            font-weight: 500;
+        }
+
+        .submit-btn:hover {
+            background-color: #0069d9;
+        }
+
+        .file-upload {
+            background-color: #6c757d;
+            color: white;
+            cursor: pointer;
+        }
+
+        .input-group-text {
+            background-color: #e9ecef;
+        }
+
+        @media (max-width: 576px) {
+            .add-user-container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Include Navbar -->
+    <%- include("../includes/admin-header.ejs") %>
+
+        <div class="container d-flex justify-content-center">
+            <div class="add-user-container w-100">
+                <h2 class="text-center"><i class="fa-solid fa-user-plus me-2"></i>Add New User</h2>
+                <form id="addUserForm" enctype="multipart/form-data">
+
+                    <!-- Name -->
+                    <div class="form-group mb-3">
+                        <label for="name">Full Name</label>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Enter full name"
+                            required>
+                    </div>
+
+                    <!-- Email & Phone -->
+                    <div class="row">
+                        <div class="form-group col-md-6 mb-3">
+                            <label for="email">Email</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fa-regular fa-envelope"></i></span>
+                                <input type="email" class="form-control" id="email" name="email"
+                                    placeholder="Enter email" required>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6 mb-3">
+                            <label for="phone">Phone</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fa-solid fa-phone"></i></span>
+                                <input type="tel" class="form-control" id="phone" name="phone"
+                                    placeholder="Enter phone number" pattern="[6789][0-9]{9}" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Role -->
+                    <div class="form-group mb-3">
+                        <label for="role">Role</label>
+                        <select class="form-control" id="role" name="role" required>
+                            <option value="">Select a role</option>
+                            <option value="customer">Customer</option>
+                            <option value="salesman">Salesman</option>
+                        </select>
+                    </div>
+
+                    <!-- Referral ID (only if role = customer) -->
+                    <div class="form-group mb-3 d-none" id="referralField">
+                        <label for="referralId">Referral ID (Salesman)</label>
+                        <input type="text" class="form-control" id="referralId" name="referralId"
+                            placeholder="Enter Salesman's Referral ID (optional)">
+                    </div>
+
+                    <!-- Salesman Fields (only if role = salesman) -->
+                    <div class="form-group mb-3 d-none" id="salesmanFields">
+                        <!-- Aadhaar Number -->
+                        <div class="form-group mb-3">
+                            <label for="aadhar">Aadhaar Number</label>
+                            <input type="text" class="form-control" id="aadhar" name="aadhar"
+                                placeholder="Enter Aadhaar Number" pattern="^\d{12}$"
+                                title="Aadhaar must be a 12-digit number">
+                        </div>
+
+                        <!-- PAN Card Number -->
+                        <div class="form-group mb-3">
+                            <label for="pancard">PAN Card Number</label>
+                            <input type="text" class="form-control" id="pancard" name="pancard"
+                                placeholder="Enter PAN Card Number" pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}"
+                                title="PAN must be in format: ABCDE1234F">
+                        </div>
+
+                        <!-- State -->
+                        <div class="form-group mb-3">
+                            <label for="state">State</label>
+                            <input type="text" class="form-control" id="state" name="state" placeholder="Enter State">
+                        </div>
+
+                        <!-- Salary -->
+                        <div class="form-group mb-3">
+                            <label for="salary">Salary</label>
+                            <input type="number" class="form-control" id="salary" name="salary"
+                                placeholder="Enter Salary">
+                        </div>
+
+                        <!-- Previous Salary -->
+                        <div class="form-group mb-3">
+                            <label for="previousSalary">Previous Salary</label>
+                            <input type="number" class="form-control" id="previousSalary" name="previousSalary"
+                                placeholder="Enter Previous Salary">
+                        </div>
+
+                        <!-- Previous Company -->
+                        <div class="form-group mb-3">
+                            <label for="previousCompany">Previous Company</label>
+                            <input type="text" class="form-control" id="previousCompany" name="previousCompany"
+                                placeholder="Enter Previous Company">
+                        </div>
+                    </div>
+
+                    <!-- Profile Image -->
+                    <div class="form-group mb-4">
+                        <label for="profileImage">Profile Image</label>
+                        <input type="file" class="form-control-file file-upload" id="profileImage" name="profileImage">
+                        <small id="fileError" class="text-danger d-none">Invalid file format. Please upload .jpeg, .jpg,
+                            .png, or .webp only.</small>
+                    </div>
+
+                    <!-- Submit -->
+                    <button type="submit" class="btn btn-block submit-btn w-100" id="submitBtn">
+                        <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                        Add User
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Include Admin Sidebar -->
+        <%- include("../includes/admin-sidebar.ejs"); %>
+
+            <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+            <script>
+                // Show referral field only when role = customer
+                $("#role").on("change", function () {
+                    if ($(this).val() === "customer") {
+                        $("#referralField").removeClass("d-none");
+                        $("#salesmanFields").addClass("d-none");
+                    } else if ($(this).val() === "salesman") {
+                        $("#salesmanFields").removeClass("d-none");
+                        $("#referralField").addClass("d-none");
+                        $("#referralId").val(""); // reset if hidden
+                    } else {
+                        $("#referralField").addClass("d-none");
+                        $("#salesmanFields").addClass("d-none");
+                        $("#referralId").val(""); // reset if hidden
+                    }
+                });
+
+                // Validate file format
+                $("#profileImage").on("change", function () {
+                    const filePath = this.value;
+                    const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.webp)$/i;
+                    const fileError = $("#fileError");
+
+                    if (!allowedExtensions.exec(filePath)) {
+                        fileError.removeClass("d-none");
+                        this.value = ''; // Reset
+                    } else {
+                        fileError.addClass("d-none");
+                    }
+                });
+
+                // Handle form submission
+                $("#addUserForm").on("submit", function (e) {
+                    e.preventDefault();
+
+                    let formData = new FormData(this);
+                    const submitBtn = $("#submitBtn");
+                    const spinner = $(".spinner-border");
+
+                    spinner.removeClass("d-none");
+                    submitBtn.prop("disabled", true).text("Adding...");
+
+                    $.ajax({
+                        url: '/admin/user/new',
+                        type: 'POST',
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function (response) {
+                            swal("Success!", "User added successfully!", "success");
+                            $("#addUserForm")[0].reset();
+                            $("#referralField").addClass("d-none"); // hide again
+                        },
+                        error: function (xhr) {
+                            const response = JSON.parse(xhr.responseText);
+                            const errorMessage = response.message || "An unexpected error occurred.";
+                            swal("Error", errorMessage, "error");
+                        },
+                        complete: function () {
+                            spinner.addClass("d-none");
+                            submitBtn.prop("disabled", false).text("Add User");
+                        }
+                    });
+                });
+            </script>
+</body>
+
+</html>

@@ -466,6 +466,34 @@
 
                         <hr class="divider">
 
+                        <!-- Discount Section -->
+                        <div class="discount-section">
+                            <h3 class="section-title">
+                                <i class="fas fa-tags"></i>
+                                Apply Discount
+                            </h3>
+                            <div class="row align-items-center">
+                                <div class="col-md-4">
+                                    <select id="discountType" class="form-select">
+                                        <option value="flat">Flat (₹)</option>
+                                        <option value="percent">Percentage (%)</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="number" id="discountValue" class="form-control"
+                                        placeholder="Enter discount">
+                                </div>
+                                <div class="col-md-4">
+                                    <button type="button" class="btn btn-success" id="applyDiscount">
+                                        Apply Discount
+                                    </button>
+                                </div>
+                            </div>
+                            <p id="discountInfo" class="mt-2 fw-bold text-success" style="display:none;"></p>
+                        </div>
+
+                        <hr class="divider">
+
                         <!-- Address Section -->
                         <div class="address-section">
                             <h3 class="section-title">
@@ -645,8 +673,41 @@
                 });
 
                 // Function to calculate totals
+                // function calculateTotals() {
+                //     let grandTotal = 0;
+                //     const items = [];
+                //     const orderId = "<%=order._id%>";
+
+                //     document.querySelectorAll(".item-card").forEach(item => {
+                //         const productName = item.querySelector("input[name*='[productName]']").value;
+                //         const qty = parseFloat(item.querySelector("input[name*='[quantity]']").value) || 0;
+                //         const price = parseFloat(item.querySelector("input[name*='[price]']").value) || 0;
+                //         const gstType = item.querySelector("select[name*='[taxType]']").value;
+                //         const gstRate = parseFloat(item.querySelector("select[name*='[taxRate]']").value) || 0;
+
+                //         let itemTotal = 0;
+
+                //         if (gstType === "Inclusive") {
+                //             itemTotal = price * qty;
+                //         } else {
+                //             // Exclusive GST
+                //             itemTotal = (price + (price * gstRate / 100)) * qty;
+                //         }
+
+                //         grandTotal += itemTotal;
+
+                //         items.push({ productName, qty, price, gstType, gstRate, itemTotal: itemTotal.toFixed(2) });
+                //     });
+
+                //     document.getElementById("grandTotal").textContent = grandTotal.toFixed(2);
+
+                //     return { items, grandTotal, orderId };
+                // }
+
+                let appliedDiscount = { type: null, value: 0, amount: 0 };
+
                 function calculateTotals() {
-                    let grandTotal = 0;
+                    let discountAmount, grandTotal = 0;
                     const items = [];
                     const orderId = "<%=order._id%>";
 
@@ -658,23 +719,62 @@
                         const gstRate = parseFloat(item.querySelector("select[name*='[taxRate]']").value) || 0;
 
                         let itemTotal = 0;
-
                         if (gstType === "Inclusive") {
                             itemTotal = price * qty;
                         } else {
-                            // Exclusive GST
                             itemTotal = (price + (price * gstRate / 100)) * qty;
                         }
 
                         grandTotal += itemTotal;
-
                         items.push({ productName, qty, price, gstType, gstRate, itemTotal: itemTotal.toFixed(2) });
                     });
 
-                    document.getElementById("grandTotal").textContent = grandTotal.toFixed(2);
+                    // Apply discount
+                    if (appliedDiscount.type === "flat") {
+                        discountAmount = appliedDiscount.value;
+                    } else if (appliedDiscount.type === "percent") {
+                        discountAmount = (grandTotal * appliedDiscount.value) / 100;
+                    }
 
-                    return { items, grandTotal, orderId };
+                    let finalTotal = grandTotal - discountAmount;
+                    if (finalTotal < 0) finalTotal = 0;
+
+                    document.getElementById("grandTotal").textContent = finalTotal.toFixed(2);
+
+                    return {
+                        items,
+                        grandTotal,
+                        discount: {
+                            type: appliedDiscount.type,
+                            value: appliedDiscount.value,
+                            amount: discountAmount.toFixed(2)
+                        },
+                        finalTotal,
+                        orderId
+                    };
                 }
+
+                // Apply Discount button
+                document.getElementById("applyDiscount").addEventListener("click", function () {
+                    const type = document.getElementById("discountType").value;
+                    const value = parseFloat(document.getElementById("discountValue").value);
+
+                    if (isNaN(value) || value <= 0) {
+                        swal("Oops!", "Enter a valid discount value.", "warning");
+                        return;
+                    }
+
+                    appliedDiscount = { type, value, amount: 0 };
+
+                    if (type === "flat") {
+                        document.getElementById("discountInfo").innerText = `Flat ₹${value} discount applied.`;
+                    } else {
+                        document.getElementById("discountInfo").innerText = `${value}% discount applied.`;
+                    }
+                    document.getElementById("discountInfo").style.display = "block";
+
+                    calculateTotals();
+                });
 
                 // Watch for any changes
                 document.addEventListener("input", function (e) {
