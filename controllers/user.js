@@ -10,13 +10,20 @@ module.exports.userRegister = async (req, res) => {
         const { fullName, email, password, contactNo } = req.body;
 
         const userEmail = email.toLowerCase();
-        
+
         const user = await userModel.findOne({ email: userEmail });
+        const userByContactNo = await userModel.findOne({ contactNo });
 
         if (user) {
             return res
                 .status(404)
                 .json({ message: "User with this email is already registered" });
+        }
+
+        if (userByContactNo) {
+            return res
+                .status(404)
+                .json({ message: "User with this contact number is already registered" });
         }
 
         bcrypt.genSalt(10, (err, salt) => {
@@ -130,8 +137,8 @@ module.exports.updatePassword = async (req, res) => {
 };
 
 module.exports.forgetPassword = async (req, res) => {
-    const { email } = req.body;
     try {
+        const { email } = req.body;
         const user = await userModel.findOne({ email });
         if (!user) {
             return res.status(404).json({ message: 'User not found' });

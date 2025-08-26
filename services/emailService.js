@@ -66,7 +66,7 @@ const sendForgotPasswordMail = async (clientMail, fullName, resetToken) => {
         }
     });
 
-    const resetURL = `https://kharidlow.com/resetpassword/${resetToken}`; // The link to reset the password
+    // const resetURL = `https://kharidlow.com/resetpassword/${resetToken}`; // The link to reset the password
 
     const mailOptions = {
         from: mailData.email,
@@ -81,7 +81,7 @@ const sendForgotPasswordMail = async (clientMail, fullName, resetToken) => {
                     .email-container { max-width: 600px; margin: 0 auto; background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
                     h1 { color: #1e90ff; }
                     p { font-size: 16px; line-height: 1.6; }
-                    .button { background-color: #1e90ff; color: #fffff; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block; margin-top: 20px; }
+                    .button { background-color: #1e90ff; color: #ffffff; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block; margin-top: 20px; }
                     .footer { font-size: 12px; color: #999; text-align: center; margin-top: 20px; }
                 </style>
             </head>
@@ -91,7 +91,7 @@ const sendForgotPasswordMail = async (clientMail, fullName, resetToken) => {
                     <p>Hi ${fullName},</p>
                     <p>We received a request to reset your password for your Kharidlow account. If you did not request this, please ignore this email.</p>
                     <p>If you did request a password reset, click the button below to reset your password:</p>
-                    <a href="${resetURL}" class="button" style="color: #fff; font-size: 16px;">Reset Password</a>
+                    <a href="https://kharidlow.com/resetpassword/${resetToken}" class="button" style="color: #fff; font-size: 16px;">Reset Password</a>
                     <p>This link will expire in 1 hour. If you don’t reset your password within this time, you will need to submit another password reset request.</p>
                     <p>If you have any questions or need further assistance, feel free to contact our support team.</p>
                     <div class="footer">
