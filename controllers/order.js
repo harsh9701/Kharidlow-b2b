@@ -9,7 +9,7 @@ const { generateOrderNumber } = require("../utils/generateOrderNumber");
 
 module.exports.renderOrdersPage = async (req, res) => {
     try {
-        const orders = await orderModel.find({ userId: req.session.user.userId }, { orderNumber: 1, createdAt: 1, status: 1, grandTotal: 1 }).sort({ createdAt: -1 });
+        const orders = await orderModel.find({ userId: req.session.user.userId }, { orderNumber: 1, createdAt: 1, status: 1, grandTotal: 1, cancellationReason: 1 }).sort({ createdAt: -1 });
         res.render("order/orders.ejs", { orders });
     } catch (error) {
         return res.status(500).send(error.message);

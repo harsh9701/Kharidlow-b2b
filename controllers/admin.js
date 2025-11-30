@@ -27,7 +27,7 @@ module.exports.renderAdminPage = async (req, res) => {
             }
         ]);
 
-        const lastFiveOrders = await orderModel.find({}, { orderNumber: 1, userId: 1, status: 1, grandTotal: 1, isInvoiceCreated: 1, _id: 1 }).sort({ createdAt: -1 }).limit(5).populate("userId", "fullName");
+        const lastFiveOrders = await orderModel.find({}, { orderNumber: 1, userId: 1, status: 1, grandTotal: 1, isInvoiceCreated: 1, _id: 1, cancellationReason: 1 }).sort({ createdAt: -1 }).limit(5).populate("userId", "fullName");
         const lastFiveUser = await userModel.find({}, { fullName: 1, email: 1, orderCount: 1, contactNo: 1 }).sort({ createdAt: -1 }).limit(5);
         const lastFiveProduct = await productModel.find({}, { productName: 1, price: 1, stock: 1, moq: 1, subCategory: 1 }).sort({ createdAt: -1 }).limit(5);
 
@@ -50,7 +50,7 @@ module.exports.renderAdminPage = async (req, res) => {
 
 module.exports.renderManageOrderPage = async (req, res) => {
     try {
-        const allOrders = await orderModel.find({}, { orderNumber: 1, userId: 1, status: 1, grandTotal: 1, createdAt: 1, _id: 1 }).sort({ createdAt: -1 }).populate("userId", "fullName");
+        const allOrders = await orderModel.find({}, { orderNumber: 1, userId: 1, status: 1, grandTotal: 1, createdAt: 1, _id: 1, cancellationReason: 1 }).sort({ createdAt: -1 }).populate("userId", "fullName");
         res.render("admin/manage-orders.ejs", { allOrders });
     } catch (error) {
         res.status(500).send(error.message);
@@ -241,7 +241,7 @@ module.exports.finalizeBill = async (req, res) => {
             return res.status(400).render("error.ejs", { message: "Order doesn't exist" });
         }
 
-        const isInvoiceExist = await invoiceModel.findOne({orderId});
+        const isInvoiceExist = await invoiceModel.findOne({ orderId });
 
         if (isOrderExist.isInvoiceCreated || isInvoiceExist) {
             return res.status(400).json({ message: "Invoice Already Generated" });

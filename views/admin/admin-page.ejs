@@ -97,7 +97,10 @@
                                                                         <%= order.status %>
                                                                     </span>
                                                                     <% } else if(order.status=="canceled" ) { %>
-                                                                        <span class="badge bg-danger">
+                                                                        <span class="badge bg-danger"
+                                                                            data-bs-toggle="tooltip"
+                                                                            data-bs-placement="top"
+                                                                            title="<%= order.cancellationReason %>">
                                                                             <%= order.status %>
                                                                         </span>
                                                                         <%} else { %>

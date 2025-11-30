@@ -39,8 +39,12 @@
                                 <%= order.status %>
                             </span>
                             <%} else if(order.status=="canceled" ) {%>
-                                <span class="badge rounded-pill text-bg-danger fs-6">
-                                    <%= order.status %>
+                                <span class="d-inline-flex align-items-center gap-1">
+                                    <span class="badge rounded-pill text-bg-danger fs-6">
+                                        <%= order.status %>
+                                    </span>
+                                    <i class="fa-solid fa-circle-info fs-5" data-bs-toggle="tooltip"
+                                        data-bs-placement="top" title="<%= order.cancellationReason %>"></i>
                                 </span>
                                 <%} else {%>
                                     <span class="badge rounded-pill text-bg-info fs-6">
@@ -49,7 +53,7 @@
                                     <%} %>
                 </div>
                 <% if(order.isInvoiceCreated){ %>
-                    <div class="fullName">View Invoice: 
+                    <div class="fullName">View Invoice:
                         <a href="/admin/manage/orders/invoice/<%= order._id %>" class="btn btn-sm"
                             data-bs-toggle="tooltip" data-bs-placement="top" title="View">
                             <i class="fa-solid fa-eye"></i>
