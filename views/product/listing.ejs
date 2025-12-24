@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Products - Kharidlow</title>
+    <title>New Arrivals - Kharidlow</title>
     <link rel="icon" type="image/x-icon" href="/assets/Kharidlow.ico">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
@@ -140,8 +140,11 @@
                                                 </p>
                                             </div>
                                             <button class="btn add-to-cart-btn mt-auto"
-                                                data-product-id="<%= product._id %>" data-moq="<%= product.moq %>">Add
-                                                to cart</button>
+                                                data-product-id="<%= product._id %>" data-moq="<%= product.moq %>">
+                                                <span class="btn-text">Add to cart</span>
+                                                <span class="spinner-border spinner-border-sm d-none ms-2"
+                                                    role="status"></span>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -211,8 +214,17 @@
                     $('.add-to-cart-btn').on('click', function (event) {
                         event.preventDefault();
 
+                        const $btn = $(this);
+                        const $btnText = $btn.find('.btn-text');
+                        const $loader = $btn.find('.spinner-border');
+
                         const productId = $(this).data('product-id');
                         const moq = $(this).data('moq');
+
+                        // Disable button & show loader
+                        $btn.prop('disabled', true);
+                        $btnText.text('Adding...');
+                        $loader.removeClass('d-none');
 
                         $.ajax({
                             url: '/user/cart',
@@ -222,6 +234,7 @@
                             success: function (response) {
                                 if (response.success) {
                                     swal("Fantastic!", "Product added to cart successfully!", "success");
+                                    resetButton($btn, $btnText, $loader);
                                 } else {
                                     if (response.reason) {
                                         swal("Oops!", "Please login!", "error").then(() => {
@@ -230,6 +243,7 @@
                                     } else {
                                         swal("Oops!", "Something went wrong!", "error");
                                     }
+                                    resetButton($btn, $btnText, $loader);
                                 }
                             },
                             error: function (xhr, status, error) {
@@ -237,6 +251,13 @@
                             }
                         });
                     });
+
+                    function resetButton($btn, $btnText, $loader) {
+                        $btn.prop('disabled', false);
+                        $btnText.text('Add to cart');
+                        $loader.addClass('d-none');
+                        $btn.removeClass('btn-success');
+                    }
                 });
 
                 function isValidPriceInput(value) {

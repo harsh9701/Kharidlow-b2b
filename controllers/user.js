@@ -188,6 +188,9 @@ module.exports.resetPassword = async (req, res) => {
 };
 
 module.exports.renderRegisterPage = (req, res) => {
+    if (req.session && req.session.user) {
+        return res.redirect("/");
+    }
     res.render("user/register.ejs");
 };
 
@@ -220,6 +223,9 @@ module.exports.renderCartPage = async (req, res) => {
 };
 
 module.exports.renderLoginPage = (req, res) => {
+    if (req.session && req.session.user) {
+        return res.redirect("/");
+    }
     res.render("user/login.ejs");
 };
 

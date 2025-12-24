@@ -179,7 +179,10 @@
                         </div>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary btn-block">Register</button>
+                <button type="submit" id="registerBtn" class="btn btn-primary btn-block">
+                    <span id="registerBtnText">Register</span>
+                    <span id="registerBtnLoader" class="spinner-border spinner-border-sm d-none" role="status"></span>
+                </button>
                 <div class="text-center mt-3">
                     <a href="/user/login">Already have an account? Login</a>
                 </div>
@@ -198,14 +201,22 @@
                     const password = document.getElementById("password").value;
                     const confirmPassword = document.getElementById("confirmPassword").value;
 
+                    const registerBtn = document.getElementById("registerBtn");
+                    const btnText = document.getElementById("registerBtnText");
+                    const btnLoader = document.getElementById("registerBtnLoader");
+
                     if (password !== confirmPassword) {
                         swal("Both password should be identical", "Please try again", "error");
-                        return false; // Prevent form submission
+                        return false;
                     }
 
-                    // If passwords match, send the request to the server
+                    // Disable button & show loader
+                    registerBtn.disabled = true;
+                    btnText.textContent = "Registering...";
+                    btnLoader.classList.remove("d-none");
+
                     sendRegistrationData();
-                    return false; // Prevent the form from submitting normally
+                    return false;
                 }
 
                 function sendRegistrationData() {
@@ -214,8 +225,12 @@
                     const password = document.getElementById("password").value;
                     const contact = document.getElementById("contact").value;
 
+                    const registerBtn = document.getElementById("registerBtn");
+                    const btnText = document.getElementById("registerBtnText");
+                    const btnLoader = document.getElementById("registerBtnLoader");
+
                     $.ajax({
-                        url: '/user/register', // The endpoint to send the data to
+                        url: '/user/register',
                         method: 'POST',
                         contentType: 'application/json',
                         data: JSON.stringify({
@@ -225,14 +240,20 @@
                             contactNo: contact
                         }),
                         success: function (response) {
-                            swal("Congratulations!", "You’ve successfully registered!", "success").then(() => {
-                                window.location.href = '/';
-                            });
+                            swal("Congratulations!", "You’ve successfully registered!", "success")
+                                .then(() => {
+                                    window.location.href = '/';
+                                });
                         },
-                        error: function (xhr, status, error) {
-                            const response = JSON.parse(xhr.responseText);
+                        error: function (xhr) {
+                            const response = JSON.parse(xhr.responseText || "{}");
                             const errorMessage = response.message || "An unexpected error occurred.";
                             swal("Something wrong", errorMessage, "error");
+
+                            // Re-enable button on error
+                            registerBtn.disabled = false;
+                            btnText.textContent = "Register";
+                            btnLoader.classList.add("d-none");
                         }
                     });
                 }

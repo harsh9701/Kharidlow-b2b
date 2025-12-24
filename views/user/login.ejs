@@ -139,7 +139,10 @@
                             placeholder="Enter your password" required>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary login-btn btn-block">Login</button>
+                <button type="submit" id="loginBtn" class="btn btn-primary login-btn btn-block">
+                    <span id="btnText">Login</span>
+                    <span id="btnLoader" class="spinner-border spinner-border-sm d-none" role="status"></span>
+                </button>
                 <div class="text-center mt-4">
                     <a href="/forgetpassword">Can’t remember your password? Reset it here!</a>
                 </div>
@@ -159,6 +162,15 @@
                 function login(event) {
                     event.preventDefault();
 
+                    const loginBtn = document.getElementById("loginBtn");
+                    const btnText = document.getElementById("btnText");
+                    const btnLoader = document.getElementById("btnLoader");
+
+                    // Disable button & show loader
+                    loginBtn.disabled = true;
+                    btnText.textContent = "Logging in...";
+                    btnLoader.classList.remove("d-none");
+
                     const urlParams = new URLSearchParams(window.location.search);
                     const redirectUrl = urlParams.get('redirect');
 
@@ -174,18 +186,25 @@
                             password: password
                         }),
                         success: function (response) {
-                            swal("Congratulations!", "You’ve successfully logged in!", "success").then(() => {
-                                if (redirectUrl) {
-                                    window.location.href = redirectUrl;
-                                } else {
-                                    window.location.href = '/';
-                                }
-                            });
+                            swal("Congratulations!", "You’ve successfully logged in!", "success")
+                                .then(() => {
+                                    if (redirectUrl) {
+                                        window.location.href = redirectUrl;
+                                    } else {
+                                        window.location.href = '/';
+                                    }
+                                });
                         },
-                        error: function (xhr, status, error) {
-                            const response = JSON.parse(xhr.responseText);
+                        error: function (xhr) {
+                            const response = JSON.parse(xhr.responseText || "{}");
                             const errorMessage = response.message || "An unexpected error occurred.";
+
                             swal("Something wrong", errorMessage, "error");
+
+                            // Re-enable button on error
+                            loginBtn.disabled = false;
+                            btnText.textContent = "Login";
+                            btnLoader.classList.add("d-none");
                         }
                     });
                 }
