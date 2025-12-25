@@ -650,6 +650,9 @@
                                                         success: function (response) {
                                                             if (response.success) {
                                                                 swal("Fantastic!", "Product added to cart successfully!", "success");
+                                                                document.querySelectorAll('.cartCount').forEach(el => {
+                                                                    el.innerText = response.cart.items.length;
+                                                                });
                                                                 resetButton($btn, $btnText, $loader);
                                                             } else {
                                                                 if (response.reason) {

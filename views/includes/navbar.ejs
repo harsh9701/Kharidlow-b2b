@@ -16,7 +16,7 @@
         <div class="mobile-actions d-lg-none">
             <a href="/user/cart" class="mobile-cart-link">
                 <i class="fa-solid fa-cart-shopping"></i>
-                <!-- <span class="cart-badge">0</span> -->
+                <span class="cart-badge cartCount"><%= cartCount %></span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,10 +56,12 @@
                         <li><a class="dropdown-item" href="/category/67190adb91ab551f459302a9">Under 99</a></li>
                         <li><a class="dropdown-item" href="/category/66fe8456c94255633c708a26">Bags</a></li>
                         <li><a class="dropdown-item" href="/category/6716022ffd0469b96dce6970">Beauty & Health</a></li>
-                        <li><a class="dropdown-item" href="/category/6889ca15ab9ad1fa3f59693d">Gifting & Occasions</a></li>
+                        <li><a class="dropdown-item" href="/category/6889ca15ab9ad1fa3f59693d">Gifting & Occasions</a>
+                        </li>
                         <li><a class="dropdown-item" href="/category/68b8683009267e36a95d5b3c">Home & Lifestyle</a></li>
                         <li><a class="dropdown-item" href="/category/66fe8456c94255633c708a27">Kids</a></li>
-                        <li><a class="dropdown-item" href="/category/68412a76d0603a3850908212">Kitchen Essentials</a></li>
+                        <li><a class="dropdown-item" href="/category/68412a76d0603a3850908212">Kitchen Essentials</a>
+                        </li>
                         <li><a class="dropdown-item" href="/category/66fe842dc94255633c708a24">Men</a></li>
                         <li><a class="dropdown-item" href="/category/67d573aaefcccb671f2d11a5">Stationery</a></li>
                         <li><a class="dropdown-item" href="/category/67ada5c220ff143ac9447d6e">Travel & Outdoor</a></li>
@@ -119,7 +121,7 @@
                                         <li class="nav-item cart-desktop d-none d-lg-block">
                                             <a href="/user/cart" class="nav-link cart-btn">
                                                 <i class="fa-solid fa-cart-shopping"></i>
-                                                <!-- <span class="cart-badge">0</span> -->
+                                                <span class="cart-badge cartCount"><%= cartCount %></span>
                                             </a>
                                         </li>
             </ul>
@@ -144,7 +146,7 @@
     <div class="bottom-nav-item">
         <a href="/user/cart" class="bottom-nav-link">
             <i class="fa-solid fa-cart-shopping"></i>
-            <!-- <span class="bottom-cart-badge">0</span> -->
+            <span class="bottom-cart-badge cartCount"><%= cartCount %></span>
             <span>Cart</span>
         </a>
     </div>

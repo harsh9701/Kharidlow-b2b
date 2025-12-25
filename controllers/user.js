@@ -64,36 +64,33 @@ module.exports.userLogin = async (req, res) => {
         const { email, password } = req.body;
 
         const userExists = await userModel.findOne({ email });
-
         if (!userExists) {
             return res.status(404).json({ message: "Invalid credentials" });
         }
-        bcrypt.compare(password, userExists.password, function (err, result) {
-            if (err) {
-                return res.status(500).json({ message: "Some error occured" });
-            } else {
-                if (result) {
-                    req.session.user = {
-                        userId: userExists._id,
-                        fullName: userExists.fullName,
-                        email: userExists.email,
-                        contactNo: userExists.contactNo,
-                        role: userExists.role,
-                        isAuthenticated: true
-                    };
 
-                    if (userExists) {
-                        return res.status(200).json({ message: "Login Successful" });
-                    } else {
-                        return res.status(500).json({ message: "Failed to login" });
-                    }
-                } else {
-                    return res.status(404).json({ message: "Invalid credentials" });
-                }
-            }
-        });
+        const isMatch = await bcrypt.compare(password, userExists.password);
+        if (!isMatch) {
+            return res.status(404).json({ message: "Invalid credentials" });
+        }
+
+        const cart = await cartModel.findOne({ userId: userExists._id });
+        const cartCount = cart ? cart.items.length : 0;
+
+        // SET SESSION DATA
+        req.session.user = {
+            userId: userExists._id,
+            fullName: userExists.fullName,
+            email: userExists.email,
+            role: userExists.role,
+            isAuthenticated: true
+        };
+
+        req.session.cartCount = cartCount;
+
+        return res.status(200).json({ message: "Login Successful" });
+
     } catch (err) {
-        return res.status(500).send(err.message);
+        return res.status(500).json({ message: err.message });
     }
 };
 

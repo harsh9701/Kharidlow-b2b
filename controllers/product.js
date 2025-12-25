@@ -192,6 +192,8 @@ module.exports.addToCart = async (req, res) => {
 
         await cart.save();
 
+        req.session.cartCount = cart.items.length;
+
         return res.status(200).json({ success: true, message: "Product added to cart", cart });
 
     } catch (error) {
@@ -218,6 +220,8 @@ module.exports.removeFromCart = async (req, res) => {
         cart.items = cart.items.filter(item => item.productId.toString() !== productId.toString());
 
         await cart.save();
+
+        req.session.cartCount = cart.items.length;
 
         return res.status(200).redirect("/user/cart");
     } catch (error) {
