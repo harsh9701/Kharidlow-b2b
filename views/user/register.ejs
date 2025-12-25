@@ -51,6 +51,9 @@
             border: none;
             border-radius: 25px;
             transition: background-color 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .btn-primary:hover {
@@ -242,7 +245,7 @@
                         success: function (response) {
                             swal("Congratulations!", "You’ve successfully registered!", "success")
                                 .then(() => {
-                                    window.location.href = '/';
+                                    // window.location.href = '/';
                                 });
                         },
                         error: function (xhr) {

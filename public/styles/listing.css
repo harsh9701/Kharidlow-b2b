@@ -61,6 +61,9 @@ body {
     border-radius: 20px;
     background-color: #07081b !important;
     color: #fff !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .filter-btn {
