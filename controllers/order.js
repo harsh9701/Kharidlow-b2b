@@ -164,6 +164,7 @@ module.exports.completeOrder = async (req, res) => {
             );
 
             const deleteCart = await cartModel.deleteOne({ userId: userId });
+            req.session.cartCount = 0;
             if (deleteCart) {
                 sendOrderSummaryMail(userEmail, req.session.user.fullName, orderNumber, orderDetails.orderItems, grandTotal);
                 res.cookie("orderCompletion", "");
