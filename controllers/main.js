@@ -3,44 +3,9 @@ const cartModel = require("../models/cart");
 const generalDataModel = require("../models/generaldata");
 const productModel = require("../models/product");
 
-// module.exports.renderLandingPage = async (req, res) => {
-//     try {
-//         const category = await generalDataModel.find({}, { subcategories: 0 })
-//             .sort({ createdAt: -1 });
-
-//         const recentProducts = await productModel.find({}, { productName: 1, price: 1, moq: 1, mainImage: 1 })
-//             .sort({ createdAt: -1 })
-//             .limit(12);
-
-//         const under99Products = await productModel.aggregate([
-//             { $match: { price: { $lte: 99 } } },
-//             { $sample: { size: 36 } },
-//             {
-//                 $project: {
-//                     productName: 1,
-//                     price: 1,
-//                     moq: 1,
-//                     mainImage: 1
-//                 }
-//             }
-//         ]);
-
-//         const bagsProducts = await productModel.find(
-//             { category: new mongoose.Types.ObjectId("66fe8456c94255633c708a26") },
-//             { productName: 1, price: 1, moq: 1, mainImage: 1 }
-//         ).limit(12);
-
-//         console.log(bagsProducts);
-
-//         res.render("index.ejs", { category, recentProducts, under99Products });
-//     } catch (error) {
-//         return res.status(500).json({ message: error.message });
-//     }
-// };
-
 module.exports.renderLandingPage = async (req, res) => {
     try {
-        const [category, recentProducts, under99Products, bagsProducts, stationeryItems] = await Promise.all([
+        const [category, recentProducts, under99Products, bagsProducts, stationeryItems, sameDayDispatchProducts] = await Promise.all([
             generalDataModel.find({}, { subcategories: 0 }).sort({ createdAt: -1 }).lean(),
 
             productModel.find({}, { productName: 1, price: 1, moq: 1, mainImage: 1 })
@@ -85,10 +50,23 @@ module.exports.renderLandingPage = async (req, res) => {
                         mainImage: 1
                     }
                 }
+            ]),
+
+            productModel.aggregate([
+                { $match: { sameDayDispatch: true } },
+                { $sample: { size: 36 } },
+                {
+                    $project: {
+                        productName: 1,
+                        price: 1,
+                        moq: 1,
+                        mainImage: 1
+                    }
+                }
             ])
         ]);
 
-        return res.render("index.ejs", { category, recentProducts, under99Products, bagsProducts, stationeryItems });
+        return res.render("index.ejs", { category, recentProducts, under99Products, bagsProducts, stationeryItems, sameDayDispatchProducts });
 
     } catch (error) {
         return res.status(500).json({ message: "Internal Server Error", error: error.message });
@@ -228,3 +206,26 @@ module.exports.renderAboutUsPage = (req, res) => {
         res.status(500).send(error.message);
     }
 }
+
+module.exports.renderSameDayDispatchPage = async (req, res) => {
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const pageSize = parseInt(req.query.pageSize) || 48;
+        const currentPage = parseInt(req.query.page) || 1;
+
+        const skip = (page - 1) * pageSize;
+
+        const sameDayDispatchProducts = await productModel.find({ sameDayDispatch: true })
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(pageSize)
+            .lean();
+
+        const totalProducts = await productModel.countDocuments({ sameDayDispatch: true });
+        const totalPages = Math.ceil(totalProducts / pageSize);
+
+        return res.render("product/same-day-products.ejs", { sameDayDispatchProducts, currentPage, totalPages, totalProducts });
+    } catch (err) {
+        return res.status(500).send(err.message);
+    }
+};

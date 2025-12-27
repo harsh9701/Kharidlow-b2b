@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Same Day Dispatch - Kharidlow</title>
+    <link rel="icon" type="image/x-icon" href="/assets/Kharidlow.ico">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+    <link rel="stylesheet" href="/styles/navbar.css">
+    <link rel="stylesheet" href="/styles/footer.css">
+    <link rel="stylesheet" href="/styles/listing.css">
+    <!-- Meta Pixel Code -->
+    <script>
+        !function (f, b, e, v, n, t, s) {
+            if (f.fbq) return; n = f.fbq = function () {
+                n.callMethod ?
+                    n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+            };
+            if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
+            n.queue = []; t = b.createElement(e); t.async = !0;
+            t.src = v; s = b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t, s)
+        }(window, document, 'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '979296231081207');
+        fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+            src="https://www.facebook.com/tr?id=979296231081207&ev=PageView&noscript=1" /></noscript>
+    <!-- End Meta Pixel Code -->
+    <style>
+        @media only screen and (max-width: 489px) {
+            .new-arrival {
+                margin-top: 0.5rem;
+                margin-bottom: -0.3rem;
+                font-size: 1.1rem !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- include navbar -->
+    <%- include("../includes/navbar.ejs") %>
+
+        <!-- Main Container -->
+        <div class="container mt-2">
+            <div class="row">
+
+                <!-- Product Listing Grid -->
+                <div class="col-lg-12 col-md-12 mt-3">
+                    <div class="d-flex justify-content-center align-items-center mb-4">
+                        <h2 class="new-arrival">Same Day Dispatch Products</h2>
+                        <!-- <select class="form-select w-auto">
+                            <option>Default Sorting</option>
+                            <option>Price: Low to High</option>
+                            <option>Price: High to Low</option>
+                            <option>Newest</option>
+                        </select> -->
+                    </div>
+
+                    <!-- Product Grid -->
+                    <div id="product-list" class="row">
+                        <% if(sameDayDispatchProducts && sameDayDispatchProducts.length> 0) { %>
+                            <% sameDayDispatchProducts.forEach(product=> { %>
+                                <div class="col-lg-3 col-sm-6 col-6 mb-4">
+                                    <div class="card product-card h-100">
+                                        <a href="/product/<%= product._id %>"><img src="<%= product.mainImage %>"
+                                                class="card-img-top" alt="Product Image"></a>
+                                        <div class="card-body d-flex flex-column">
+                                            <h5 class="card-title">
+                                                <%= product.productName %>
+                                            </h5>
+                                            <div class="d-flex justify-content-between">
+                                                <p class="card-text">Price: &#8377;<%= product.price %>
+                                                </p>
+                                                <p class="card-text">MOQ: <%= product.moq %>
+                                                </p>
+                                            </div>
+                                            <button class="btn add-to-cart-btn mt-auto"
+                                                data-product-id="<%= product._id %>" data-moq="<%= product.moq %>">Add
+                                                to cart</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <% }); %>
+                                    <% } else { %>
+                                        <div class="alert alert-primary fs-4 text-center" role="alert">
+                                            Currently, No Items
+                                        </div>
+                                        <% } %>
+                    </div>
+
+                    <!-- Pagination -->
+                    <nav class="mt-4">
+                        <ul id="pagination-controls" class="pagination justify-content-center">
+                            <!-- Previous Button -->
+                            <li class="page-item <%= (currentPage === 1) ? 'disabled' : '' %>">
+                                <a class="page-link" href="/search?page=<%= currentPage - 1 %>&pageSize=48">Previous</a>
+                            </li>
+
+                            <% const totalPages=Math.ceil(totalProducts / 48); const maxPagesToShow=2; let
+                                startPage=Math.max(currentPage - 2, 1); let endPage=Math.min(currentPage + 2,
+                                totalPages); if (endPage - startPage < maxPagesToShow - 1) { if (startPage===1) {
+                                endPage=Math.min(startPage + maxPagesToShow - 1, totalPages); } else if
+                                (endPage===totalPages) { startPage=Math.max(endPage - maxPagesToShow + 1, 1); } } for
+                                (let i=startPage; i <=endPage; i++) { %>
+                                <li class="page-item <%= (i === currentPage) ? 'active' : '' %>">
+                                    <a class="page-link" href="/search?page=<%= i %>&pageSize=48">
+                                        <%= i %>
+                                    </a>
+                                </li>
+                                <% } %>
+
+                                    <!-- Max Page Indicator -->
+                                    <li class="page-item disabled">
+                                        <span class="page-link">of <%= totalPages %></span>
+                                    </li>
+
+                                    <!-- Next Button -->
+                                    <li class="page-item <%= (currentPage === totalPages) ? 'disabled' : '' %>">
+                                        <a class="page-link"
+                                            href="/search?page=<%= currentPage + 1 %>&pageSize=48">Next</a>
+                                    </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+
+        <!-- include footer -->
+        <%- include("../includes/footer.ejs") %>
+
+            <!-- Bootstrap 5 JS -->
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <script>
+                $(document).ready(function () {
+                    $('.add-to-cart-btn').on('click', function (event) {
+                        event.preventDefault();
+
+                        const productId = $(this).data('product-id');
+                        const moq = $(this).data('moq');
+
+                        $.ajax({
+                            url: '/user/cart',
+                            method: 'POST',
+                            contentType: 'application/json',
+                            data: JSON.stringify({ productId: productId, moq: moq }),
+                            success: function (response) {
+                                if (response.success) {
+                                    swal("Fantastic!", "Product added to cart successfully!", "success");
+                                } else {
+                                    if (response.reason) {
+                                        swal("Oops!", "Please login!", "error").then(() => {
+                                            window.location.href = '/user/login';
+                                        });;
+                                    } else {
+                                        swal("Oops!", "Something went wrong!", "error");
+                                    }
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                swal("Oops!", error, "error");
+                            }
+                        });
+                    });
+                });
+
+                $(document).ready(function () {
+                    // Function to get the query parameter value by name
+                    function getParameterByName(name) {
+                        const url = window.location.href;
+                        name = name.replace(/[\[\]]/g, "\\$&");
+                        const regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+                            results = regex.exec(url);
+                        if (!results) return null;
+                        if (!results[2]) return '';
+                        return decodeURIComponent(results[2].replace(/\+/g, " "));
+                    }
+
+                    // Get the category parameter from the URL
+                    const category = getParameterByName('category');
+
+                    // Update the span and select option based on the category value
+                    if (category) {
+                        // Update the text in the span
+                        $('#selectedcategory').text(category);
+
+                        // Select the corresponding option in the dropdown
+                        $('select[name="category"] option').each(function () {
+                            if ($(this).val() === category) {
+                                $(this).prop('selected', true);
+                            }
+                        });
+                    } else {
+                        // Default to "All Product"
+                        $('#selectedcategory').text('All Product');
+                        $('select[name="category"] option[value=""]').prop('selected', true);
+                    }
+                });
+
+            </script>
+
+</body>
+
+</html>

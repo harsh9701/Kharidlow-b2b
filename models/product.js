@@ -109,7 +109,8 @@ const productSchema = new mongoose.Schema(
     },
     sameDayDispatch: {
       type: Boolean,
-      required: true
+      required: true,
+      default: false
     },
     reviews: [reviewSchema],
     avgRating: {
