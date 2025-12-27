@@ -10,7 +10,7 @@ const reviewSchema = new mongoose.Schema({
     type: Number,
     required: true,
     min: 1,
-    max: 5, 
+    max: 5,
   },
   comment: {
     type: String,
@@ -105,6 +105,10 @@ const productSchema = new mongoose.Schema(
     },
     tags: {
       type: Array,
+      required: true
+    },
+    sameDayDispatch: {
+      type: Boolean,
       required: true
     },
     reviews: [reviewSchema],

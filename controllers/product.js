@@ -111,7 +111,7 @@ module.exports.getSubCategory = async (req, res) => {
 
 module.exports.addNewProduct = async (req, res) => {
     try {
-        const { productName, category, subCategory, price, taxRate, taxType, stock, description, sku, tags, moq } = req.body;
+        const { productName, category, subCategory, price, taxRate, taxType, stock, description, sku, tags, moq, sameDayDispatch } = req.body;
 
         if (!req.file) {
             return res.status(400).json({ success: false, message: "Product image is mandatory" });
@@ -150,6 +150,7 @@ module.exports.addNewProduct = async (req, res) => {
             taxType,
             taxRate: Number(taxRate),
             mainImage: imageUrl,
+            sameDayDispatch: sameDayDispatch === "yes",
             tags: tagsArray,
         });
 
@@ -294,6 +295,7 @@ module.exports.updateProduct = async (req, res) => {
             taxRate: updatedProductData.taxRate,
             tags: tagsArray,
             mainImage,
+            sameDayDispatch: updatedProductData.sameDayDispatch === "yes",
             productImages
         };
 

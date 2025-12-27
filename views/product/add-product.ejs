@@ -383,18 +383,6 @@
             letter-spacing: 1px;
         }
 
-        /* Responsive improvements */
-        @media (max-width: 576px) {
-            .add-product-container {
-                padding: 25px;
-                margin: 20px;
-            }
-
-            h2 {
-                font-size: 1.8rem;
-            }
-        }
-
         /* Custom scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
@@ -428,6 +416,22 @@
 
         .tag-input input:focus::after {
             opacity: 0;
+        }
+
+        /* Responsive improvements */
+        @media (max-width: 576px) {
+            .add-product-container {
+                padding: 25px;
+                margin: 20px;
+            }
+
+            h2 {
+                font-size: 1.8rem;
+            }
+
+            .tag-input::after {
+                content: '';
+            }
         }
     </style>
 </head>
@@ -541,6 +545,17 @@
                     <!-- Additional Information Section -->
                     <div class="form-section">
                         <div class="section-title"><i class="fa-solid fa-plus-circle me-2"></i>Additional Information
+                        </div>
+
+                        <div class="form-group">
+                            <label for="sameDayDispatch">
+                                <i class="fa-solid fa-truck-fast me-2"></i>Same Day Dispatch
+                            </label>
+                            <select class="form-control" id="sameDayDispatch" name="sameDayDispatch" required>
+                                <option value="">Select an option</option>
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
                         </div>
 
                         <div class="form-group tag-input">

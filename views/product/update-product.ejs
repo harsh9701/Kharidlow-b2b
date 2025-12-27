@@ -209,6 +209,14 @@
                 </div>
 
                 <div class="mb-3">
+                    <label for="sameDayDispatch" class="form-label">Same Day Dispatch</label>
+                    <select class="form-select" id="sameDayDispatch" name="sameDayDispatch" required>
+                        <option value="yes" <%=product.sameDayDispatch==true ? 'selected' : '' %>>Yes</option>
+                        <option value="no" <%=product.sameDayDispatch==false ? 'selected' : '' %>>No</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
                     <label for="tags" class="form-label">Tags (comma separated)</label>
                     <input type="text" class="form-control" id="tags" name="tags"
                         value="<%= product.tags.join(', ') %>">
