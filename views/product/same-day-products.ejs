@@ -82,8 +82,11 @@
                                                 </p>
                                             </div>
                                             <button class="btn add-to-cart-btn mt-auto"
-                                                data-product-id="<%= product._id %>" data-moq="<%= product.moq %>">Add
-                                                to cart</button>
+                                                data-product-id="<%= product._id %>" data-moq="<%= product.moq %>">
+                                                <span class="btn-text">Add to cart</span>
+                                                <span class="spinner-border spinner-border-sm d-none ms-2"
+                                                    role="status"></span>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -143,8 +146,17 @@
                     $('.add-to-cart-btn').on('click', function (event) {
                         event.preventDefault();
 
+                        const $btn = $(this);
+                        const $btnText = $btn.find('.btn-text');
+                        const $loader = $btn.find('.spinner-border');
+
                         const productId = $(this).data('product-id');
                         const moq = $(this).data('moq');
+
+                        // Disable button & show loader
+                        $btn.prop('disabled', true);
+                        $btnText.text('Adding...');
+                        $loader.removeClass('d-none');
 
                         $.ajax({
                             url: '/user/cart',
@@ -158,10 +170,15 @@
                                     if (response.reason) {
                                         swal("Oops!", "Please login!", "error").then(() => {
                                             window.location.href = '/user/login';
-                                        });;
+                                        });
+                                        document.querySelectorAll('.cartCount').forEach(el => {
+                                            el.innerText = response.cart.items.length;
+                                        });
+                                        resetButton($btn, $btnText, $loader);
                                     } else {
                                         swal("Oops!", "Something went wrong!", "error");
                                     }
+                                    resetButton($btn, $btnText, $loader);
                                 }
                             },
                             error: function (xhr, status, error) {
@@ -169,6 +186,13 @@
                             }
                         });
                     });
+
+                    function resetButton($btn, $btnText, $loader) {
+                        $btn.prop('disabled', false);
+                        $btnText.text('Add to cart');
+                        $loader.addClass('d-none');
+                        $btn.removeClass('btn-success');
+                    }
                 });
 
                 $(document).ready(function () {
