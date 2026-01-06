@@ -12,26 +12,22 @@
     <link rel="stylesheet" href="/styles/navbar.css">
     <link rel="stylesheet" href="/styles/footer.css">
     <link rel="stylesheet" href="/styles/listing.css">
-    <!-- Meta Pixel Code -->
-    <script>
-        !function (f, b, e, v, n, t, s) {
-            if (f.fbq) return; n = f.fbq = function () {
-                n.callMethod ?
-                    n.callMethod.apply(n, arguments) : n.queue.push(arguments)
-            };
-            if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
-            n.queue = []; t = b.createElement(e); t.async = !0;
-            t.src = v; s = b.getElementsByTagName(e)[0];
-            s.parentNode.insertBefore(t, s)
-        }(window, document, 'script',
-            'https://connect.facebook.net/en_US/fbevents.js');
-        fbq('init', '979296231081207');
-        fbq('track', 'PageView');
-    </script>
-    <noscript><img height="1" width="1" style="display:none"
-            src="https://www.facebook.com/tr?id=979296231081207&ev=PageView&noscript=1" /></noscript>
-    <!-- End Meta Pixel Code -->
     <style>
+        /* Badge/Tag for "Same Day" */
+        .same-day-badge {
+            display: inline-block;
+            background: linear-gradient(45deg, #ff6b6b, #ee5a6f);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            animation: pulse 2s ease-in-out infinite;
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+        }
+
         @media only screen and (max-width: 489px) {
             .new-arrival {
                 margin-top: 0.5rem;
@@ -54,7 +50,9 @@
                 <!-- Product Listing Grid -->
                 <div class="col-lg-12 col-md-12 mt-3">
                     <div class="d-flex justify-content-center align-items-center mb-4">
-                        <h2 class="new-arrival">Same Day Dispatch Products</h2>
+                        <div class="same-day-badge">
+                            <i class="fas fa-shipping-fast me-2"></i>Same Day Dispatch
+                        </div>
                         <!-- <select class="form-select w-auto">
                             <option>Default Sorting</option>
                             <option>Price: Low to High</option>
