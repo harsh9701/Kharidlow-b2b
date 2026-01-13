@@ -576,6 +576,21 @@
                             <small id="fileError" class="text-danger d-none">Invalid file format. Please upload .jpeg,
                                 .jpg, .png, or .webp files only.</small>
                         </div>
+
+                        <div class="form-group">
+                            <label for="additionalImages">
+                                <i class="fa-solid fa-images me-2"></i>Additional Images (Max 5)
+                            </label>
+
+                            <input type="file" class="form-control file-upload" id="additionalImages"
+                                name="additionalImages" accept=".jpg,.jpeg,.png,.webp" multiple>
+
+                            <div class="file-preview mt-3 d-flex flex-wrap gap-2 d-none" id="additionalPreview"></div>
+
+                            <small id="additionalImageError" class="text-danger d-none">
+                                You can upload a maximum of 5 images only.
+                            </small>
+                        </div>
                     </div>
 
                     <!-- Submit Button -->
@@ -665,6 +680,40 @@
                             }
                         }
                     });
+
+                    // Validate additional images (max 5) + preview
+                    $("#additionalImages").on("change", function () {
+                        const files = this.files;
+                        const previewContainer = $("#additionalPreview");
+                        const errorText = $("#additionalImageError");
+
+                        previewContainer.empty();
+                        errorText.addClass("d-none");
+
+                        if (files.length > 5) {
+                            errorText.removeClass("d-none");
+                            this.value = "";
+                            previewContainer.addClass("d-none");
+                            return;
+                        }
+
+                        Array.from(files).forEach(file => {
+                            const reader = new FileReader();
+
+                            reader.onload = function (e) {
+                                const img = `
+                <img src="${e.target.result}"
+                     style="width:100px;height:100px;object-fit:cover;border-radius:10px;
+                     border:2px solid #28a745;box-shadow:0 4px 10px rgba(0,0,0,0.15)">
+            `;
+                                previewContainer.append(img);
+                            };
+
+                            reader.readAsDataURL(file);
+                        });
+
+                        previewContainer.removeClass("d-none");
+                    });
                 });
 
                 // Enhanced form validation with visual feedback
@@ -721,6 +770,10 @@
                             setTimeout(() => {
                                 $("#addProductForm")[0].reset();
                                 $("#filePreview").addClass("d-none");
+                                $("#previewImg").attr("src", "");
+                                $("#additionalPreview").empty().addClass("d-none");
+                                $("#additionalImages").val("");
+                                $("#additionalImageError").addClass("d-none");
                                 $('.form-control, .form-select, textarea').removeClass('is-valid is-invalid');
                                 $("#subCategory").html('<option value="">Select a sub category</option>');
                                 updateProgressBar();

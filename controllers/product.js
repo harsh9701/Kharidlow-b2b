@@ -113,7 +113,11 @@ module.exports.addNewProduct = async (req, res) => {
     try {
         const { productName, category, subCategory, price, taxRate, taxType, stock, description, sku, tags, moq, sameDayDispatch } = req.body;
 
-        if (!req.file) {
+        if (!productName || productName.length < 3) {
+            return res.status(400).json({ success: false, message: "Product name must be at least 3 characters long" });
+        }
+
+        if (!req.files || !req.files.productImage) {
             return res.status(400).json({ success: false, message: "Product image is mandatory" });
         }
 
@@ -121,7 +125,7 @@ module.exports.addNewProduct = async (req, res) => {
             return res.status(400).json({ success: false, message: "Price, stock & MOQ should be greater than 0" });
         }
 
-        if (!productName || !category || !price || !sku) {
+        if (!category || !price || !sku) {
             return res.status(400).json({ success: false, message: "Missing required fields" });
         }
 
@@ -136,7 +140,17 @@ module.exports.addNewProduct = async (req, res) => {
             tagsArray = tags.split(',').map(tag => tag.trim());
         }
 
-        const imageUrl = await uploadImagesUsingFirebase(req.file);
+        const mainImageFile = req.files.productImage[0];
+        const additionalImageFiles = req.files.additionalImages || [];
+
+        const mainImageUrl = await uploadImagesUsingFirebase(mainImageFile);
+
+        let additionalImageUrls = [];
+        if (additionalImageFiles.length > 0) {
+            additionalImageUrls = await Promise.all(
+                additionalImageFiles.map(file => uploadImagesUsingFirebase(file))
+            );
+        }
 
         const newProduct = await productModel.create({
             category,
@@ -149,13 +163,15 @@ module.exports.addNewProduct = async (req, res) => {
             price,
             taxType,
             taxRate: Number(taxRate),
-            mainImage: imageUrl,
+            mainImage: mainImageUrl,
+            productImages: additionalImageUrls,
             sameDayDispatch: sameDayDispatch === "yes",
             tags: tagsArray,
         });
 
         return res.status(200).json({ success: true, message: "Product Created Successfully" });
     } catch (err) {
+        console.log(err.message)
         return res.status(500).json({ success: false, message: "Internal server error" });
     }
 };

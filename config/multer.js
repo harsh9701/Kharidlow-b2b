@@ -22,4 +22,31 @@ const upload = multer({
     fileFilter: fileFilter
 });
 
-module.exports = upload;
+const multerErrorHandler = (err, req, res, next) => {
+    if (err instanceof multer.MulterError) {
+        // Multer-specific errors
+        if (err.code === "LIMIT_FILE_SIZE") {
+            return res.status(400).json({
+                success: false,
+                message: "Image size should not exceed 5MB"
+            });
+        }
+
+        return res.status(400).json({
+            success: false,
+            message: err.message
+        });
+    }
+
+    // Custom fileFilter errors
+    if (err) {
+        return res.status(400).json({
+            success: false,
+            message: err.message || "File upload error"
+        });
+    }
+
+    next();
+};
+
+module.exports = {upload, multerErrorHandler};

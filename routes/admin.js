@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const upload = require("../config/multer");
+const { upload, multerErrorHandler } = require("../config/multer");
 const { isAdmin } = require("../middleware/auth");
 
 const { renderAdminPage, renderManageCustomerPage, renderManageOrderPage, renderManageProductPage, renderViewOrderPage, updateOrderStatus, renderViewCustomerPage, renderUpdateProductPage, renderCartAnalysisPage, sendAbandonedCartEmailService, renderFinalizeBillPage, finalizeBill, renderInvoice, renderAddUserPage } = require("../controllers/admin");
@@ -23,6 +23,6 @@ router.post("/abandoned-cart-reminder/:userId", isAdmin, sendAbandonedCartEmailS
 router.delete("/delete/productimage/:productId", isAdmin, deleteProductImage);
 router.delete("/delete/products", isAdmin, deleteMultipleProducts);
 router.delete("/delete/product/:productId", isAdmin, deleteProduct);
-router.put("/update/product/:productId", isAdmin, upload.fields([{ name: 'mainImage', maxCount: 1 }, { name: 'productImages', maxCount: 5 }]), updateProduct);
+router.put("/update/product/:productId", isAdmin, upload.fields([{ name: 'mainImage', maxCount: 1 }, { name: 'productImages', maxCount: 5 }]), multerErrorHandler, updateProduct);
 
 module.exports = router;
