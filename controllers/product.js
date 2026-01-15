@@ -81,10 +81,15 @@ module.exports.renderProductPage = async (req, res) => {
             });
         const suggestedProducts = await productModel.aggregate([
             { $match: { subCategory: productDetails.subCategory } },
-            { $sample: { size: 32 } },
+            { $sample: { size: 36 } },
             { $project: { productName: 1, price: 1, moq: 1, mainImage: 1 } }
         ]);
-        res.render("product/product.ejs", { productDetails, suggestedProducts });
+
+        const retailersChoiceProducts = await productModel.aggregate([
+            { $sample: { size: 36 } },
+            { $project: { productName: 1, price: 1, moq: 1, mainImage: 1 } }
+        ]);
+        res.render("product/product.ejs", { productDetails, suggestedProducts, retailersChoiceProducts });
     } catch (error) {
         res.status(500).send(error.message);
     }

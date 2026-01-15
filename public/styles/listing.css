@@ -252,7 +252,7 @@ body {
 ::-webkit-scrollbar {
     width: 5px;
     height: 8px;
-    background-color: #f1f1f1;
+    background-color: #dad9d9;
 }
 
 /* Handle of the scrollbar */

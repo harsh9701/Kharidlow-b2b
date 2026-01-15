@@ -184,10 +184,18 @@
     /* Standard property */
 }
 
+.suggested-products {
+    padding: 12px;
+}
+
+.retailers-products-container,
 .suggested-products-container {
     overflow-x: auto;
+    padding: 12px;
+}
+
+.suggested-products-container {
     white-space: nowrap;
-    /* scrollbar-width: none; */
 }
 
 .suggested-products-container .row {
@@ -302,7 +310,7 @@
 ::-webkit-scrollbar {
     width: 5px;
     height: 3px;
-    background-color: #f1f1f1;
+    background-color: #dad9d9;
 }
 
 /* Handle of the scrollbar */
@@ -336,6 +344,11 @@
         margin-bottom: 20px;
     }
 
+    .suggested-products,
+    .suggested-products-container {
+        padding: 0;
+    }
+
     .suggested-products-container .row {
         display: flex;
         flex-wrap: nowrap;
@@ -344,10 +357,6 @@
     .add-to-cart-btn,
     .review-btn {
         width: 100%;
-    }
-
-    ::-webkit-scrollbar {
-        display: none;
     }
 }
 

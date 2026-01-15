@@ -162,12 +162,12 @@
 
             <!-- Suggested Products Section -->
             <% if(suggestedProducts.length> 0) { %>
-                <section class="container suggested-products mt-5">
-                    <h4>Suggested Products</h4>
+                <section class="suggested-products mt-5">
+                    <h4 class="text-center">Suggested Products</h4>
                     <div class="suggested-products-container">
                         <div class="row">
                             <% suggestedProducts.forEach((product)=> { %>
-                                <div class="col-6 col-md-4 col-lg-3 mb-3">
+                                <div class="col-6 col-sm-4 col-md-4 col-lg-3 mb-3">
                                     <div class="card">
                                         <div class="card-img-container">
                                             <a href="/product/<%= product._id %>"><img src="<%= product.mainImage %>"
@@ -194,6 +194,43 @@
                     </div>
                 </section>
                 <% } %>
+
+                    <!-- Retailers Choice Products Section -->
+                    <% if(retailersChoiceProducts.length> 0) { %>
+                        <section class="suggested-products mt-5 mt-md-0">
+                            <h4 class="text-center">Retailers’ Top Picks</h4>
+                            <div class="retailers-products-container">
+                                <div class="row">
+                                    <% retailersChoiceProducts.forEach((product)=> { %>
+                                        <div class="col-6 col-sm-4 col-md-4 col-lg-3 mb-3">
+                                            <div class="card">
+                                                <div class="card-img-container">
+                                                    <a href="/product/<%= product._id %>"><img
+                                                            src="<%= product.mainImage %>" class="card-img-top"
+                                                            alt="<%= product.productName %>"></a>
+                                                </div>
+                                                <div class="card-body">
+                                                    <h5 class="card-title">
+                                                        <%= product.productName %>
+                                                    </h5>
+                                                    <div class="d-flex justify-content-between">
+                                                        <p class="card-text"><span class="price">Price: </span>&#8377;
+                                                            <%= product.price %>
+                                                                <p class="card-text">MOQ: <%= product.moq %>
+                                                    </div>
+                                                    <button class="btn btn-primary add-to-cart-btn-card"
+                                                        data-product-id="<%= product._id %>"
+                                                        data-moq="<%= product.moq %>">Add
+                                                        to
+                                                        Cart</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <% }) %>
+                                </div>
+                            </div>
+                        </section>
+                        <% } %>
         </div>
 
         <!-- include footer -->
