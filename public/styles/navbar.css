@@ -341,6 +341,10 @@ body {
 }
 
 /* ------Brand Logo designing------- */
+.mobile-logo a {
+    text-decoration: none;
+}
+
 .brand-name {
     position: relative;
     font-size: 1.7rem;

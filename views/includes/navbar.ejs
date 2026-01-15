@@ -8,15 +8,19 @@
             </a>
         </div>
 
-        <div>
-            <h5 class="brand-name" data-text="KharidLow">KharidLow&nbsp;&nbsp;</h5>
+        <div class="mobile-logo">
+            <a href="/">
+                <h5 class="brand-name" data-text="KharidLow">KharidLow&nbsp;&nbsp;</h5>
+            </a>
         </div>
 
         <!-- Mobile-only cart icon -->
         <div class="mobile-actions d-lg-none">
             <a href="/user/cart" class="mobile-cart-link">
                 <i class="fa-solid fa-cart-shopping"></i>
-                <span class="cart-badge cartCount"><%= cartCount %></span>
+                <span class="cart-badge cartCount">
+                    <%= cartCount %>
+                </span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -121,7 +125,9 @@
                                         <li class="nav-item cart-desktop d-none d-lg-block">
                                             <a href="/user/cart" class="nav-link cart-btn">
                                                 <i class="fa-solid fa-cart-shopping"></i>
-                                                <span class="cart-badge cartCount"><%= cartCount %></span>
+                                                <span class="cart-badge cartCount">
+                                                    <%= cartCount %>
+                                                </span>
                                             </a>
                                         </li>
             </ul>
@@ -146,7 +152,9 @@
     <div class="bottom-nav-item">
         <a href="/user/cart" class="bottom-nav-link">
             <i class="fa-solid fa-cart-shopping"></i>
-            <span class="bottom-cart-badge cartCount"><%= cartCount %></span>
+            <span class="bottom-cart-badge cartCount">
+                <%= cartCount %>
+            </span>
             <span>Cart</span>
         </a>
     </div>
@@ -174,11 +182,17 @@
         const searchToggle = document.getElementById('bottom-search-toggle');
         const searchOverlay = document.getElementById('mobileSearchOverlay');
         const searchClose = document.getElementById('mobileSearchClose');
+        const searchInput = document.querySelector('.mobile-search-input');
 
         searchToggle.addEventListener('click', function (e) {
             e.preventDefault();
             searchOverlay.classList.add('active');
-            document.querySelector('.mobile-search-input').focus();
+
+            // Delay focus so mobile keyboard opens properly
+            setTimeout(() => {
+                searchInput.focus();
+                searchInput.click(); // helps on some Android devices
+            }, 300);
         });
 
         searchClose.addEventListener('click', function () {
