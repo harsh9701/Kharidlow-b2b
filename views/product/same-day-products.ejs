@@ -2,6 +2,15 @@
 <html lang="en">
 
 <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SNMCFJBC49"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-SNMCFJBC49');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Same Day Dispatch - Kharidlow</title>
@@ -101,7 +110,8 @@
                         <ul id="pagination-controls" class="pagination justify-content-center">
                             <!-- Previous Button -->
                             <li class="page-item <%= (currentPage === 1) ? 'disabled' : '' %>">
-                                <a class="page-link" href="/search?page=<%= currentPage - 1 %>&pageSize=48">Previous</a>
+                                <a class="page-link"
+                                    href="/same-day-dispatch?page=<%= currentPage - 1 %>&pageSize=48">Previous</a>
                             </li>
 
                             <% const totalPages=Math.ceil(totalProducts / 48); const maxPagesToShow=2; let
@@ -111,7 +121,7 @@
                                 (endPage===totalPages) { startPage=Math.max(endPage - maxPagesToShow + 1, 1); } } for
                                 (let i=startPage; i <=endPage; i++) { %>
                                 <li class="page-item <%= (i === currentPage) ? 'active' : '' %>">
-                                    <a class="page-link" href="/search?page=<%= i %>&pageSize=48">
+                                    <a class="page-link" href="/same-day-dispatch?page=<%= i %>&pageSize=48">
                                         <%= i %>
                                     </a>
                                 </li>
@@ -125,7 +135,7 @@
                                     <!-- Next Button -->
                                     <li class="page-item <%= (currentPage === totalPages) ? 'disabled' : '' %>">
                                         <a class="page-link"
-                                            href="/search?page=<%= currentPage + 1 %>&pageSize=48">Next</a>
+                                            href="/same-day-dispatch?page=<%= currentPage + 1 %>&pageSize=48">Next</a>
                                     </li>
                         </ul>
                     </nav>
