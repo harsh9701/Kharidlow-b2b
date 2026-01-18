@@ -73,9 +73,11 @@
                         <h1 class="product-title">
                             <%= productDetails.productName %>
                         </h1>
-                        <span class="category-badge">
-                            <%= productDetails.subCategory %>
-                        </span>
+                        <a href="/product?category=<%= encodeURIComponent(productDetails.subCategory) %>"><span
+                                class="category-badge">
+                                <%= productDetails.subCategory %>
+                            </span>
+                        </a>
                         <p class="product-price"><strong>&#8377;<%= productDetails.price %>
                                     <% if(productDetails.taxType=="inclusive" ) { %> <span
                                             style="font-size: 14px;">(Inc.
