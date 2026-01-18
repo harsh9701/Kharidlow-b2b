@@ -308,8 +308,8 @@
 
 /* Target the scrollbar */
 ::-webkit-scrollbar {
-    width: 5px;
-    height: 3px;
+    width: 10px;
+    height: 5px;
     background-color: #dad9d9;
 }
 
@@ -344,12 +344,11 @@
         margin-bottom: 20px;
     }
 
-    .suggested-products,
-    .suggested-products-container {
-        padding: 0;
+    .suggested-products {
+        padding: 0px;
     }
 
-    .suggested-products-container .row {
+    .retailers-products-container .row {
         display: flex;
         flex-wrap: nowrap;
     }
