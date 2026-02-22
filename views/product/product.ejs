@@ -80,11 +80,11 @@
                         </a>
                         <p class="product-price"><strong>&#8377;<%= productDetails.price %>
                                     <% if(productDetails.taxType=="inclusive" ) { %> <span
-                                            style="font-size: 14px;">(Inc.
-                                            GST@<%= productDetails.taxRate %>%)</span>
-                                        <% } else { %> <span style="font-size: 14px;">(Excl. GST@<%=
-                                                    productDetails.taxRate %>%)</span>
-                                            <% } %></strong></p>
+                                            style="font-size: 14px;">(Inc. GST)</span>
+                                        <% } else { %>
+                                            <span style="font-size: 14px;">(Excl. GST)</span>
+                                            <% } %></strong>
+                        </p>
 
                         <!-- Quantity Controls -->
                         <div class="quantity-control my-3">
@@ -194,9 +194,11 @@
                                                         <p class="card-text">MOQ: <%= product.moq %>
                                             </div>
                                             <button class="btn btn-primary add-to-cart-btn-card"
-                                                data-product-id="<%= product._id %>" data-moq="<%= product.moq %>">Add
-                                                to
-                                                Cart</button>
+                                                data-product-id="<%= product._id %>" data-moq="<%= product.moq %>">
+                                                <span class="btn-text">Add to cart</span>
+                                                <span class="spinner-border spinner-border-sm d-none ms-2"
+                                                    role="status"></span>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -231,9 +233,11 @@
                                                     </div>
                                                     <button class="btn btn-primary add-to-cart-btn-card"
                                                         data-product-id="<%= product._id %>"
-                                                        data-moq="<%= product.moq %>">Add
-                                                        to
-                                                        Cart</button>
+                                                        data-moq="<%= product.moq %>">
+                                                        <span class="btn-text">Add to cart</span>
+                                                        <span class="spinner-border spinner-border-sm d-none ms-2"
+                                                            role="status"></span>
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
@@ -333,8 +337,6 @@
                     const rating = $('input[name="rating"]:checked').val();
                     const comment = $('textarea[name="comment"]').val();
 
-                    console.log(rating);
-
                     if (rating == 0) {
                         swal("Oops!", "Please select a star rating!", "warning");
                         return;
@@ -355,7 +357,6 @@
                             if (response.success) {
                                 swal("Thank you!", "Your review has been submitted!", "success");
                             } else {
-                                console.log(response);
                                 swal("Oops!", response.message, "error");
                             }
                         },
@@ -368,8 +369,17 @@
                 $('.add-to-cart-btn-card').on('click', function (event) {
                     event.preventDefault();
 
+                    const $btn = $(this);
+                    const $btnText = $btn.find('.btn-text');
+                    const $loader = $btn.find('.spinner-border');
+
                     const productId = $(this).data('product-id');
                     const moq = $(this).data('moq');
+
+                    // Disable button & show loader
+                    $btn.prop('disabled', true);
+                    $btnText.text('Adding...');
+                    $loader.removeClass('d-none');
 
                     $.ajax({
                         url: '/user/cart',
@@ -379,6 +389,10 @@
                         success: function (response) {
                             if (response.success) {
                                 swal("Fantastic!", "Product added to cart successfully!", "success");
+                                document.querySelectorAll('.cartCount').forEach(el => {
+                                    el.innerText = response.cart.items.length;
+                                });
+                                resetButton($btn, $btnText, $loader);
                             } else {
                                 if (response.reason) {
                                     swal("Oops!", "Please login!", "error").then(() => {
@@ -387,6 +401,7 @@
                                 } else {
                                     swal("Oops!", "Something went wrong!", "error");
                                 }
+                                resetButton($btn, $btnText, $loader);
                             }
                         },
                         error: function (xhr, status, error) {

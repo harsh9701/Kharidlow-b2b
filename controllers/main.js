@@ -229,3 +229,15 @@ module.exports.renderSameDayDispatchPage = async (req, res) => {
         return res.status(500).send(err.message);
     }
 };
+
+module.exports.renderProductReelPage = async (req, res) => {
+    try {
+        const products = await productModel.aggregate([
+            { $sample: { size: 20 } }
+        ]);
+
+        return res.render("product/product-reels.ejs", { products });
+    } catch (err) {
+        return res.status(500).send(err.message);
+    }
+}

@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Reels - Kharidlow</title>
+
+    <link rel="icon" type="image/x-icon" href="/assets/Kharidlow.ico">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/styles/product-reel.css">
+</head>
+
+<body>
+
+    <!-- Top bar -->
+    <div class="top-bar">
+        <a href="/" class="btn-exit" title="Back to Home">✕</a>
+        <span class="top-brand">KHARIDLOW</span>
+        <a href="/user/cart" class="btn-view-cart">
+            🛒 View Cart
+        </a>
+    </div>
+
+    <div class="desktop-hint">
+        <div class="hint-pill"><span>↕</span> Scroll to browse</div>
+        <div class="hint-pill"><span>🛒</span> Add to cart instantly</div>
+    </div>
+
+    <div class="reel-wrapper">
+        <div class="reel-container" id="reelContainer">
+
+            <% products.forEach(function(product, i) { %>
+                <div class="reel" data-index="<%= i %>">
+
+                    <!-- Ambient blur bg -->
+                    <div class="reel-bg" style="background-image: url('<%= product.mainImage %>')"></div>
+
+                    <!-- Progress dots -->
+                    <!-- <div class="reel-progress" id="progress-<%= i %>">
+                        <% products.forEach(function(_, j) { %>
+                            <div class="progress-seg <%= j < i ? 'done' : '' %>">
+                                <div class="fill"></div>
+                            </div>
+                            <% }) %>
+                    </div> -->
+
+                    <!-- Image -->
+                    <div class="reel-img-wrap">
+                        <img src="<%= product.mainImage %>" alt="<%= product.productName %>" loading="lazy">
+                    </div>
+
+                    <!-- Side actions -->
+                    <div class="side-actions">
+                        <!-- <div class="side-action-wrap">
+                            <button class="side-btn like-btn" data-id="<%= product._id %>">❤️</button>
+                            <span style="font-size:10px;color:rgba(255,255,255,0.4)">Like</span>
+                        </div> -->
+                        <div class="side-action-wrap">
+                            <a class="side-btn" href="/product/<%= product._id %>">🔍</a>
+                            <span style="font-size:10px;font-weight:500;color:rgba(251, 251, 251, 0.973)">Details</span>
+                        </div>
+                        <div class="side-action-wrap">
+                            <button class="side-btn share-btn"
+                                data-url="<%= 'https://kharidlow.com/product/' + product._id %>"
+                                data-title="<%= product.productName %>">
+                                📤
+                            </button>
+                            <span style="font-size:10px;font-weight:500;color:rgba(251, 251, 251, 0.973)">Share</span>
+                        </div>
+                    </div>
+
+                    <!-- Bottom overlay -->
+                    <div class="reel-overlay">
+                        <div class="reel-badge">
+                            <span>✦</span> Wholesale Deal
+                        </div>
+                        <div class="product-name">
+                            <%= product.productName %>
+                        </div>
+                        <div class="product-meta">
+                            <div class="product-price">₹ <%= product.price %>
+                            </div>
+                            <div class="product-moq">MOQ: <%= product.moq %>
+                            </div>
+                        </div>
+                        <div class="cta-row">
+                            <button class="btn-cart add-to-cart-btn" data-product-id="<%= product._id %>"
+                                data-moq="<%= product.moq %>">
+                                <span class="cart-icon">🛒</span>
+                                <span class="btn-text">Add to Cart</span>
+                                <span class="spinner-border spinner-border-sm d-none ms-1"
+                                    style="width:14px;height:14px;"></span>
+                            </button>
+                            <a href="/product/<%= product._id %>" class="btn-details" title="View Details">→</a>
+                        </div>
+                    </div>
+
+                </div>
+                <% }) %>
+
+        </div>
+    </div>
+
+    <!-- Scroll hint (first load) -->
+    <div class="scroll-hint" id="scrollHint">
+        <div class="scroll-arrow"></div>
+        Swipe up
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            // ── Intersection Observer for active reel ──
+            const reels = document.querySelectorAll('.reel');
+            const scrollHint = document.getElementById('scrollHint');
+            let hasScrolled = false;
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        reels.forEach(r => r.classList.remove('active'));
+                        entry.target.classList.add('active');
+
+                        // Update progress bars
+                        const idx = parseInt(entry.target.dataset.index);
+                        document.querySelectorAll('.reel-progress').forEach((pg, i) => {
+                            const segs = pg.querySelectorAll('.progress-seg');
+                            segs.forEach((seg, j) => {
+                                seg.classList.toggle('done', j < idx);
+                                seg.querySelector('.fill').style.width = j < idx ? '100%' : '0%';
+                                if (i === idx && j === idx) {
+                                    // current reel's own segment — fill slowly
+                                    seg.querySelector('.fill').style.width = '100%';
+                                }
+                            });
+                        });
+
+                        if (!hasScrolled && idx > 0) {
+                            hasScrolled = true;
+                            scrollHint.classList.add('hidden');
+                        }
+                    }
+                });
+            }, { threshold: 0.6 });
+
+            reels.forEach(r => observer.observe(r));
+
+            // Activate first reel
+            if (reels.length > 0) reels[0].classList.add('active');
+
+            // Hide scroll hint after first scroll
+            document.getElementById('reelContainer').addEventListener('scroll', () => {
+                if (!hasScrolled) {
+                    hasScrolled = true;
+                    scrollHint.classList.add('hidden');
+                }
+            }, { once: true });
+
+            // --- Share Button ---
+            $('.share-btn').on('click', function () {
+
+                const url = $(this).data('url');
+                const title = $(this).data('title');
+
+                // If Web Share API supported (Mobile)
+                if (navigator.share) {
+                    navigator.share({
+                        title: title,
+                        text: "Check this product on Kharidlow",
+                        url: url
+                    }).catch(err => console.log("Share cancelled"));
+                } else {
+                    // Fallback for desktop → copy to clipboard
+                    navigator.clipboard.writeText(url).then(() => {
+                        alert("Link copied to clipboard!");
+                    }).catch(() => {
+                        alert("Unable to share");
+                    });
+                }
+
+            });
+
+            // ── Like button ──
+            $('.like-btn').on('click', function () {
+                $(this).toggleClass('liked');
+                const isLiked = $(this).hasClass('liked');
+                $(this).css('transform', 'scale(1.35)');
+                setTimeout(() => $(this).css('transform', ''), 250);
+            });
+
+            // ── Add to cart ──
+            $('.add-to-cart-btn').on('click', function (e) {
+                e.preventDefault();
+
+                const $btn = $(this);
+                const $text = $btn.find('.btn-text');
+                const $loader = $btn.find('.spinner-border');
+                const $icon = $btn.find('.cart-icon');
+                const productId = $btn.data('product-id');
+                const moq = $btn.data('moq');
+
+                $btn.prop('disabled', true);
+                $text.text('Adding...');
+                $icon.text('⏳');
+                $loader.removeClass('d-none');
+
+                $.ajax({
+                    url: '/user/cart',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ productId, moq }),
+                    success: function (response) {
+                        if (response.success) {
+                            $btn.addClass('success');
+                            $icon.text('✓');
+                            $text.text('Added!');
+                            $loader.addClass('d-none');
+
+                            setTimeout(() => {
+                                $btn.removeClass('success');
+                                resetButton();
+                            }, 2000);
+                        } else {
+                            window.location.href = '/user/login';
+                        }
+                    },
+                    error: function () {
+                        alert("Error adding to cart");
+                        resetButton();
+                    }
+                });
+
+                function resetButton() {
+                    $btn.prop('disabled', false);
+                    $text.text('Add to Cart');
+                    $icon.text('🛒');
+                    $loader.addClass('d-none');
+                }
+            });
+
+        });
+    </script>
+
+</body>
+
+</html>

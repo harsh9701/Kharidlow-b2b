@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { renderLandingPage, cartCount, renderCategoryWiseListingPage, renderSearchResultPage, renderShippingInfoPage, renderReturnRefundPolicyPage, renderPrivacyPolicyPage, renderAboutUsPage, renderSameDayDispatchPage } = require("../controllers/main");
+const { renderLandingPage, cartCount, renderCategoryWiseListingPage, renderSearchResultPage, renderShippingInfoPage, renderReturnRefundPolicyPage, renderPrivacyPolicyPage, renderAboutUsPage, renderSameDayDispatchPage, renderProductReelPage } = require("../controllers/main");
 const { userLogout, renderForgetPasswordPage, renderResetPasswordPage, forgetPassword, resetPassword } = require("../controllers/user");
 
 router.get("/", renderLandingPage);
@@ -16,6 +16,7 @@ router.get("/cart/count", cartCount);
 router.get("/forgetpassword", renderForgetPasswordPage);
 router.get("/resetpassword/:token", renderResetPasswordPage);
 router.get("/same-day-dispatch", renderSameDayDispatchPage);
+router.get("/product-reels", renderProductReelPage);
 router.put("/resetpassword/:token", resetPassword);
 router.post("/forgetpassword", forgetPassword);
 
