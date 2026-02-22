@@ -233,7 +233,15 @@ module.exports.renderSameDayDispatchPage = async (req, res) => {
 module.exports.renderProductReelPage = async (req, res) => {
     try {
         const products = await productModel.aggregate([
-            { $sample: { size: 20 } }
+            { $sample: { size: 60 } },
+            {
+                $project: {
+                    productName: 1,
+                    price: 1,
+                    mainImage: 1,
+                    moq: 1,
+                }
+            }
         ]);
 
         return res.render("product/product-reels.ejs", { products });

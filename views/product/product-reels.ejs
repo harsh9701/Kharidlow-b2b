@@ -3,7 +3,8 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- viewport-fit=cover is critical for safe-area-inset on iOS notch/home bar -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Product Reels - Kharidlow</title>
 
     <link rel="icon" type="image/x-icon" href="/assets/Kharidlow.ico">
@@ -39,15 +40,6 @@
                     <!-- Ambient blur bg -->
                     <div class="reel-bg" style="background-image: url('<%= product.mainImage %>')"></div>
 
-                    <!-- Progress dots -->
-                    <!-- <div class="reel-progress" id="progress-<%= i %>">
-                        <% products.forEach(function(_, j) { %>
-                            <div class="progress-seg <%= j < i ? 'done' : '' %>">
-                                <div class="fill"></div>
-                            </div>
-                            <% }) %>
-                    </div> -->
-
                     <!-- Image -->
                     <div class="reel-img-wrap">
                         <img src="<%= product.mainImage %>" alt="<%= product.productName %>" loading="lazy">
@@ -55,10 +47,6 @@
 
                     <!-- Side actions -->
                     <div class="side-actions">
-                        <!-- <div class="side-action-wrap">
-                            <button class="side-btn like-btn" data-id="<%= product._id %>">❤️</button>
-                            <span style="font-size:10px;color:rgba(255,255,255,0.4)">Like</span>
-                        </div> -->
                         <div class="side-action-wrap">
                             <a class="side-btn" href="/product/<%= product._id %>">🔍</a>
                             <span style="font-size:10px;font-weight:500;color:rgba(251, 251, 251, 0.973)">Details</span>
@@ -126,21 +114,7 @@
                         reels.forEach(r => r.classList.remove('active'));
                         entry.target.classList.add('active');
 
-                        // Update progress bars
-                        const idx = parseInt(entry.target.dataset.index);
-                        document.querySelectorAll('.reel-progress').forEach((pg, i) => {
-                            const segs = pg.querySelectorAll('.progress-seg');
-                            segs.forEach((seg, j) => {
-                                seg.classList.toggle('done', j < idx);
-                                seg.querySelector('.fill').style.width = j < idx ? '100%' : '0%';
-                                if (i === idx && j === idx) {
-                                    // current reel's own segment — fill slowly
-                                    seg.querySelector('.fill').style.width = '100%';
-                                }
-                            });
-                        });
-
-                        if (!hasScrolled && idx > 0) {
+                        if (!hasScrolled && parseInt(entry.target.dataset.index) > 0) {
                             hasScrolled = true;
                             scrollHint.classList.add('hidden');
                         }
@@ -163,11 +137,9 @@
 
             // --- Share Button ---
             $('.share-btn').on('click', function () {
-
                 const url = $(this).data('url');
                 const title = $(this).data('title');
 
-                // If Web Share API supported (Mobile)
                 if (navigator.share) {
                     navigator.share({
                         title: title,
@@ -175,20 +147,17 @@
                         url: url
                     }).catch(err => console.log("Share cancelled"));
                 } else {
-                    // Fallback for desktop → copy to clipboard
                     navigator.clipboard.writeText(url).then(() => {
                         alert("Link copied to clipboard!");
                     }).catch(() => {
                         alert("Unable to share");
                     });
                 }
-
             });
 
             // ── Like button ──
             $('.like-btn').on('click', function () {
                 $(this).toggleClass('liked');
-                const isLiked = $(this).hasClass('liked');
                 $(this).css('transform', 'scale(1.35)');
                 setTimeout(() => $(this).css('transform', ''), 250);
             });
