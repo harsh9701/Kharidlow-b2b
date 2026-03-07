@@ -128,9 +128,6 @@
                         <th>Product</th>
                         <th>Qty</th>
                         <th>Price (₹)</th>
-                        <th>Taxable Amount (₹)</th>
-                        <th>Tax (%)</th>
-                        <th>Tax Amount (₹)</th>
                         <th>Total (₹)</th>
                     </tr>
                 </thead>
@@ -148,15 +145,6 @@
                             </td>
                             <td>
                                 <%= item.price.toFixed(2) %>
-                            </td>
-                            <td>
-                                <%= Number(item.quantity) * Number(item.price.toFixed(2)) %>
-                            </td>
-                            <td>
-                                <% if(item.taxType.toLowerCase()=="inclusive" ){ %>Incl. <% } else { %>Excl. <% } %> (<%= item.taxRate %>%)
-                            </td>
-                            <td>
-                                <%= item.taxAmount.toFixed(2) %>
                             </td>
                             <td>
                                 <%= item.total.toFixed(2) %>

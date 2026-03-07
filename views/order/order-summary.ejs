@@ -33,9 +33,9 @@
                             <th>Product Name</th>
                             <th>Price</th>
                             <th>Quantity</th>
-                            <th>Tax Rate</th>
-                            <th>Tax Type</th>
-                            <th>Tax Amount</th>
+                            <th style="display: none;">Tax Rate</th>
+                            <th style="display: none;">Tax Type</th>
+                            <th style="display: none;">Tax Amount</th>
                             <th>Total</th>
                         </tr>
                     </thead>
@@ -57,14 +57,14 @@
                                     <td data-label="Quantity">
                                         <%= item.quantity %>
                                     </td>
-                                    <td data-label="Tax Rate">
+                                    <td data-label="Tax Rate" style="display: none;">
                                         <%= item.taxRate %>
                                     </td>
-                                    <td data-label="Tax Type">
+                                    <td data-label="Tax Type" style="display: none;">
                                         <%= item.taxType.charAt(0).toUpperCase() + item.taxType.slice(1).toLowerCase()
                                             %>
                                     </td>
-                                    <td data-label="Tax Amount">
+                                    <td data-label="Tax Amount" style="display: none;">
                                         <%= item.taxAmount %>
                                     </td>
                                     <td data-label="Total" class="item-total">&#8377; <%= item.total.toFixed(2) %>

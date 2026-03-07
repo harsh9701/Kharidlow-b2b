@@ -191,9 +191,6 @@ const sendOrderSummaryMail = async (clientMail, fullName, orderNumber, orderItem
                     <td>${item.productName}</td>
                     <td>${item.price}</td>
                     <td>${item.quantity}</td>
-                    <td>${item.taxRate}</td>
-                    <td>${item.taxType}</td>
-                    <td>${item.taxAmount.toFixed(2)}</td>
                     <td>${total.toFixed(2)}</td>
                 </tr>
             `;
@@ -233,9 +230,6 @@ const sendOrderSummaryMail = async (clientMail, fullName, orderNumber, orderItem
                                     <th>Product Name</th>
                                     <th>Price</th>
                                     <th>Quantity</th>
-                                    <th>Tax Rate</th>
-                                    <th>Tax Type</th>
-                                    <th>Tax Amount</th>
                                     <th>Total</th>
                                 </tr>
                             </thead>
@@ -244,7 +238,7 @@ const sendOrderSummaryMail = async (clientMail, fullName, orderNumber, orderItem
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <td colspan="6" style="text-align:right;">Grand Total:</td>
+                                    <td colspan="3" style="text-align:right;">Grand Total:</td>
                                     <td class="grand-total">${grandTotal}</td>
                                 </tr>
                             </tfoot>
