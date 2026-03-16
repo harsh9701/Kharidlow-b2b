@@ -4,322 +4,699 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abandoned Carts - Admin Panel</title>
+    <title>Cart Insights - Kharidlow</title>
     <link rel="icon" type="image/x-icon" href="/assets/Kharidlow.ico">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
-    <link rel="stylesheet" href="/styles/adminHeader.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/styles/adminPage.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        /* ── Page-specific only ── */
+
+        .wa-link {
+            display: inline-flex;
+            align-items: center;
+            color: var(--success);
+            text-decoration: none;
+            font-size: 14px;
+            margin-left: 6px;
+            transition: opacity 0.15s;
         }
 
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f6f9;
-            color: #333;
+        .wa-link:hover {
+            opacity: 0.75;
         }
 
-        .admin-container {
-            max-width: 1200px;
-            margin: auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        h1 {
-            text-align: center;
-            font-size: 24px;
-            color: #333;
-            margin-bottom: 20px;
-        }
-
-        .table-wrapper {
+        /* ── Table ── */
+        .table-wrap {
             overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
-        .admin-table {
+        table {
             width: 100%;
             border-collapse: collapse;
+            min-width: 560px;
+        }
+
+        thead th {
+            background: var(--bg4);
+            padding: 11px 16px;
             text-align: left;
-            font-size: 16px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+            white-space: nowrap;
         }
 
-        .admin-table th,
-        .admin-table td {
-            padding: 12px 15px;
-            border-bottom: 1px solid #e0e0e0;
+        tbody tr {
+            border-bottom: 1px solid var(--border);
+            transition: background 0.12s;
         }
 
-        .admin-table th {
-            background-color: #6c63ff;
-            color: #fff;
+        tbody tr:last-child {
+            border-bottom: none;
         }
 
-        .admin-table tr:hover {
-            background-color: #f1f1f1;
+        tbody tr:hover {
+            background: rgba(255, 255, 255, 0.025);
         }
 
-        .notify-btn {
-            padding: 8px 12px;
-            color: #fff;
-            background-color: #ff6b6b;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
+        tbody td {
+            padding: 13px 16px;
+            font-size: 13px;
+            color: var(--text-primary);
+            white-space: nowrap;
         }
 
-        .notify-btn:hover {
-            background-color: #ff4949;
+        .mono {
+            font-family: 'DM Mono', monospace;
+            font-size: 12.5px;
         }
 
-        .modal-content {
+        .muted {
+            color: var(--text-secondary);
+        }
+
+        /* ── Notify button ── */
+        .btn-notify {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 12px;
             border-radius: 8px;
+            background: rgba(248, 113, 113, 0.1);
+            border: 1px solid rgba(248, 113, 113, 0.25);
+            color: var(--danger);
+            font-size: 12px;
+            font-weight: 500;
+            font-family: 'DM Sans', sans-serif;
+            cursor: pointer;
+            transition: all 0.15s;
         }
 
-        .table {
-            transition: background-color 0.3s ease;
+        .btn-notify:hover {
+            background: rgba(248, 113, 113, 0.18);
+            border-color: rgba(248, 113, 113, 0.4);
         }
 
-        .table-hover tbody tr:hover {
-            background-color: #f1f1f1;
+        /* ── Action icon buttons ── */
+        .btn-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            background: var(--bg4);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.15s;
         }
 
-        .table-bordered th,
-        .table-bordered td {
-            border: 1px solid #e0e0e0;
+        .btn-icon:hover {
+            background: var(--accent-glow);
+            color: var(--accent2);
+            border-color: rgba(108, 99, 255, 0.3);
         }
 
-        .table-light {
-            background-color: #6c63ff;
-            color: white;
+        /* ── Pagination ── */
+        .table-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 20px;
+            border-top: 1px solid var(--border);
+            gap: 12px;
+            flex-wrap: wrap;
         }
 
-        .table-light th {
-            background-color: #5a53d1;
-            color: #fff;
+        .table-info {
+            font-size: 12px;
+            color: var(--text-muted);
         }
 
-        .table-light th:hover {
-            background-color: #5a53d1;
+        .pagination {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
         }
 
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 20px;
+        .page-btn {
+            min-width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            background: var(--bg4);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.15s;
+            text-decoration: none;
+            font-family: 'DM Mono', monospace;
+            padding: 0 8px;
+        }
+
+        .page-btn:hover {
+            border-color: var(--border-hover);
+            color: var(--text-primary);
+        }
+
+        .page-btn.active {
+            background: var(--accent-glow);
+            color: var(--accent2);
+            border-color: rgba(108, 99, 255, 0.3);
+            pointer-events: none;
+        }
+
+        .page-btn.disabled {
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        .no-data {
+            padding: 60px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .no-data i {
+            font-size: 32px;
+            margin-bottom: 12px;
+            display: block;
+            opacity: 0.4;
+        }
+
+        /* ── Modal ── */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.65);
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .modal-box {
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            width: 100%;
+            max-width: 560px;
+            overflow: hidden;
+            animation: modalIn 0.2s ease;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: scale(0.96) translateY(8px);
             }
 
-            .admin-table th,
-            .admin-table td {
-                padding: 10px 8px;
-                font-size: 14px;
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .modal-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+
+        .modal-head h3 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .modal-close {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            background: var(--bg4);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .modal-close:hover {
+            color: var(--text-primary);
+            border-color: var(--border-hover);
+        }
+
+        .modal-body {
+            padding: 0;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .modal-foot {
+            padding: 14px 20px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: flex-end;
+            flex-shrink: 0;
+        }
+
+        .btn-cancel {
+            padding: 8px 18px;
+            border-radius: 10px;
+            background: var(--bg4);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            font-size: 13.5px;
+            font-family: 'DM Sans', sans-serif;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .btn-cancel:hover {
+            color: var(--text-primary);
+            border-color: var(--border-hover);
+        }
+
+        /* Modal table */
+        .modal-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 400px;
+        }
+
+        .modal-table thead th {
+            background: var(--bg4);
+            padding: 10px 16px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+            text-align: left;
+            position: sticky;
+            top: 0;
+        }
+
+        .modal-table tbody tr {
+            border-bottom: 1px solid var(--border);
+        }
+
+        .modal-table tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        .modal-table tbody tr:hover {
+            background: rgba(255, 255, 255, 0.025);
+        }
+
+        .modal-table tbody td {
+            padding: 11px 16px;
+            font-size: 13px;
+            color: var(--text-primary);
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 900px) {
+            .content {
+                padding: 20px 16px;
             }
 
-            .notify-btn {
-                padding: 6px 10px;
+            .topbar {
+                padding: 0 16px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .content {
+                padding: 16px 12px;
             }
 
-            .modal-dialog {
-                max-width: 90%;
+            .topbar {
+                height: 56px;
+            }
+
+            .page-sub {
+                display: none;
+            }
+
+            .table-footer {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .topbar {
+                padding: 0 12px;
+            }
+
+            .icon-btn {
+                width: 32px;
+                height: 32px;
             }
         }
     </style>
 </head>
 
 <body>
-    <%- include("../includes/admin-header.ejs"); %>
-        <div class="admin-container mt-3">
-            <h1>Abandoned Carts</h1>
-            <div class="table-wrapper">
-                <table class="admin-table">
-                    <thead>
-                        <tr style="text-align: center;">
-                            <th>Customer Name</th>
-                            <th>Contact No</th>
-                            <th>Email</th>
-                            <th>Items in Cart</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="cart-list">
-                        <% if(cartDetails.length> 0) { %>
-                            <% cartDetails.forEach((item)=> { %>
-                                <tr style="text-align: center;">
-                                    <td>
-                                        <%= item.userId.fullName %>
-                                    </td>
-                                    <td>
-                                        <%= item.userId.contactNo %>
-                                            <a href="https://wa.me/91<%= item.userId.contactNo %>" target="_blank">
-                                                <i class="fa-brands fa-whatsapp"></i>
-                                            </a>
-                                    </td>
-                                    <td>
-                                        <%= item.userId.email %>
-                                    </td>
-                                    <td>
-                                        <div class="btn-group" role="group">
-                                            <a href="#" class="btn btn-sm btn-info view-btn" data-bs-toggle="modal"
-                                                data-bs-target="#itemModal"
-                                                data-items="<%= JSON.stringify(item.items) %>">
-                                                <i class="fa-solid fa-eye"></i>
-                                            </a>
-                                        </div>
-                                    </td>
-                                    <td><button class="notify-btn" onclick="notifyCustomer('<%= item.userId._id %>')">
-                                            <i class="fa-regular fa-bell"></i>
-                                        </button></td>
-                                </tr>
-                                <% }) %>
-                                    <% } %>
-                    </tbody>
-                </table>
-            </div>
 
-            <!-- Pagination Controls -->
-            <nav aria-label="Page navigation">
-                <ul class="pagination justify-content-center mt-3">
-                    <% const totalPages=Math.ceil(totalCarts / limit); %>
-                        <% if(currentPage> 1) { %>
-                            <li class="page-item">
-                                <a class="page-link" href="?page=<%= currentPage - 1 %>&limit=<%= limit %>">Previous</a>
-                            </li>
-                            <% } %>
-                                <% for(let i=1; i <=totalPages; i++) { %>
-                                    <li class="page-item <%= currentPage === i ? 'active' : '' %>">
-                                        <a class="page-link" href="?page=<%= i %>&limit=<%= limit %>">
-                                            <%= i %>
-                                        </a>
-                                    </li>
-                                    <% } %>
-                                        <% if(currentPage < totalPages) { %>
-                                            <li class="page-item">
-                                                <a class="page-link"
-                                                    href="?page=<%= currentPage + 1 %>&limit=<%= limit %>">Next</a>
-                                            </li>
-                                            <% } %>
-                </ul>
-            </nav>
+    <!-- Mobile Sidebar Overlay -->
+    <div class="sidebar-overlay" id="overlay" onclick="closeSidebar()"></div>
 
-            <!-- Modal -->
-            <div class="modal fade" id="itemModal" tabindex="-1" aria-labelledby="itemModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="itemModalLabel">Cart Items</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <table class="table table-bordered table-hover" id="modalTable">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>Product Name</th>
-                                        <th>Price</th>
-                                        <th>Quantity</th>
-                                        <th>View</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="modalTableBody">
-                                    <!-- Table rows will be dynamically added here -->
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <!-- ── Sidebar ── -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <div class="logo-icon"><img src="/assets/Kharidlow.png" alt="logo" width="45"></div>
+            <div class="logo-text">Kharid<span>low</span></div>
         </div>
 
-        <%- include("../includes/admin-sidebar.ejs"); %>
+        <nav class="sidebar-nav">
+            <div class="nav-label">Overview</div>
+            <a href="/admin/manage" class="nav-link">
+                <i class="fa-solid fa-chart-pie"></i> Dashboard
+            </a>
 
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <div class="nav-label">Manage</div>
+            <a href="/admin/manage/orders" class="nav-link">
+                <i class="fa-solid fa-box"></i> Orders
+            </a>
+            <a href="/admin/manage/customers" class="nav-link">
+                <i class="fa-solid fa-users"></i> Customers
+            </a>
+            <a href="/admin/manage/products" class="nav-link">
+                <i class="fa-solid fa-tags"></i> Products
+            </a>
 
-            <script>
+            <div class="nav-label">Store</div>
+            <a href="/product/new" class="nav-link">
+                <i class="fa-solid fa-plus-circle"></i> Add Product
+            </a>
+            <a href="/admin/cartanalysis" class="nav-link active">
+                <i class="fa-solid fa-cart-arrow-down"></i> Cart Insights
+            </a>
+            <a href="/" class="nav-link">
+                <i class="fa-solid fa-store"></i> Store
+            </a>
 
-                function notifyCustomer(userId) {
-                    // Show confirmation dialog
-                    Swal.fire({
-                        title: 'Send Notification?',
-                        text: "Do you want to notify this customer about their abandoned cart?",
-                        icon: 'question',
-                        showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Yes, send it!',
-                        cancelButtonText: 'No, cancel'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            // If user confirms, hit the API
-                            $.ajax({
-                                url: `/admin/abandoned-cart-reminder/${userId}`,
-                                method: 'POST',
-                                success: function (response) {
-                                    Swal.fire({
-                                        icon: 'success',
-                                        title: 'Notification Sent',
-                                        text: response.message || 'The customer has been notified successfully!',
-                                        showConfirmButton: false,
-                                        timer: 3000
-                                    });
-                                },
-                                error: function (error) {
-                                    Swal.fire({
-                                        icon: 'error',
-                                        title: 'Notification Failed',
-                                        text: error.responseJSON?.message || 'An error occurred. Please try again.',
-                                        showConfirmButton: true
-                                    });
-                                }
-                            });
-                        }
+            <div class="nav-label">User</div>
+            <a href="/admin/add-user" class="nav-link">
+                <i class="fa-solid fa-user-plus"></i> Add User
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-card">
+                <div class="avatar">AD</div>
+                <div class="user-info">
+                    <div class="user-name">Admin</div>
+                    <div class="user-role">Super Admin</div>
+                </div>
+                <a href="/logout" style="color:var(--text-muted);font-size:13px;margin-left:2px;" title="Logout">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                </a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ── Main Wrapper ── -->
+    <div class="main-wrap">
+
+        <!-- Topbar -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="hamburger" onclick="toggleSidebar()" aria-label="Toggle Menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <div>
+                    <div class="page-title">Cart Insights</div>
+                    <div class="page-sub">Abandoned carts &amp; customer recovery</div>
+                </div>
+            </div>
+            <div class="topbar-right">
+                <div class="icon-btn" data-tooltip="Notifications">
+                    <i class="fa-solid fa-bell"></i>
+                    <span class="notif-dot"></span>
+                </div>
+                <div class="avatar" style="width:36px;height:36px;font-size:12px;border-radius:10px;cursor:pointer;">AD
+                </div>
+            </div>
+        </header>
+
+        <!-- Content -->
+        <main class="content">
+            <div class="section-card">
+
+                <!-- Header -->
+                <div class="section-head">
+                    <h2><i class="fa-solid fa-cart-arrow-down"
+                            style="color:var(--accent2);margin-right:8px;font-size:14px;"></i>Abandoned Carts</h2>
+                    <span style="font-size:12px;color:var(--text-muted);">
+                        <%= totalCarts %> total
+                    </span>
+                </div>
+
+                <!-- Table -->
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Customer</th>
+                                <th>Contact</th>
+                                <th>Email</th>
+                                <th>Cart Items</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (cartDetails.length> 0) { %>
+                                <% cartDetails.forEach((item)=> { %>
+                                    <tr>
+                                        <td>
+                                            <%= item.userId.fullName %>
+                                        </td>
+                                        <td class="mono">
+                                            <%= item.userId.contactNo %>
+                                                <a href="https://wa.me/91<%= item.userId.contactNo %>" target="_blank"
+                                                    class="wa-link" data-tooltip="Chat on WhatsApp">
+                                                    <i class="fa-brands fa-whatsapp"></i>
+                                                </a>
+                                        </td>
+                                        <td class="muted">
+                                            <%= item.userId.email %>
+                                        </td>
+                                        <td>
+                                            <button class="btn-icon view-cart-btn"
+                                                data-items="<%= JSON.stringify(item.items).replace(/" /g, '&quot;' ) %>"
+                                                data-name="<%= item.userId.fullName %>"
+                                                    data-tooltip="View cart items">
+                                                    <i class="fa-solid fa-eye"></i>
+                                            </button>
+                                        </td>
+                                        <td>
+                                            <button class="btn-notify"
+                                                onclick="notifyCustomer('<%= item.userId._id %>')"
+                                                data-tooltip="Send reminder">
+                                                <i class="fa-regular fa-bell"></i> Notify
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <% }); %>
+                                        <% } else { %>
+                                            <tr>
+                                                <td colspan="5" class="no-data">
+                                                    <i class="fa-solid fa-cart-shopping"></i>
+                                                    No abandoned carts found
+                                                </td>
+                                            </tr>
+                                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <div class="table-footer">
+                    <div class="table-info">
+                        <% const totalPages=Math.ceil(totalCarts / limit); const from=totalCarts===0 ? 0 : (currentPage
+                            - 1) * limit + 1; const to=Math.min(currentPage * limit, totalCarts); %>
+                            Showing <%= from %>–<%= to %> of <%= totalCarts %> carts
+                    </div>
+                    <div class="pagination">
+                        <a href="?page=<%= currentPage - 1 %>&limit=<%= limit %>"
+                            class="page-btn <%= currentPage <= 1 ? 'disabled' : '' %>">
+                            <i class="fa-solid fa-chevron-left" style="font-size:10px;"></i>
+                        </a>
+
+                        <% for (let i=1; i <=totalPages; i++) { %>
+                            <% if (i===1 || i===totalPages || (i>= currentPage - 2 && i <= currentPage + 2)) { %>
+                                    <a href="?page=<%= i %>&limit=<%= limit %>"
+                                        class="page-btn <%= currentPage === i ? 'active' : '' %>">
+                                        <%= i %>
+                                    </a>
+                                    <% } else if (i===currentPage - 3 || i===currentPage + 3) { %>
+                                        <span class="page-btn disabled">…</span>
+                                        <% } %>
+                                            <% } %>
+
+                                                <a href="?page=<%= currentPage + 1 %>&limit=<%= limit %>"
+                                                    class="page-btn <%= currentPage >= totalPages ? 'disabled' : '' %>">
+                                                    <i class="fa-solid fa-chevron-right" style="font-size:10px;"></i>
+                                                </a>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- ── Cart Items Modal ── -->
+    <div class="modal-overlay" id="cartModal">
+        <div class="modal-box">
+            <div class="modal-head">
+                <h3><i class="fa-solid fa-cart-shopping"
+                        style="color:var(--accent2);margin-right:8px;font-size:13px;"></i><span
+                        id="modalCustomerName">Cart Items</span></h3>
+                <button class="modal-close" onclick="closeModal()">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="table-wrap">
+                    <table class="modal-table">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Price</th>
+                                <th>Qty</th>
+                                <th>View</th>
+                            </tr>
+                        </thead>
+                        <tbody id="modalTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-foot">
+                <button class="btn-cancel" onclick="closeModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ── Sidebar ──
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('overlay').classList.toggle('open');
+        }
+        function closeSidebar() {
+            document.getElementById('sidebar').classList.remove('open');
+            document.getElementById('overlay').classList.remove('open');
+        }
+        window.addEventListener('resize', () => { if (window.innerWidth > 900) closeSidebar(); });
+
+        // ── Modal ──
+        function closeModal() { document.getElementById('cartModal').classList.remove('open'); }
+        document.getElementById('cartModal').addEventListener('click', function (e) {
+            if (e.target === this) closeModal();
+        });
+
+        // ── View cart items ──
+        document.querySelectorAll('.view-cart-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const items = JSON.parse(this.dataset.items.replace(/&quot;/g, '"'));
+                const name = this.dataset.name;
+                const tbody = document.getElementById('modalTableBody');
+
+                document.getElementById('modalCustomerName').textContent = name + "'s Cart";
+                tbody.innerHTML = '';
+
+                if (items.length > 0) {
+                    items.forEach(item => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${item.productId.productName}</td>
+                            <td class="mono">&#8377;${item.productId.price}</td>
+                            <td>${item.quantity}</td>
+                            <td>
+                                <a href="/product/${item.productId._id}" class="btn-icon" target="_blank" data-tooltip="View on site">
+                                    <i class="fa-solid fa-eye"></i>
+                                </a>
+                            </td>
+                        `;
+                        tbody.appendChild(tr);
                     });
+                } else {
+                    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:30px;color:var(--text-muted);">No items in cart</td></tr>';
                 }
 
+                document.getElementById('cartModal').classList.add('open');
+            });
+        });
 
-                document.addEventListener('DOMContentLoaded', function () {
-                    const modalTableBody = document.getElementById('modalTableBody');
+        // ── Notify customer ──
+        const swalDark = { background: '#1e2028', color: '#f0f0f4', confirmButtonColor: '#6c63ff', cancelButtonColor: '#f87171' };
 
-                    document.querySelectorAll('.view-btn').forEach(button => {
-                        button.addEventListener('click', function () {
-                            const items = JSON.parse(this.getAttribute('data-items'));
-                            modalTableBody.innerHTML = ''; // Clear any previous content
-
-                            if (items.length > 0) {
-                                items.forEach(item => {
-                                    const row = document.createElement('tr');
-                                    row.innerHTML = `
-                                        <td>${item.productId.productName}</td>
-                                        <td>&#8377;${item.productId.price}</td>
-                                        <td>${item.quantity}</td>
-                                        <td><a href="/product/${item.productId._id}"
-                                                            class="btn btn-sm btn-info" data-bs-toggle="tooltip"
-                                                            data-bs-placement="top" title="View on browser">
-                                                            <i class="fa-solid fa-eye"></i>
-                                                        </a></td>
-                                    `;
-                                    modalTableBody.appendChild(row);
-                                });
-                            } else {
-                                const emptyRow = document.createElement('tr');
-                                emptyRow.innerHTML = '<td colspan="3" class="text-center">No items in cart</td>';
-                                modalTableBody.appendChild(emptyRow);
-                            }
+        function notifyCustomer(userId) {
+            Swal.fire({
+                title: 'Send Notification?',
+                text: 'Do you want to notify this customer about their abandoned cart?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, send it!',
+                cancelButtonText: 'Cancel',
+                ...swalDark
+            }).then(result => {
+                if (result.isConfirmed) {
+                    fetch(`/admin/abandoned-cart-reminder/${userId}`, { method: 'POST' })
+                        .then(res => res.json())
+                        .then(response => {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Notification Sent',
+                                text: response.message || 'The customer has been notified successfully!',
+                                showConfirmButton: false,
+                                timer: 3000,
+                                ...swalDark
+                            });
+                        })
+                        .catch(() => {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Failed',
+                                text: 'An error occurred. Please try again.',
+                                ...swalDark
+                            });
                         });
-                    });
-                });
-
-            </script>
-
-
+                }
+            });
+        }
+    </script>
 </body>
 
 </html>

@@ -7,287 +7,369 @@
     <title>Kharidlow Admin Dashboard</title>
     <link rel="icon" type="image/x-icon" href="/assets/Kharidlow.ico">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="/styles/adminAccount.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/styles/adminPage.css">
 </head>
 
 <body>
-    <div class="admin-container">
 
-        <%- include("../includes/admin-header.ejs"); %>
+    <!-- Mobile Sidebar Overlay -->
+    <div class="sidebar-overlay" id="overlay" onclick="closeSidebar()"></div>
 
-            <div class="admin-content">
-                <main class="admin-main">
-                    <section class="admin-dashboard">
-                        <div class="grid">
-                            <div class="card">
-                                <h5>Total Sales <i class="fa-solid fa-circle-info fs-5" data-bs-toggle="tooltip"
-                                        data-bs-placement="top"
-                                        title="This total only includes sales from completed and active orders, excluding those marked as 'Pending' or 'Canceled"></i>
-                                </h5>
-                                <p>&#8377;<%= (data && (data.totalSales)) ? data.totalSales : 0 %>
-                                </p>
-                                <i class="fa-solid fa-chart-line"></i>
-                            </div>
-                            <div class="card">
-                                <h5>Delivered Orders</h5>
-                                <p>
-                                    <%= (data && data.deliveredOrder) ? data.deliveredOrder : 0 %>
-                                </p>
-                                <i class="fa-solid fa-truck"></i>
-                            </div>
-                            <div class="card">
-                                <h5>Total Orders</h5>
-                                <p>
-                                    <%= (data && data.orderCount) ? data.orderCount : 0 %>
-                                </p>
-                                <i class="fas fa-box"></i>
-                            </div>
-                            <div class="card">
-                                <h5>Total Customers</h5>
-                                <p>
-                                    <%= (data && data.userCount) ? data.userCount : 0 %>
-                                </p>
-                                <i class="fas fa-users"></i>
-                            </div>
-                            <div class="card">
-                                <h5>Total Listings</h5>
-                                <p>
-                                    <%= (data && data.productCount) ? data.productCount : 0 %>
-                                </p>
-                                <i class="fas fa-th-list"></i>
-                            </div>
-                        </div>
-                    </section>
+    <!-- ── Sidebar ── -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <div class="logo-icon"><img src="/assets/Kharidlow.png" alt="logo" width="45"></div>
+            <div class="logo-text">Kharid<span>low</span></div>
+        </div>
 
-                    <section id="manageOrders" class="admin-section">
-                        <h2>Manage Orders</h2>
-                        <div class="table-responsive">
-                            <table class="orderTable">
-                                <thead>
-                                    <tr>
-                                        <th>Order ID</th>
-                                        <th>Customer</th>
-                                        <th>Status</th>
-                                        <th>Total</th>
-                                        <th>Invoice Created</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <% if((data.orders).length> 0) { let count = 0; %>
-                                        <% data.orders.forEach((order)=> {%>
-                                            <% count++; %>
-                                                <% if(count < 5) { %>
-                                                    <tr>
-                                                        <td>
-                                                            <%= order.orderNumber %>
-                                                        </td>
-                                                        <td>
-                                                            <%= order.userId.fullName.charAt(0).toUpperCase() +
-                                                                order.userId.fullName.slice(1).toLowerCase(); %>
-                                                        </td>
-                                                        <td>
-                                                            <% if(order.status=="pending" ) { %>
-                                                                <span class="badge bg-warning">
+        <nav class="sidebar-nav">
+            <div class="nav-label">Overview</div>
+            <a href="/admin/manage" class="nav-link active">
+                <i class="fa-solid fa-chart-pie"></i> Dashboard
+            </a>
+
+            <div class="nav-label">Manage</div>
+            <a href="/admin/manage/orders" class="nav-link">
+                <i class="fa-solid fa-box"></i> Orders
+            </a>
+            <a href="/admin/manage/customers" class="nav-link">
+                <i class="fa-solid fa-users"></i> Customers
+            </a>
+            <a href="/admin/manage/products" class="nav-link">
+                <i class="fa-solid fa-tags"></i> Products
+            </a>
+
+            <div class="nav-label">Store</div>
+            <a href="/product/new" class="nav-link">
+                <i class="fa-solid fa-plus-circle"></i> Add Product
+            </a>
+            <a href="/admin/cartanalysis" class="nav-link">
+                <i class="fa-solid fa-cart-arrow-down"></i> Cart Insights
+            </a>
+            <a href="/" class="nav-link">
+                <i class="fa-solid fa-store"></i> Store
+            </a>
+
+            <div class="nav-label">User</div>
+            <a href="/admin/add-user" class="nav-link">
+                <i class="fa-solid fa-user-plus"></i> Add User
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-card">
+                <div class="avatar">AD</div>
+                <div class="user-info">
+                    <div class="user-name">Admin</div>
+                    <div class="user-role">Super Admin</div>
+                </div>
+                <a href="/logout" style="color:var(--text-muted);font-size:13px;margin-left:2px;" title="Logout">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                </a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ── Main Wrapper ── -->
+    <div class="main-wrap">
+
+        <!-- Topbar -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="hamburger" onclick="toggleSidebar()" aria-label="Toggle Menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <div>
+                    <div class="page-title">Dashboard</div>
+                    <div class="page-sub">Welcome back, Admin</div>
+                </div>
+            </div>
+            <div class="topbar-right">
+                <div class="icon-btn" title="Notifications">
+                    <i class="fa-solid fa-bell"></i>
+                    <span class="notif-dot"></span>
+                </div>
+                <div class="avatar" style="width:36px;height:36px;font-size:12px;border-radius:10px;cursor:pointer;">AD
+                </div>
+            </div>
+        </header>
+
+        <!-- Content -->
+        <main class="content">
+
+            <!-- ── Stat Cards ── -->
+            <div class="stat-grid">
+                <div class="stat-card">
+                    <div class="stat-icon-wrap purple"><i class="fa-solid fa-chart-line"></i></div>
+                    <div class="stat-label">Total Sales</div>
+                    <div class="stat-value">&#8377;<%= (data && data.totalSales) ? data.totalSales : 0 %>
+                    </div>
+                    <div class="stat-info">Excludes pending &amp; canceled orders</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon-wrap green"><i class="fa-solid fa-truck"></i></div>
+                    <div class="stat-label">Delivered Orders</div>
+                    <div class="stat-value">
+                        <%= (data && data.deliveredOrder) ? data.deliveredOrder : 0 %>
+                    </div>
+                    <div class="stat-info">Successfully fulfilled</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon-wrap blue"><i class="fa-solid fa-box"></i></div>
+                    <div class="stat-label">Total Orders</div>
+                    <div class="stat-value">
+                        <%= (data && data.orderCount) ? data.orderCount : 0 %>
+                    </div>
+                    <div class="stat-info">All time</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon-wrap amber"><i class="fa-solid fa-users"></i></div>
+                    <div class="stat-label">Total Customers</div>
+                    <div class="stat-value">
+                        <%= (data && data.userCount) ? data.userCount : 0 %>
+                    </div>
+                    <div class="stat-info">Registered users</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon-wrap red"><i class="fa-solid fa-th-list"></i></div>
+                    <div class="stat-label">Total Listings</div>
+                    <div class="stat-value">
+                        <%= (data && data.productCount) ? data.productCount : 0 %>
+                    </div>
+                    <div class="stat-info">Active products</div>
+                </div>
+            </div>
+
+            <!-- ── Manage Orders ── -->
+            <div class="section-card" id="manageOrders">
+                <div class="section-head">
+                    <h2><i class="fa-solid fa-box"
+                            style="color:var(--accent2);margin-right:8px;font-size:14px;"></i>Recent Orders</h2>
+                    <a href="/admin/manage/orders" class="view-all">View all <i class="fa-solid fa-arrow-right"
+                            style="font-size:10px;"></i></a>
+                </div>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Status</th>
+                                <th>Total</th>
+                                <th>Invoice</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (data.orders && data.orders.length> 0) { %>
+                                <% let orderCount=0; %>
+                                    <% data.orders.forEach((order)=> { %>
+                                        <% if (orderCount < 4) { %>
+                                            <% orderCount++; %>
+                                                <tr>
+                                                    <td><span class="order-id">#<%= order.orderNumber %></span></td>
+                                                    <td>
+                                                        <%= order.userId.fullName.charAt(0).toUpperCase() +
+                                                            order.userId.fullName.slice(1).toLowerCase() %>
+                                                    </td>
+                                                    <td>
+                                                        <% if (order.status=="pending" ) { %>
+                                                            <span class="badge badge-warning">
+                                                                <%= order.status %>
+                                                            </span>
+                                                            <% } else if (order.status=="delivered" ) { %>
+                                                                <span class="badge badge-success">
                                                                     <%= order.status %>
                                                                 </span>
-                                                                <% } else if(order.status=="delivered" ) { %>
-                                                                    <span class="badge bg-success">
+                                                                <% } else if (order.status=="canceled" ) { %>
+                                                                    <span class="badge badge-danger"
+                                                                        data-tooltip="<%= order.cancellationReason %>">
                                                                         <%= order.status %>
                                                                     </span>
-                                                                    <% } else if(order.status=="canceled" ) { %>
-                                                                        <span class="badge bg-danger"
-                                                                            data-bs-toggle="tooltip"
-                                                                            data-bs-placement="top"
-                                                                            title="<%= order.cancellationReason %>">
+                                                                    <% } else if (order.status=="dispatched" ) { %>
+                                                                        <span class="badge badge-primary">
                                                                             <%= order.status %>
                                                                         </span>
-                                                                        <%} else { %>
-                                                                            <span class="badge bg-info">
+                                                                        <% } else { %>
+                                                                            <span class="badge badge-info">
                                                                                 <%= order.status %>
                                                                             </span>
                                                                             <% } %>
-                                                        </td>
-                                                        <td>&#8377;<%= order.grandTotal %>
-                                                        </td>
-                                                        <td>
-                                                            <% if(order.isInvoiceCreated){ %>
-                                                                <i class="fa-solid fa-check"></i>
-                                                                <% }else{ %>
-                                                                    <i class="fa-solid fa-xmark"></i>
-                                                                    <% } %>
-                                                        </td>
-                                                        <td class="text-center"><a
-                                                                href="/admin/manage/orders/<%= order._id %>"
-                                                                class="btn btn-sm btn-info" data-bs-toggle="tooltip"
-                                                                data-bs-placement="top" title="View">
-                                                                <i class="fa-solid fa-eye"></i>
-                                                            </a></td>
-                                                    </tr>
-                                                    <% } %>
-                                                        <% }); %>
-                                                            <% if(count==5) {%>
-                                                                <tr>
-                                                                    <td colspan="5" class="text-center fs-5"><a
-                                                                            href="/admin/manage/orders">View More</a>
-                                                                    </td>
-                                                                </tr>
+                                                    </td>
+                                                    <td class="mono">&#8377;<%= order.grandTotal %>
+                                                    </td>
+                                                    <td>
+                                                        <% if (order.isInvoiceCreated) { %>
+                                                            <i class="fa-solid fa-check check-icon"></i>
+                                                            <% } else { %>
+                                                                <i class="fa-solid fa-xmark x-icon"></i>
                                                                 <% } %>
-                                                                    <% } else { %>
-                                                                        <tr>
-                                                                            <td colspan="5" class="text-center fs-5">No
-                                                                                Orders</td>
-                                                                        </tr>
-                                                                        <% } %>
-                                </tbody>
-                            </table>
-                        </div>
-                    </section>
-
-                    <section id="manageCustomers" class="admin-section">
-                        <h2>Manage Customers</h2>
-                        <div class="table-responsive">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>S. No.</th>
-                                        <th>Name</th>
-                                        <th>Email</th>
-                                        <th>Contact</th>
-                                        <th>Total Orders</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <% if((data.customers).length> 0) { let count = 0; %>
-                                        <% data.customers.forEach((customer, index)=> { %>
-                                            <% count++; %>
-                                                <% if(count < 5) { %>
-                                                    <tr>
-                                                        <td>
-                                                            <%= index+1 %>
-                                                        </td>
-                                                        <td>
-                                                            <%= customer.fullName.charAt(0).toUpperCase() +
-                                                                customer.fullName.slice(1).toLowerCase(); %>
-                                                        </td>
-                                                        <td>
-                                                            <%= customer.email %>
-                                                        </td>
-                                                        <td>
-                                                            <%= customer.contactNo %>
-                                                        </td>
-                                                        <td>
-                                                            <%= customer.orderCount %>
-                                                        </td>
-                                                        <td class="text-center">
-                                                            <div class="btn-group" role="group">
-                                                                <a href="/admin/manage/customers/<%= customer._id %>"
-                                                                    class="btn btn-sm btn-info" data-bs-toggle="tooltip"
-                                                                    data-bs-placement="top" title="View">
-                                                                    <i class="fa-solid fa-eye"></i>
-                                                                </a>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    <% } %>
-                                                        <% }); %>
-                                                            <% if(count==5) {%>
-                                                                <tr>
-                                                                    <td colspan="6" class="text-center fs-5"><a
-                                                                            href="/admin/manage/customers">View More</a>
-                                                                    </td>
-                                                                </tr>
-                                                                <% } %>
-                                                                    <% } else { %>
-                                                                        <tr>
-                                                                            <td colspan="6" class="text-center fs-5">No
-                                                                                Records</td>
-                                                                        </tr>
-                                                                        <% } %>
-                                </tbody>
-                            </table>
-                        </div>
-                    </section>
-
-                    <section id="manageListings" class="admin-section">
-                        <h2>Manage Listings</h2>
-                        <div class="table-responsive">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>S. No.</th>
-                                        <th>Product Name</th>
-                                        <th>Category</th>
-                                        <th>Price</th>
-                                        <th>MOQ</th>
-                                        <th>Stock</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <% if((data.listing).length> 0) { let count = 0; %>
-                                        <% data.listing.forEach((item, index)=> { %>
-                                            <% count++; %>
-                                                <% if(count < 5) { %>
-                                                    <tr>
-                                                        <td>
-                                                            <%= index+1 %>
-                                                        </td>
-                                                        <td>
-                                                            <%= item.productName %>
-                                                        </td>
-                                                        <td>
-                                                            <%= item.subCategory %>
-                                                        </td>
-                                                        <td>&#8377;<%= item.price %>
-                                                        </td>
-                                                        <td>
-                                                            <%= item.moq %>
-                                                        </td>
-                                                        <td>
-                                                            <%= item.stock %>
-                                                        </td>
-                                                        <td class="text-center"><a href="/product/<%= item._id %>"
-                                                                class="btn btn-sm btn-info" data-bs-toggle="tooltip"
-                                                                data-bs-placement="top" title="View on browser">
-                                                                <i class="fa-solid fa-eye"></i>
-                                                            </a></td>
-                                                    </tr>
-                                                    <% } %>
-                                                        <% }); %>
-                                                            <% if(count==5) {%>
-                                                                <tr>
-                                                                    <td colspan="7" class="text-center fs-5"><a
-                                                                            href="/admin/manage/products">View More</a>
-                                                                    </td>
-                                                                </tr>
-                                                                <% } %>
-                                                                    <% } else { %>
-                                                                        <tr>
-                                                                            <td colspan="7" class="text-center fs-5">No
-                                                                                Records</td>
-                                                                        </tr>
-                                                                        <% } %>
-                                </tbody>
-                            </table>
-                        </div>
-                    </section>
-                </main>
+                                                    </td>
+                                                    <td>
+                                                        <a href="/admin/manage/orders/<%= order._id %>" class="btn-icon"
+                                                            title="View">
+                                                            <i class="fa-solid fa-eye"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                                <% } %>
+                                                    <% }); %>
+                                                        <% } else { %>
+                                                            <tr>
+                                                                <td colspan="6" class="no-data">No Orders Found</td>
+                                                            </tr>
+                                                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
             </div>
+
+            <!-- ── Manage Customers ── -->
+            <div class="section-card" id="manageCustomers">
+                <div class="section-head">
+                    <h2><i class="fa-solid fa-users"
+                            style="color:var(--accent2);margin-right:8px;font-size:14px;"></i>Recent Customers</h2>
+                    <a href="/admin/manage/customers" class="view-all">View all <i class="fa-solid fa-arrow-right"
+                            style="font-size:10px;"></i></a>
+                </div>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Contact</th>
+                                <th>Orders</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (data.customers && data.customers.length> 0) { %>
+                                <% let custCount=0; %>
+                                    <% data.customers.forEach((customer, index)=> { %>
+                                        <% if (custCount < 4) { %>
+                                            <% custCount++; %>
+                                                <tr>
+                                                    <td class="sno">
+                                                        <%= index + 1 %>
+                                                    </td>
+                                                    <td>
+                                                        <%= customer.fullName.charAt(0).toUpperCase() +
+                                                            customer.fullName.slice(1).toLowerCase() %>
+                                                    </td>
+                                                    <td class="muted">
+                                                        <%= customer.email %>
+                                                    </td>
+                                                    <td class="mono">
+                                                        <%= customer.contactNo %>
+                                                    </td>
+                                                    <td><span class="count-pill">
+                                                            <%= customer.orderCount %>
+                                                        </span></td>
+                                                    <td>
+                                                        <a href="/admin/manage/customers/<%= customer._id %>"
+                                                            class="btn-icon" title="View">
+                                                            <i class="fa-solid fa-eye"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                                <% } %>
+                                                    <% }); %>
+                                                        <% } else { %>
+                                                            <tr>
+                                                                <td colspan="6" class="no-data">No Records Found</td>
+                                                            </tr>
+                                                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ── Manage Listings ── -->
+            <div class="section-card" id="manageListings">
+                <div class="section-head">
+                    <h2><i class="fa-solid fa-tags"
+                            style="color:var(--accent2);margin-right:8px;font-size:14px;"></i>Recent Listings</h2>
+                    <a href="/admin/manage/products" class="view-all">View all <i class="fa-solid fa-arrow-right"
+                            style="font-size:10px;"></i></a>
+                </div>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Product Name</th>
+                                <th>Category</th>
+                                <th>Price</th>
+                                <th>MOQ</th>
+                                <th>Stock</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (data.listing && data.listing.length> 0) { %>
+                                <% let listCount=0; %>
+                                    <% data.listing.forEach((item, index)=> { %>
+                                        <% if (listCount < 4) { %>
+                                            <% listCount++; %>
+                                                <tr>
+                                                    <td class="sno">
+                                                        <%= index + 1 %>
+                                                    </td>
+                                                    <td>
+                                                        <%= item.productName %>
+                                                    </td>
+                                                    <td><span class="cat-pill">
+                                                            <%= item.subCategory %>
+                                                        </span></td>
+                                                    <td class="mono">&#8377;<%= item.price %>
+                                                    </td>
+                                                    <td>
+                                                        <%= item.moq %>
+                                                    </td>
+                                                    <td>
+                                                        <%= item.stock %>
+                                                    </td>
+                                                    <td>
+                                                        <a href="/product/<%= item._id %>" class="btn-icon"
+                                                            title="View on browser">
+                                                            <i class="fa-solid fa-eye"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                                <% } %>
+                                                    <% }); %>
+                                                        <% } else { %>
+                                                            <tr>
+                                                                <td colspan="7" class="no-data">No Records Found</td>
+                                                            </tr>
+                                                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </main>
     </div>
 
-    <!-- Include Admin Sidebar -->
-    <%- include("../includes/admin-sidebar.ejs"); %>
-
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-        <script>
-            $(document).ready(function () {
-                $('[data-bs-toggle="tooltip"]').tooltip();
-            });
-        </script>
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('overlay').classList.toggle('open');
+        }
+        function closeSidebar() {
+            document.getElementById('sidebar').classList.remove('open');
+            document.getElementById('overlay').classList.remove('open');
+        }
+        // Auto-close sidebar when screen goes wide again
+        window.addEventListener('resize', function () {
+            if (window.innerWidth > 900) closeSidebar();
+        });
+    </script>
 </body>
 
 </html>

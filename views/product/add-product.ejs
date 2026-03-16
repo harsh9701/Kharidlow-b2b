@@ -6,840 +6,841 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Product - Kharidlow</title>
     <link rel="icon" type="image/x-icon" href="/assets/Kharidlow.ico">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/styles/adminHeader.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/styles/adminPage.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
-        :root {
-            --primary-gradient: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-            --secondary-gradient: linear-gradient(135deg, #17a2b8 0%, #6f42c1 100%);
-            --warning-gradient: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
-            --shadow-light: 0 8px 30px rgba(0, 0, 0, 0.12);
-            --shadow-hover: 0 15px 40px rgba(0, 0, 0, 0.18);
-            --border-radius: 16px;
+        /* ── Page-specific only ── */
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            align-items: start;
         }
 
-        * {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        .form-full {
+            grid-column: 1 / -1;
         }
 
-        body {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            min-height: 100vh;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        .add-product-container {
-            margin-top: 50px;
-            padding: 40px;
-            border-radius: var(--border-radius);
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(10px);
-            box-shadow: var(--shadow-light);
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-            border: 1px solid rgba(0, 0, 0, 0.05);
-            animation: slideInUp 0.6s ease-out;
-        }
-
-        @keyframes slideInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        h2 {
-            margin-bottom: 30px;
-            font-weight: 700;
-            background: var(--primary-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-align: center;
-            font-size: 2.2rem;
-            animation: fadeInDown 0.8s ease-out 0.2s both;
-        }
-
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-            animation: fadeInLeft 0.6s ease-out both;
-        }
-
-        .form-group:nth-child(1) {
-            animation-delay: 0.3s;
-        }
-
-        .form-group:nth-child(2) {
-            animation-delay: 0.4s;
-        }
-
-        .form-group:nth-child(3) {
-            animation-delay: 0.5s;
-        }
-
-        .form-group:nth-child(4) {
-            animation-delay: 0.6s;
-        }
-
-        .form-group:nth-child(5) {
-            animation-delay: 0.7s;
-        }
-
-        @keyframes fadeInLeft {
-            from {
-                opacity: 0;
-                transform: translateX(-20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        .form-control,
-        .form-select,
-        textarea {
-            background: rgba(248, 249, 250, 0.8);
-            border: 2px solid transparent;
-            border-radius: 12px;
-            padding: 12px 16px;
-            font-size: 15px;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-        }
-
-        .form-control:focus,
-        .form-select:focus,
-        textarea:focus {
-            background: rgba(255, 255, 255, 0.95);
-            border-color: #28a745;
-            box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
-            transform: translateY(-2px);
-        }
-
-        .form-control:hover,
-        .form-select:hover,
-        textarea:hover {
-            background: rgba(255, 255, 255, 0.9);
-            transform: translateY(-1px);
-        }
-
-        label {
-            font-weight: 600;
-            color: #495057;
-            margin-bottom: 8px;
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .submit-btn {
-            background: var(--primary-gradient);
-            border: none;
-            color: white;
-            font-weight: 600;
-            padding: 15px 30px;
-            border-radius: 12px;
-            font-size: 16px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            position: relative;
+        /* ── Shared card ── */
+        .view-card {
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: 14px;
             overflow: hidden;
-            animation: fadeInUp 0.8s ease-out 0.8s both;
-            width: 100%;
         }
 
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .view-card-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border);
+            gap: 12px;
         }
 
-        .submit-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: left 0.5s;
+        .view-card-head h3 {
+            font-size: 13.5px;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0;
         }
 
-        .submit-btn:hover::before {
-            left: 100%;
+        .view-card-head h3 i {
+            color: var(--accent2);
+            font-size: 13px;
         }
 
-        .submit-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-hover);
+        .view-card-body {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
         }
 
-        .submit-btn:active {
-            transform: translateY(-1px);
-        }
-
-        .file-upload {
-            background: var(--secondary-gradient);
-            color: white;
-            cursor: pointer;
-            border: none;
-            border-radius: 12px;
-            padding: 12px 16px;
-            transition: all 0.3s ease;
-        }
-
-        .file-upload:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-        }
-
-        /* Progress indicator */
-        .progress-indicator {
-            height: 4px;
-            background: #e9ecef;
+        /* ── Progress bar ── */
+        .progress-wrap {
+            height: 3px;
+            background: var(--bg4);
             border-radius: 2px;
-            margin-bottom: 30px;
             overflow: hidden;
+            margin-bottom: 20px;
         }
 
         .progress-bar {
             height: 100%;
-            background: var(--primary-gradient);
             width: 0%;
+            background: linear-gradient(90deg, var(--accent), var(--accent2));
             transition: width 0.3s ease;
+            border-radius: 2px;
         }
 
-        /* File preview styles */
-        .file-preview {
-            text-align: center;
-            animation: fadeInUp 0.5s ease-out;
+        /* ── Form elements ── */
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
         }
 
-        .file-preview img {
-            max-width: 200px;
-            max-height: 200px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            border: 3px solid #28a745;
-        }
-
-        /* Enhanced error styling */
-        .text-danger {
-            font-size: 13px;
-            margin-top: 5px;
-            animation: shake 0.5s ease-in-out;
-        }
-
-        @keyframes shake {
-
-            0%,
-            100% {
-                transform: translateX(0);
-            }
-
-            25% {
-                transform: translateX(-5px);
-            }
-
-            75% {
-                transform: translateX(5px);
-            }
-        }
-
-        /* Card hover effect */
-        .add-product-container:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-hover);
-        }
-
-        /* Loading animation */
-        .loading-pulse {
-            animation: pulse 1.5s ease-in-out infinite alternate;
-        }
-
-        @keyframes pulse {
-            from {
-                transform: scale(1);
-            }
-
-            to {
-                transform: scale(1.05);
-            }
-        }
-
-        /* Success animation */
-        .success-animation {
-            animation: successBounce 0.6s ease-out;
-        }
-
-        @keyframes successBounce {
-            0% {
-                transform: scale(1);
-            }
-
-            50% {
-                transform: scale(1.1);
-            }
-
-            100% {
-                transform: scale(1);
-            }
-        }
-
-        /* Icon animations */
-        .fa-box {
-            animation: bounceIn 0.8s ease-out 0.1s both;
-        }
-
-        @keyframes bounceIn {
-            0% {
-                transform: scale(0.3);
-                opacity: 0;
-            }
-
-            50% {
-                transform: scale(1.05);
-            }
-
-            70% {
-                transform: scale(0.9);
-            }
-
-            100% {
-                transform: scale(1);
-                opacity: 1;
-            }
-        }
-
-        /* Row animation stagger */
-        .form-row .form-group:first-child {
-            animation-delay: 0.4s;
-        }
-
-        .form-row .form-group:last-child {
-            animation-delay: 0.5s;
-        }
-
-        /* Validation states */
-        .is-valid {
-            border-color: #28a745 !important;
-            box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25) !important;
-        }
-
-        .is-invalid {
-            border-color: #dc3545 !important;
-            box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
-        }
-
-        .is-typing {
-            border-color: #17a2b8 !important;
-            box-shadow: 0 0 0 0.2rem rgba(23, 162, 184, 0.25) !important;
-        }
-
-        /* Form sections */
-        .form-section {
-            background: rgba(248, 249, 250, 0.3);
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 25px;
-            border-left: 4px solid #28a745;
-        }
-
-        .section-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: #28a745;
-            margin-bottom: 15px;
+        .form-label {
+            font-size: 11.5px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            letter-spacing: 0.3px;
             text-transform: uppercase;
-            letter-spacing: 1px;
         }
 
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
+        .form-input,
+        .form-select,
+        .form-textarea {
+            background: var(--bg4);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 9px 14px;
+            color: var(--text-primary);
+            font-size: 13.5px;
+            font-family: 'DM Sans', sans-serif;
+            transition: border-color 0.15s;
+            outline: none;
+            width: 100%;
         }
 
-        ::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1);
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            border-color: var(--accent);
         }
 
-        ::-webkit-scrollbar-thumb {
-            background: var(--primary-gradient);
-            border-radius: 4px;
+        .form-input.valid {
+            border-color: var(--success);
         }
 
-        /* Tag input enhancement */
-        .tag-input {
+        .form-input.invalid {
+            border-color: var(--danger);
+        }
+
+        .form-select option {
+            background: var(--bg4);
+            color: var(--text-primary);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 90px;
+        }
+
+        .form-select:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .form-hint {
+            font-size: 11.5px;
+            color: var(--text-muted);
+        }
+
+        .form-error {
+            font-size: 11.5px;
+            color: var(--danger);
+            display: none;
+        }
+
+        .form-error.show {
+            display: block;
+        }
+
+        /* ── Two-col row inside card ── */
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        /* ── Image upload area ── */
+        .img-upload-area {
+            border: 1.5px dashed var(--border-hover);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.15s, background 0.15s;
+            background: var(--bg4);
+        }
+
+        .img-upload-area:hover {
+            border-color: var(--accent);
+            background: var(--accent-glow);
+        }
+
+        .img-upload-area i {
+            font-size: 26px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .img-upload-area p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        /* ── Image previews ── */
+        .main-preview-wrap {
             position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            display: none;
         }
 
-        .tag-input::after {
-            content: 'Separate tags with commas';
+        .main-preview-wrap img {
+            width: 100%;
+            display: block;
+            max-height: 220px;
+            object-fit: cover;
+        }
+
+        .main-preview-wrap .clear-btn {
             position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 12px;
-            color: #6c757d;
-            pointer-events: none;
-            opacity: 0.7;
+            top: 8px;
+            right: 8px;
+            width: 26px;
+            height: 26px;
+            border-radius: 7px;
+            background: rgba(248, 113, 113, 0.85);
+            border: none;
+            color: #fff;
+            font-size: 11px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .tag-input input:focus::after {
-            opacity: 0;
+        .add-previews {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 4px;
         }
 
-        /* Responsive improvements */
-        @media (max-width: 576px) {
-            .add-product-container {
-                padding: 25px;
-                margin: 20px;
+        .add-preview-item {
+            position: relative;
+            width: 76px;
+            height: 76px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .add-preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* ── Submit ── */
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            padding: 16px 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .btn-submit {
+            flex: 1;
+            padding: 10px 20px;
+            border-radius: 10px;
+            background: var(--accent);
+            border: none;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 500;
+            font-family: 'DM Sans', sans-serif;
+            cursor: pointer;
+            transition: background 0.15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-submit:hover {
+            background: #5a52e0;
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn-reset {
+            padding: 10px 18px;
+            border-radius: 10px;
+            background: var(--bg4);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 500;
+            font-family: 'DM Sans', sans-serif;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .btn-reset:hover {
+            border-color: var(--border-hover);
+            color: var(--text-primary);
+        }
+
+        /* ── Loader ── */
+        .spinner-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.55);
+            z-index: 300;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .spinner-overlay.show {
+            display: flex;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 3px solid var(--border-hover);
+            border-top-color: var(--accent2);
+            animation: spin 0.7s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 900px) {
+            .form-grid {
+                grid-template-columns: 1fr;
             }
 
-            h2 {
-                font-size: 1.8rem;
+            .form-full {
+                grid-column: 1;
             }
 
-            .tag-input::after {
-                content: '';
+            .page-sub {
+                display: none;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .content {
+                padding: 16px 12px;
+            }
+
+            .topbar {
+                height: 56px;
+                padding: 0 16px;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .topbar {
+                padding: 0 12px;
+            }
+
+            .icon-btn {
+                width: 32px;
+                height: 32px;
             }
         }
     </style>
 </head>
 
 <body>
-    <!-- Include Navbar -->
-    <%- include("../includes/admin-header.ejs") %>
 
-        <div class="container d-flex justify-content-center">
-            <div class="add-product-container w-100">
-                <!-- Progress indicator -->
-                <div class="progress-indicator">
-                    <div class="progress-bar" id="progressBar"></div>
-                </div>
+    <!-- Loading Spinner -->
+    <div class="spinner-overlay" id="loadingSpinner">
+        <div class="spinner"></div>
+    </div>
 
-                <h2><i class="fa-solid fa-box me-3"></i>Add New Product</h2>
+    <!-- Mobile Sidebar Overlay -->
+    <div class="sidebar-overlay" id="overlay" onclick="closeSidebar()"></div>
 
-                <form id="addProductForm" enctype="multipart/form-data">
-
-                    <!-- Basic Information Section -->
-                    <div class="form-section">
-                        <div class="section-title"><i class="fa-solid fa-info-circle me-2"></i>Basic Information</div>
-
-                        <div class="form-group">
-                            <label for="productName"><i class="fa-solid fa-tag me-2"></i>Product Name</label>
-                            <input type="text" class="form-control" id="productName" name="productName"
-                                placeholder="Enter product name" required>
-                        </div>
-
-                        <div class="row">
-                            <div class="form-group col-md-6">
-                                <label for="category"><i class="fa-solid fa-folder me-2"></i>Category</label>
-                                <select class="form-control" id="category" name="category" required>
-                                    <option value="">Select a category</option>
-                                </select>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="subCategory"><i class="fa-solid fa-folder-open me-2"></i>Sub
-                                    Category</label>
-                                <select class="form-control" id="subCategory" name="subCategory" required>
-                                    <option value="">Select a sub category</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="description"><i class="fa-solid fa-file-text me-2"></i>Description</label>
-                            <textarea class="form-control" id="description" name="description" rows="4"
-                                placeholder="Enter detailed product description" required></textarea>
-                        </div>
-                    </div>
-
-                    <!-- Pricing & Inventory Section -->
-                    <div class="form-section">
-                        <div class="section-title"><i class="fa-solid fa-chart-line me-2"></i>Pricing & Inventory</div>
-
-                        <div class="row">
-                            <div class="form-group col-md-6">
-                                <label for="price"><i class="fa-solid fa-rupee-sign me-2"></i>Price</label>
-                                <input type="number" class="form-control" id="price" name="price"
-                                    placeholder="Enter product price" required min="0" step="0.01">
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="stock"><i class="fa-solid fa-boxes me-2"></i>Stock Quantity</label>
-                                <input type="number" class="form-control" id="stock" name="stock"
-                                    placeholder="Enter available stock" min="0">
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="form-group col-md-6">
-                                <label for="sku"><i class="fa-solid fa-barcode me-2"></i>SKU (Stock Keeping
-                                    Unit)</label>
-                                <input type="text" class="form-control" id="sku" name="sku" placeholder="Enter SKU"
-                                    required>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="moq"><i class="fa-solid fa-shopping-cart me-2"></i>MOQ (Minimum Order
-                                    Quantity)</label>
-                                <input type="number" class="form-control" id="moq" name="moq"
-                                    placeholder="Minimum order quantity" required min="1">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Tax Information Section -->
-                    <div class="form-section">
-                        <div class="section-title"><i class="fa-solid fa-calculator me-2"></i>Tax Information</div>
-
-                        <div class="row">
-                            <div class="form-group col-md-6">
-                                <label for="taxRate"><i class="fa-solid fa-percent me-2"></i>Tax Rate</label>
-                                <select class="form-control" id="taxRate" name="taxRate" required>
-                                    <option value="">Select a Tax Rate</option>
-                                    <option value="5">5%</option>
-                                    <option value="12">12%</option>
-                                    <option value="18">18%</option>
-                                </select>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="taxType"><i class="fa-solid fa-cogs me-2"></i>Tax Type</label>
-                                <select class="form-control" id="taxType" name="taxType" required>
-                                    <option value="">Select a Tax Type</option>
-                                    <option value="exclusive">Exclusive</option>
-                                    <option value="inclusive" selected>Inclusive</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Additional Information Section -->
-                    <div class="form-section">
-                        <div class="section-title"><i class="fa-solid fa-plus-circle me-2"></i>Additional Information
-                        </div>
-
-                        <div class="form-group">
-                            <label for="sameDayDispatch">
-                                <i class="fa-solid fa-truck-fast me-2"></i>Same Day Dispatch
-                            </label>
-                            <select class="form-control" id="sameDayDispatch" name="sameDayDispatch" required>
-                                <option value="">Select an option</option>
-                                <option value="yes">Yes</option>
-                                <option value="no">No</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group tag-input">
-                            <label for="tags"><i class="fa-solid fa-hashtag me-2"></i>Tags</label>
-                            <input type="text" class="form-control" id="tags" name="tags"
-                                placeholder="e.g. electronics, mobile, accessories">
-                            <small class="form-text text-muted">Separate multiple tags with commas</small>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="productImage"><i class="fa-solid fa-camera me-2"></i>Product Image</label>
-                            <input type="file" class="form-control file-upload" id="productImage" name="productImage"
-                                accept=".jpg,.jpeg,.png,.webp" required>
-                            <div class="file-preview mt-3 d-none" id="filePreview">
-                                <img id="previewImg" src="" alt="Product Preview"
-                                    style="max-width: 200px; max-height: 200px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 3px solid #28a745;">
-                            </div>
-                            <small id="fileError" class="text-danger d-none">Invalid file format. Please upload .jpeg,
-                                .jpg, .png, or .webp files only.</small>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="additionalImages">
-                                <i class="fa-solid fa-images me-2"></i>Additional Images (Max 5)
-                            </label>
-
-                            <input type="file" class="form-control file-upload" id="additionalImages"
-                                name="additionalImages" accept=".jpg,.jpeg,.png,.webp" multiple>
-
-                            <div class="file-preview mt-3 d-flex flex-wrap gap-2 d-none" id="additionalPreview"></div>
-
-                            <small id="additionalImageError" class="text-danger d-none">
-                                You can upload a maximum of 5 images only.
-                            </small>
-                        </div>
-                    </div>
-
-                    <!-- Submit Button -->
-                    <button type="submit" class="btn submit-btn" id="submitBtn">
-                        <span class="spinner-border spinner-border-sm d-none me-2" role="status"
-                            aria-hidden="true"></span>
-                        <i class="fa-solid fa-plus me-2"></i>
-                        <span class="btn-text">Add Product</span>
-                    </button>
-                </form>
-            </div>
+    <!-- ── Sidebar ── -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <div class="logo-icon"><img src="/assets/Kharidlow.png" alt="logo" width="45"></div>
+            <div class="logo-text">Kharid<span>low</span></div>
         </div>
 
-        <!-- Include Admin Sidebar -->
-        <%- include("../includes/admin-sidebar.ejs"); %>
+        <nav class="sidebar-nav">
+            <div class="nav-label">Overview</div>
+            <a href="/admin/manage" class="nav-link">
+                <i class="fa-solid fa-chart-pie"></i> Dashboard
+            </a>
 
-            <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+            <div class="nav-label">Manage</div>
+            <a href="/admin/manage/orders" class="nav-link">
+                <i class="fa-solid fa-box"></i> Orders
+            </a>
+            <a href="/admin/manage/customers" class="nav-link">
+                <i class="fa-solid fa-users"></i> Customers
+            </a>
+            <a href="/admin/manage/products" class="nav-link">
+                <i class="fa-solid fa-tags"></i> Products
+            </a>
 
-            <script>
-                // Progress bar animation
-                function updateProgressBar() {
-                    const formInputs = $('#addProductForm input[required], #addProductForm select[required], #addProductForm textarea[required]');
-                    let filledInputs = 0;
+            <div class="nav-label">Store</div>
+            <a href="/product/new" class="nav-link active">
+                <i class="fa-solid fa-plus-circle"></i> Add Product
+            </a>
+            <a href="/admin/cartanalysis" class="nav-link">
+                <i class="fa-solid fa-cart-arrow-down"></i> Cart Insights
+            </a>
+            <a href="/" class="nav-link">
+                <i class="fa-solid fa-store"></i> Store
+            </a>
 
-                    formInputs.each(function () {
-                        if ($(this).val().trim() !== '') {
-                            filledInputs++;
-                        }
+            <div class="nav-label">User</div>
+            <a href="/admin/add-user" class="nav-link">
+                <i class="fa-solid fa-user-plus"></i> Add User
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-card">
+                <div class="avatar">AD</div>
+                <div class="user-info">
+                    <div class="user-name">Admin</div>
+                    <div class="user-role">Super Admin</div>
+                </div>
+                <a href="/logout" style="color:var(--text-muted);font-size:13px;margin-left:2px;" title="Logout">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                </a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ── Main Wrapper ── -->
+    <div class="main-wrap">
+
+        <!-- Topbar -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="hamburger" onclick="toggleSidebar()" aria-label="Toggle Menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <div>
+                    <div class="page-title">Add Product</div>
+                    <div class="page-sub">Create a new product listing</div>
+                </div>
+            </div>
+            <div class="topbar-right">
+                <a href="/admin/manage/products" class="icon-btn" data-tooltip="Back to Products">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </a>
+                <div class="icon-btn" data-tooltip="Notifications">
+                    <i class="fa-solid fa-bell"></i>
+                    <span class="notif-dot"></span>
+                </div>
+                <div class="avatar" style="width:36px;height:36px;font-size:12px;border-radius:10px;cursor:pointer;">AD
+                </div>
+            </div>
+        </header>
+
+        <!-- Content -->
+        <main class="content">
+
+            <!-- Progress bar -->
+            <div class="progress-wrap">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+
+            <form id="addProductForm" enctype="multipart/form-data">
+                <div class="form-grid">
+
+                    <!-- ── Left col ── -->
+                    <div style="display:flex;flex-direction:column;gap:20px;">
+
+                        <!-- Basic Info -->
+                        <div class="view-card">
+                            <div class="view-card-head">
+                                <h3><i class="fa-solid fa-circle-info"></i> Basic Information</h3>
+                            </div>
+                            <div class="view-card-body">
+                                <div class="form-group">
+                                    <label class="form-label">Product Name</label>
+                                    <input type="text" class="form-input" id="productName" name="productName"
+                                        placeholder="Enter product name" required>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label class="form-label">Category</label>
+                                        <select class="form-select" id="category" name="category" required>
+                                            <option value="">Select category</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Sub Category</label>
+                                        <select class="form-select" id="subCategory" name="subCategory" required
+                                            disabled>
+                                            <option value="">Select sub category</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Description</label>
+                                    <textarea class="form-textarea" id="description" name="description"
+                                        placeholder="Enter detailed product description" required></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Tags <span class="form-hint"
+                                            style="text-transform:none;">(comma separated)</span></label>
+                                    <input type="text" class="form-input" id="tags" name="tags"
+                                        placeholder="e.g. electronics, mobile, accessories">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Pricing & Inventory -->
+                        <div class="view-card">
+                            <div class="view-card-head">
+                                <h3><i class="fa-solid fa-chart-line"></i> Pricing &amp; Inventory</h3>
+                            </div>
+                            <div class="view-card-body">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label class="form-label">Price (₹)</label>
+                                        <input type="number" class="form-input" id="price" name="price" placeholder="0"
+                                            required min="0" step="0.01">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Stock Quantity</label>
+                                        <input type="number" class="form-input" id="stock" name="stock" placeholder="0"
+                                            min="0">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label class="form-label">SKU</label>
+                                        <input type="text" class="form-input" id="sku" name="sku"
+                                            placeholder="Enter SKU" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">MOQ</label>
+                                        <input type="number" class="form-input" id="moq" name="moq" placeholder="1"
+                                            required min="1">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- ── Right col ── -->
+                    <div style="display:flex;flex-direction:column;gap:20px;">
+
+                        <!-- Tax & Dispatch -->
+                        <div class="view-card">
+                            <div class="view-card-head">
+                                <h3><i class="fa-solid fa-calculator"></i> Tax &amp; Dispatch</h3>
+                            </div>
+                            <div class="view-card-body">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label class="form-label">Tax Rate</label>
+                                        <select class="form-select" id="taxRate" name="taxRate" required>
+                                            <option value="">Select rate</option>
+                                            <option value="0">0%</option>
+                                            <option value="5" selected>5%</option>
+                                            <option value="12">12%</option>
+                                            <option value="18">18%</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Tax Type</label>
+                                        <select class="form-select" id="taxType" name="taxType" required>
+                                            <option value="">Select type</option>
+                                            <option value="exclusive">Exclusive</option>
+                                            <option value="inclusive" selected>Inclusive</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Same Day Dispatch</label>
+                                    <select class="form-select" id="sameDayDispatch" name="sameDayDispatch" required>
+                                        <option value="">Select option</option>
+                                        <option value="yes">Yes</option>
+                                        <option value="no" selected>No</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Main Image -->
+                        <div class="view-card">
+                            <div class="view-card-head">
+                                <h3><i class="fa-solid fa-image"></i> Main Image</h3>
+                            </div>
+                            <div class="view-card-body">
+                                <div class="main-preview-wrap" id="mainPreviewWrap">
+                                    <img id="mainPreviewImg" src="" alt="Preview">
+                                    <button type="button" class="clear-btn" onclick="clearMainImage()"
+                                        data-tooltip="Remove">
+                                        <i class="fa-solid fa-xmark"></i>
+                                    </button>
+                                </div>
+                                <div class="img-upload-area" id="mainUploadArea"
+                                    onclick="document.getElementById('productImage').click();">
+                                    <i class="fa-solid fa-camera"></i>
+                                    <p>Click to upload main image</p>
+                                    <span class="form-hint">.jpg, .jpeg, .png, .webp</span>
+                                </div>
+                                <input type="file" id="productImage" name="productImage" accept=".jpg,.jpeg,.png,.webp"
+                                    style="display:none;" required>
+                                <span class="form-error" id="mainImgError">Invalid format. Use .jpg, .jpeg, .png or
+                                    .webp</span>
+                            </div>
+                        </div>
+
+                        <!-- Additional Images -->
+                        <div class="view-card">
+                            <div class="view-card-head">
+                                <h3><i class="fa-solid fa-images"></i> Additional Images</h3>
+                                <span style="font-size:11px;color:var(--text-muted);">Max 5</span>
+                            </div>
+                            <div class="view-card-body">
+                                <div class="add-previews" id="addPreviews"></div>
+                                <div class="img-upload-area"
+                                    onclick="document.getElementById('additionalImages').click();">
+                                    <i class="fa-solid fa-plus"></i>
+                                    <p>Click to upload additional images</p>
+                                </div>
+                                <input type="file" id="additionalImages" name="additionalImages"
+                                    accept=".jpg,.jpeg,.png,.webp" multiple style="display:none;">
+                                <span class="form-error" id="addImgError">You can upload a maximum of 5 images.</span>
+                            </div>
+                        </div>
+
+                        <!-- Submit actions inside last card -->
+                        <div class="view-card">
+                            <div class="form-actions">
+                                <button type="button" class="btn-reset" onclick="resetForm()">
+                                    <i class="fa-solid fa-rotate-left"></i> Reset
+                                </button>
+                                <button type="submit" class="btn-submit" id="submitBtn">
+                                    <i class="fa-solid fa-plus"></i>
+                                    <span id="btnText">Add Product</span>
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </form>
+        </main>
+    </div>
+
+    <script>
+        // ── Sidebar ──
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('overlay').classList.toggle('open');
+        }
+        function closeSidebar() {
+            document.getElementById('sidebar').classList.remove('open');
+            document.getElementById('overlay').classList.remove('open');
+        }
+        window.addEventListener('resize', () => { if (window.innerWidth > 900) closeSidebar(); });
+
+        // ── Loader ──
+        function showLoader() { document.getElementById('loadingSpinner').classList.add('show'); }
+        function hideLoader() { document.getElementById('loadingSpinner').classList.remove('show'); }
+
+        // ── Swal theme ──
+        const swalDark = { background: '#1e2028', color: '#f0f0f4', confirmButtonColor: '#6c63ff' };
+
+        // ── Progress bar ──
+        function updateProgress() {
+            const fields = document.querySelectorAll('#addProductForm input[required], #addProductForm select[required], #addProductForm textarea[required]');
+            let filled = 0;
+            fields.forEach(f => { if (f.value.trim() !== '') filled++; });
+            document.getElementById('progressBar').style.width = ((filled / fields.length) * 100) + '%';
+        }
+
+        document.getElementById('addProductForm').addEventListener('input', updateProgress);
+        document.getElementById('addProductForm').addEventListener('change', updateProgress);
+
+        // ── Fetch categories ──
+        function fetchCategories() {
+            fetch('/product/category')
+                .then(res => res.json())
+                .then(categories => {
+                    const sel = document.getElementById('category');
+                    categories.forEach(cat => {
+                        const opt = document.createElement('option');
+                        opt.value = cat._id;
+                        opt.textContent = cat.name;
+                        sel.appendChild(opt);
                     });
+                })
+                .catch(() => Swal.fire({ icon: 'error', title: 'Error', text: 'Failed to load categories.', ...swalDark }));
+        }
 
-                    const progress = (filledInputs / formInputs.length) * 100;
-                    $('#progressBar').css('width', progress + '%');
-                }
+        // ── Fetch sub-categories ──
+        document.getElementById('category').addEventListener('change', function () {
+            const subSel = document.getElementById('subCategory');
+            subSel.innerHTML = '<option value="">Loading…</option>';
+            subSel.disabled = true;
 
-                // Update progress on input changes
-                $(document).on('input change', '#addProductForm input, #addProductForm select, #addProductForm textarea', updateProgressBar);
+            if (!this.value) {
+                subSel.innerHTML = '<option value="">Select sub category</option>';
+                return;
+            }
 
-                // Fetch categories from the server on page load
-                $(document).ready(function () {
-                    fetchCategories();
-                    updateProgressBar();
-
-                    // Fetch sub-categories when a category is selected
-                    $("#category").on("change", function () {
-                        const selectedCategory = $(this).val();
-                        const subCategorySelect = $("#subCategory");
-
-                        // Add loading effect
-                        $(this).addClass('loading-pulse');
-                        setTimeout(() => $(this).removeClass('loading-pulse'), 300);
-
-                        if (selectedCategory) {
-                            // Show loading in subcategory dropdown
-                            subCategorySelect.html('<option value="">Loading subcategories...</option>');
-                            fetchSubCategories(selectedCategory);
-                        } else {
-                            subCategorySelect.html('<option value="">Select a sub category</option>');
-                        }
-                        updateProgressBar();
+            fetch(`/product/category/${this.value}/subCateorgy`)
+                .then(res => res.json())
+                .then(subs => {
+                    subSel.innerHTML = '<option value="">Select sub category</option>';
+                    subs.forEach(sub => {
+                        const opt = document.createElement('option');
+                        opt.value = sub._id;
+                        opt.textContent = sub.name;
+                        subSel.appendChild(opt);
                     });
-
-                    // Validate file format on file input change
-                    $("#productImage").on("change", function () {
-                        const file = this.files[0];
-                        const filePath = this.value;
-                        const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.webp)$/i;
-                        const fileError = $("#fileError");
-                        const filePreview = $("#filePreview");
-                        const previewImg = $("#previewImg");
-
-                        // Check if file extension is valid
-                        if (!allowedExtensions.exec(filePath)) {
-                            fileError.removeClass("d-none");
-                            filePreview.addClass("d-none");
-                            this.value = ''; // Clear the input
-                        } else {
-                            fileError.addClass("d-none");
-
-                            if (file) {
-                                const reader = new FileReader();
-                                reader.onload = function (e) {
-                                    previewImg.attr('src', e.target.result);
-                                    filePreview.removeClass("d-none");
-                                }
-                                reader.readAsDataURL(file);
-                            }
-                        }
-                    });
-
-                    // Validate additional images (max 5) + preview
-                    $("#additionalImages").on("change", function () {
-                        const files = this.files;
-                        const previewContainer = $("#additionalPreview");
-                        const errorText = $("#additionalImageError");
-
-                        previewContainer.empty();
-                        errorText.addClass("d-none");
-
-                        if (files.length > 5) {
-                            errorText.removeClass("d-none");
-                            this.value = "";
-                            previewContainer.addClass("d-none");
-                            return;
-                        }
-
-                        Array.from(files).forEach(file => {
-                            const reader = new FileReader();
-
-                            reader.onload = function (e) {
-                                const img = `
-                <img src="${e.target.result}"
-                     style="width:100px;height:100px;object-fit:cover;border-radius:10px;
-                     border:2px solid #28a745;box-shadow:0 4px 10px rgba(0,0,0,0.15)">
-            `;
-                                previewContainer.append(img);
-                            };
-
-                            reader.readAsDataURL(file);
-                        });
-
-                        previewContainer.removeClass("d-none");
-                    });
+                    subSel.disabled = false;
+                })
+                .catch(() => {
+                    subSel.innerHTML = '<option value="">Error loading</option>';
                 });
+        });
 
-                // Enhanced form validation with visual feedback
-                $(document).on('blur', '#addProductForm input, #addProductForm select, #addProductForm textarea', function () {
-                    const field = $(this);
-                    if (field.prop('required') && field.val().trim() === '') {
-                        field.addClass('is-invalid');
-                        field.parent().addClass('shake');
-                        setTimeout(() => field.parent().removeClass('shake'), 500);
+        // ── Main image preview ──
+        document.getElementById('productImage').addEventListener('change', function () {
+            const file = this.files[0];
+            const allowed = /\.(jpg|jpeg|png|webp)$/i;
+            const errEl = document.getElementById('mainImgError');
+
+            if (!file || !allowed.test(file.name)) {
+                errEl.classList.add('show');
+                this.value = '';
+                return;
+            }
+            errEl.classList.remove('show');
+
+            const reader = new FileReader();
+            reader.onload = e => {
+                document.getElementById('mainPreviewImg').src = e.target.result;
+                document.getElementById('mainPreviewWrap').style.display = 'block';
+                document.getElementById('mainUploadArea').style.display = 'none';
+            };
+            reader.readAsDataURL(file);
+        });
+
+        function clearMainImage() {
+            document.getElementById('productImage').value = '';
+            document.getElementById('mainPreviewWrap').style.display = 'none';
+            document.getElementById('mainUploadArea').style.display = 'block';
+        }
+
+        // ── Additional images preview ──
+        document.getElementById('additionalImages').addEventListener('change', function () {
+            const errEl = document.getElementById('addImgError');
+            const container = document.getElementById('addPreviews');
+            container.innerHTML = '';
+
+            if (this.files.length > 5) {
+                errEl.classList.add('show');
+                this.value = '';
+                return;
+            }
+            errEl.classList.remove('show');
+
+            Array.from(this.files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = e => {
+                    const div = document.createElement('div');
+                    div.className = 'add-preview-item';
+                    div.innerHTML = `<img src="${e.target.result}" alt="preview">`;
+                    container.appendChild(div);
+                };
+                reader.readAsDataURL(file);
+            });
+        });
+
+        // ── Reset form ──
+        function resetForm() {
+            document.getElementById('addProductForm').reset();
+            document.getElementById('addPreviews').innerHTML = '';
+            clearMainImage();
+            document.getElementById('subCategory').innerHTML = '<option value="">Select sub category</option>';
+            document.getElementById('subCategory').disabled = true;
+            document.getElementById('progressBar').style.width = '0%';
+        }
+
+        // ── Submit ──
+        document.getElementById('addProductForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            const btnText = document.getElementById('btnText');
+
+            btn.disabled = true;
+            btnText.textContent = 'Adding…';
+            showLoader();
+
+            const formData = new FormData(this);
+
+            fetch('/product/new', {
+                method: 'POST',
+                body: formData
+            })
+                .then(res => res.json())
+                .then(response => {
+                    hideLoader();
+                    btn.disabled = false;
+                    btnText.textContent = 'Add Product';
+
+                    if (response.success !== false) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Product Added!',
+                            text: 'Product has been added successfully.',
+                            confirmButtonText: 'OK',
+                            ...swalDark
+                        }).then(() => resetForm());
                     } else {
-                        field.removeClass('is-invalid').addClass('is-valid');
+                        Swal.fire({ icon: 'error', title: 'Error', text: response.message || 'Failed to add product.', ...swalDark });
                     }
-                    updateProgressBar();
+                })
+                .catch(() => {
+                    hideLoader();
+                    btn.disabled = false;
+                    btnText.textContent = 'Add Product';
+                    Swal.fire({ icon: 'error', title: 'Error', text: 'An unexpected error occurred.', ...swalDark });
                 });
+        });
 
-                // Add typing animation effect
-                $(document).on('input', 'input[type="text"], input[type="number"], textarea', function () {
-                    $(this).addClass('is-typing');
-                    clearTimeout($(this).data('timeout'));
-                    $(this).data('timeout', setTimeout(() => {
-                        $(this).removeClass('is-typing');
-                    }, 500));
-                });
-
-                // Handle form submission
-                $("#addProductForm").on("submit", function (e) {
-                    e.preventDefault();
-
-                    let formData = new FormData(this);
-                    const submitBtn = $("#submitBtn");
-                    const spinner = $(".spinner-border");
-                    const btnText = $(".btn-text");
-
-                    // Enhanced loading animation
-                    spinner.removeClass("d-none");
-                    submitBtn.prop("disabled", true).addClass('loading-pulse');
-                    btnText.text("Adding Product...");
-
-                    // Animate progress bar to 100%
-                    $('#progressBar').css('width', '100%');
-
-                    $.ajax({
-                        url: '/product/new',
-                        type: 'POST',
-                        data: formData,
-                        contentType: false,
-                        processData: false,
-                        success: function (response) {
-                            // Success animation
-                            submitBtn.addClass('success-animation');
-                            swal("Success!", "Product added successfully!", "success");
-
-                            // Reset form with animation
-                            setTimeout(() => {
-                                $("#addProductForm")[0].reset();
-                                $("#filePreview").addClass("d-none");
-                                $("#previewImg").attr("src", "");
-                                $("#additionalPreview").empty().addClass("d-none");
-                                $("#additionalImages").val("");
-                                $("#additionalImageError").addClass("d-none");
-                                $('.form-control, .form-select, textarea').removeClass('is-valid is-invalid');
-                                $("#subCategory").html('<option value="">Select a sub category</option>');
-                                updateProgressBar();
-                            }, 1000);
-                        },
-                        error: function (xhr, status, error) {
-                            const response = JSON.parse(xhr.responseText);
-                            const errorMessage = response.message || "An unexpected error occurred.";
-
-                            // Error animation
-                            submitBtn.addClass('shake');
-                            setTimeout(() => submitBtn.removeClass('shake'), 500);
-
-                            swal("Error", errorMessage, "error");
-                        },
-                        complete: function () {
-                            setTimeout(() => {
-                                spinner.addClass("d-none");
-                                submitBtn.prop("disabled", false).removeClass('loading-pulse success-animation');
-                                btnText.text("Add Product");
-                            }, 1000);
-                        }
-                    });
-                });
-
-                function fetchCategories() {
-                    $.ajax({
-                        url: '/product/category',
-                        method: 'GET',
-                        success: function (categories) {
-                            const categoryDropdown = $("#category");
-                            categories.forEach(category => {
-                                categoryDropdown.append(new Option(category.name, category._id));
-                            });
-                        },
-                        error: function (err) {
-                            console.error("Error fetching categories:", err);
-                            swal("Error", "Failed to load categories", "error");
-                        }
-                    });
-                }
-
-                function fetchSubCategories(categoryId) {
-                    $.ajax({
-                        url: `/product/category/${categoryId}/subCateorgy`,
-                        method: 'GET',
-                        success: function (subCategories) {
-                            const subCategoryDropdown = $("#subCategory");
-                            subCategoryDropdown.html('<option value="">Select a sub category</option>');
-                            subCategories.forEach(subCategory => {
-                                subCategoryDropdown.append(new Option(subCategory.name, subCategory._id));
-                            });
-                        },
-                        error: function (err) {
-                            console.error("Error fetching sub-categories:", err);
-                            const subCategoryDropdown = $("#subCategory");
-                            subCategoryDropdown.html('<option value="">Error loading subcategories</option>');
-                        }
-                    });
-                }
-
-                // Initialize page
-                $(document).ready(function () {
-                    $('.add-product-container').css('opacity', '0').animate({ 'opacity': '1' }, 800);
-                });
-            </script>
+        // ── Init ──
+        fetchCategories();
+        updateProgress();
+    </script>
 </body>
 
 </html>

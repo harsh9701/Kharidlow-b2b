@@ -4,187 +4,862 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View Order - KharidLow</title>
+    <title>View Order - Kharidlow</title>
     <link rel="icon" type="image/x-icon" href="/assets/Kharidlow.ico">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
-    <link rel="stylesheet" href="/styles/adminHeader.css">
-    <link rel="stylesheet" href="/styles/viewOrderAdmin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/styles/adminPage.css">
+    <style>
+        /* ── Page-specific only ── */
+
+        .order-grid {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 20px;
+            align-items: start;
+        }
+
+        /* ── Info Card ── */
+        .info-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .info-row:first-child {
+            padding-top: 0;
+        }
+
+        .info-label {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-muted);
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+            flex-shrink: 0;
+        }
+
+        .info-value {
+            font-size: 14px;
+            color: var(--text-primary);
+            text-align: right;
+        }
+
+        .info-value.mono {
+            font-family: 'DM Mono', monospace;
+            font-size: 13px;
+        }
+
+        .wa-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--success);
+            text-decoration: none;
+            font-size: 13px;
+            margin-left: 8px;
+            transition: opacity 0.15s;
+        }
+
+        .wa-link:hover {
+            opacity: 0.75;
+        }
+
+        /* ── Badges ── */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge::before {
+            content: '';
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+
+        .badge-warning {
+            background: rgba(251, 191, 36, 0.12);
+            color: var(--warning);
+        }
+
+        .badge-warning::before {
+            background: var(--warning);
+        }
+
+        .badge-success {
+            background: rgba(52, 211, 153, 0.12);
+            color: var(--success);
+        }
+
+        .badge-success::before {
+            background: var(--success);
+        }
+
+        .badge-danger {
+            background: rgba(248, 113, 113, 0.12);
+            color: var(--danger);
+        }
+
+        .badge-danger::before {
+            background: var(--danger);
+        }
+
+        .badge-info {
+            background: rgba(96, 165, 250, 0.12);
+            color: var(--info);
+        }
+
+        .badge-info::before {
+            background: var(--info);
+        }
+
+        /* ── Items ── */
+        .items-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .item-card {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 14px;
+            background: var(--bg4);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            transition: border-color 0.15s;
+        }
+
+        .item-card:hover {
+            border-color: var(--border-hover);
+        }
+
+        .item-image {
+            width: 72px;
+            height: 72px;
+            object-fit: cover;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: opacity 0.15s;
+        }
+
+        .item-image:hover {
+            opacity: 0.85;
+        }
+
+        .item-details {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .item-name {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .item-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .meta-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+
+        .meta-pill span {
+            font-family: 'DM Mono', monospace;
+            color: var(--text-primary);
+        }
+
+        .gst-note {
+            font-size: 10.5px;
+            color: var(--text-muted);
+        }
+
+        .instruction-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 8px;
+            background: rgba(251, 191, 36, 0.1);
+            border: 1px solid rgba(251, 191, 36, 0.25);
+            color: var(--warning);
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .instruction-btn:hover {
+            background: rgba(251, 191, 36, 0.18);
+        }
+
+        /* ── Summary card ── */
+        .summary-card {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .summary-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+            gap: 8px;
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .summary-row:first-child {
+            padding-top: 0;
+        }
+
+        .summary-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .summary-value {
+            font-size: 14px;
+            color: var(--text-primary);
+            text-align: right;
+        }
+
+        .summary-value.total {
+            font-size: 20px;
+            font-weight: 600;
+            font-family: 'DM Mono', monospace;
+            color: var(--accent2);
+        }
+
+        .address-text {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            text-align: right;
+        }
+
+        /* ── Action Buttons ── */
+        .action-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            font-family: 'DM Sans', sans-serif;
+            transition: all 0.15s;
+            text-decoration: none;
+            border: none;
+            width: 100%;
+        }
+
+        .action-btn.primary {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .action-btn.primary:hover {
+            background: #5a52e0;
+        }
+
+        .action-btn.disabled {
+            background: var(--bg4);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .btn-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            background: var(--bg4);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 13px;
+            transition: all 0.15s;
+        }
+
+        .btn-icon:hover {
+            background: var(--accent-glow);
+            color: var(--accent2);
+            border-color: rgba(108, 99, 255, 0.3);
+        }
+
+        /* ── Section card ── */
+        .view-card {
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            overflow: hidden;
+        }
+
+        .view-card-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+            gap: 12px;
+        }
+
+        .view-card-head h3 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .view-card-body {
+            padding: 20px;
+        }
+
+        /* ── Image Modal ── */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.75);
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .modal-box {
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            max-width: 480px;
+            width: 100%;
+            animation: modalIn 0.2s ease;
+        }
+
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: scale(0.96) translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .modal-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .modal-head h3 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .modal-close {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            background: var(--bg4);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .modal-close:hover {
+            color: var(--text-primary);
+            border-color: var(--border-hover);
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .modal-body img {
+            width: 100%;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+
+        /* ── Instruction Popover ── */
+        .popover-wrap {
+            position: relative;
+            display: inline-block;
+        }
+
+        .popover-box {
+            display: none;
+            position: absolute;
+            bottom: calc(100% + 8px);
+            left: 0;
+            background: var(--bg4);
+            border: 1px solid var(--border-hover);
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-size: 13px;
+            color: var(--text-primary);
+            min-width: 200px;
+            max-width: 280px;
+            z-index: 50;
+            line-height: 1.5;
+            white-space: normal;
+            word-break: break-word;
+        }
+
+        .popover-box::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 16px;
+            border: 6px solid transparent;
+            border-top-color: var(--border-hover);
+        }
+
+        .popover-wrap:hover .popover-box,
+        .popover-wrap .instruction-btn:focus+.popover-box {
+            display: block;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 900px) {
+            .order-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .page-sub {
+                display: none;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .item-card {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .item-image {
+                width: 100%;
+                height: 160px;
+            }
+
+            .info-value {
+                text-align: left;
+            }
+
+            .address-text {
+                text-align: left;
+            }
+
+            .summary-value {
+                text-align: right;
+            }
+        }
+    </style>
 </head>
 
 <body>
-    <%- include("../includes/admin-header.ejs"); %>
-        <div class="container order-container">
-            <!-- Order Information -->
-            <div class="order-info text-center">
-                <div class="order-number">Order No. #<%= order.orderNumber %>
+
+    <!-- Mobile Sidebar Overlay -->
+    <div class="sidebar-overlay" id="overlay" onclick="closeSidebar()"></div>
+
+    <!-- ── Sidebar ── -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <div class="logo-icon"><img src="/assets/Kharidlow.png" alt="logo" width="45"></div>
+            <div class="logo-text">Kharid<span>low</span></div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <div class="nav-label">Overview</div>
+            <a href="/admin" class="nav-link">
+                <i class="fa-solid fa-chart-pie"></i> Dashboard
+            </a>
+
+            <div class="nav-label">Manage</div>
+            <a href="/admin/manage/orders" class="nav-link active">
+                <i class="fa-solid fa-box"></i> Orders
+            </a>
+            <a href="/admin/manage/customers" class="nav-link">
+                <i class="fa-solid fa-users"></i> Customers
+            </a>
+            <a href="/admin/manage/products" class="nav-link">
+                <i class="fa-solid fa-tags"></i> Products
+            </a>
+
+            <div class="nav-label">Store</div>
+            <a href="/product/new" class="nav-link">
+                <i class="fa-solid fa-plus-circle"></i> Add Product
+            </a>
+            <a href="/admin/cartanalysis" class="nav-link">
+                <i class="fa-solid fa-cart-arrow-down"></i> Cart Insights
+            </a>
+            <a href="/" class="nav-link">
+                <i class="fa-solid fa-store"></i> Store
+            </a>
+
+            <div class="nav-label">User</div>
+            <a href="/admin/add-user" class="nav-link">
+                <i class="fa-solid fa-user-plus"></i> Add User
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-card">
+                <div class="avatar">AD</div>
+                <div class="user-info">
+                    <div class="user-name">Admin</div>
+                    <div class="user-role">Super Admin</div>
                 </div>
-                <div class="order-date">Order Date: <%= order.createdAt.toDateString() %>
-                </div>
-                <div class="fullName">Customer: <%= order.userId.fullName.charAt(0).toUpperCase() +
-                        order.userId.fullName.slice(1).toLowerCase(); %>
-                </div>
-                <div class="fullName">Contact: <%= order.userId.contactNo %>
-                        <a href="https://wa.me/91<%= order.userId.contactNo %>" target="_blank">
-                            <i class="fa-brands fa-whatsapp"></i>
-                        </a>
-                </div>
-                <div class="fullName">Status:
-                    <% if(order.status=="delivered" ) { %>
-                        <span class="badge rounded-pill text-bg-success fs-6">
-                            <%= order.status %>
-                        </span>
-                        <%} else if(order.status=="pending" ) {%>
-                            <span class="badge rounded-pill text-bg-warning fs-6">
-                                <%= order.status %>
-                            </span>
-                            <%} else if(order.status=="canceled" ) {%>
-                                <span class="d-inline-flex align-items-center gap-1">
-                                    <span class="badge rounded-pill text-bg-danger fs-6">
-                                        <%= order.status %>
-                                    </span>
-                                    <i class="fa-solid fa-circle-info fs-5" data-bs-toggle="tooltip"
-                                        data-bs-placement="top" title="<%= order.cancellationReason %>"></i>
-                                </span>
-                                <%} else {%>
-                                    <span class="badge rounded-pill text-bg-info fs-6">
-                                        <%= order.status %>
-                                    </span>
-                                    <%} %>
-                </div>
-                <% if(order.isInvoiceCreated){ %>
-                    <div class="fullName">View Invoice:
-                        <a href="/admin/manage/orders/invoice/<%= order._id %>" class="btn btn-sm"
-                            data-bs-toggle="tooltip" data-bs-placement="top" title="View">
-                            <i class="fa-solid fa-eye"></i>
-                        </a>
-                    </div>
-                    <% } %>
+                <a href="/logout" style="color:var(--text-muted);font-size:13px;margin-left:2px;" title="Logout">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                </a>
             </div>
+        </div>
+    </aside>
 
-            <hr class="hr-line">
+    <!-- ── Main Wrapper ── -->
+    <div class="main-wrap">
 
-            <!-- Items List -->
-            <div class="order-items text-center mb-4">
-                <h3>Items Ordered</h3>
-                <hr class="hr-line">
-                <div class="items-list">
-                    <% order.orderItems.forEach(item=> { %>
-                        <div class="item-card">
-                            <% const imagePath=item.productId && item.productId.mainImage ?
-                                `${item.productId.mainImage}` : '/assets/Image_deleted_logo.png' ; %>
-                                <img src="<%= imagePath %>" alt="<%= item.productName.replace(/'/g, " \\'") %>"
-                                class="item-image img-thumbnail" data-bs-toggle="modal" data-bs-target="#imageModal"
-                                onclick="openImageModal('<%= imagePath.replace(/'/g, "\\'" ) %>', '<%=
-                                        item.productName.replace(/'/g, "\\'" ) %>')">
-                                        <div class="item-details d-flex flex-column">
-                                            <div>
-                                                <span class="badge badge-product fs-5 my-1">
-                                                    <%= item.productName %>
-                                                </span>
-                                            </div>
-                                            <div>
-                                                <span class="badge badge-info text-bg-info my-1">Quantity: <%=
-                                                        item.quantity %>
-                                                </span>
-                                                <span class="badge badge-info text-bg-info my-1">Price: &#8377;<%=
-                                                        item.price %>
-                                                        <% if(item.taxType=="Inclusive" ){ %><span
-                                                                style="font-size: 11px;">(Inc. GST@<%= item.taxRate %>%)
-                                                            </span>
-                                                            <% } else { %><span style="font-size: 11px;">(Excl. GST@<%=
-                                                                        item.taxRate %>%)</span>
-                                                                <% } %>
-                                                </span>
-                                            </div>
-                                            <% if(item.instruction !="" ){ %>
-                                                <div class="mt-1">
-                                                    <button type="button" class="btn btn-warning instruction-btn"
-                                                        data-bs-toggle="popover" data-bs-placement="right"
-                                                        data-bs-custom-class="custom-popover"
-                                                        data-bs-title="Customer Instruction"
-                                                        data-bs-content="<%= item.instruction %>">
-                                                        Instruction <i class="fa-solid fa-circle-info"></i>
-                                                    </button>
-                                                </div>
-                                                <% } %>
-                                        </div>
-                        </div>
-                        <% }) %>
-                </div>
-            </div>
-
-            <hr class="hr-line">
-
-            <!-- Total -->
-            <div class="order-info text-center">
-                <div class="order-total">Total: &#8377;<%= order.grandTotal %>
-                </div>
-                <div class="address">Delivery Address: <br>
-                    <%= order.shippingAddress.flatNo %>, <%= order.shippingAddress.streetNo %>,
-                            <%= order.shippingAddress.area %>, <%= order.shippingAddress.state %>,
-                                    <%= order.shippingAddress.pincode %>
-                </div>
+        <!-- Topbar -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="hamburger" onclick="toggleSidebar()" aria-label="Toggle Menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
                 <div>
-                    <% if(!order.isInvoiceCreated){ %>
-                        <a href="/admin/manage/orders/<%= order._id %>/finalize" class="btn btn-dark">Finalize the
-                            Bill</a>
-                        <% } else { %>
-                            <button class="btn btn-dark" disabled>Invoice Created</button>
-                            <% } %>
-                </div>
-            </div>
-        </div>
-
-        <!-- Image Modal -->
-        <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="imageModalLabel">Product Image</h5>
-                        <button type="button" class="btn-close custom-close" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
+                    <div class="page-title">Order #<%= order.orderNumber %>
                     </div>
-                    <div class="modal-body">
-                        <img id="modalImage" src="" class="img-fluid" alt="Product Image">
+                    <div class="page-sub">
+                        <%= order.createdAt.toDateString() %>
                     </div>
                 </div>
             </div>
+            <div class="topbar-right">
+                <a href="/admin/manage/orders" class="icon-btn" data-tooltip="Back to Orders">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </a>
+                <div class="icon-btn" data-tooltip="Notifications">
+                    <i class="fa-solid fa-bell"></i>
+                    <span class="notif-dot"></span>
+                </div>
+                <div class="avatar" style="width:36px;height:36px;font-size:12px;border-radius:10px;cursor:pointer;">AD
+                </div>
+            </div>
+        </header>
+
+        <!-- Content -->
+        <main class="content">
+            <div class="order-grid">
+
+                <!-- ── Left Column: Details + Items ── -->
+                <div style="display:flex;flex-direction:column;gap:20px;">
+
+                    <!-- Order Info -->
+                    <div class="view-card">
+                        <div class="view-card-head">
+                            <h3><i class="fa-solid fa-circle-info"
+                                    style="color:var(--accent2);margin-right:8px;font-size:13px;"></i>Order Information
+                            </h3>
+                            <!-- Status badge -->
+                            <% if (order.status=="delivered" ) { %>
+                                <span class="badge badge-success">
+                                    <%= order.status %>
+                                </span>
+                                <% } else if (order.status=="pending" ) { %>
+                                    <span class="badge badge-warning">
+                                        <%= order.status %>
+                                    </span>
+                                    <% } else if (order.status=="canceled" ) { %>
+                                        <span class="badge badge-danger" data-tooltip="<%= order.cancellationReason %>">
+                                            <%= order.status %>
+                                                <i class="fa-solid fa-circle-info" style="font-size:10px;"></i>
+                                        </span>
+                                        <% } else if (order.status=="dispatched" ) { %>
+                                            <span class="badge badge-primary">
+                                                <%= order.status %>
+                                            </span>
+                                            <% } else { %>
+                                                <span class="badge badge-info">
+                                                    <%= order.status %>
+                                                </span>
+                                                <% } %>
+                        </div>
+                        <div class="view-card-body">
+                            <div class="info-row">
+                                <span class="info-label">Order Number</span>
+                                <span class="info-value mono">#<%= order.orderNumber %></span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Order Date</span>
+                                <span class="info-value">
+                                    <%= order.createdAt.toDateString() %>
+                                </span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Customer</span>
+                                <span class="info-value">
+                                    <%= order.userId.fullName.charAt(0).toUpperCase() +
+                                        order.userId.fullName.slice(1).toLowerCase() %>
+                                </span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Contact</span>
+                                <span class="info-value mono">
+                                    <a href="https://wa.me/91<%= order.userId.contactNo %>" target="_blank"
+                                        class="wa-link" data-tooltip="Chat on WhatsApp">
+                                        <i class="fa-brands fa-whatsapp"></i>
+                                    </a>
+                                    <%= order.userId.contactNo %>
+                                </span>
+                            </div>
+                            <% if (order.isInvoiceCreated) { %>
+                                <div class="info-row">
+                                    <span class="info-label">Invoice</span>
+                                    <span class="info-value">
+                                        <a href="/admin/manage/orders/invoice/<%= order._id %>" class="btn-icon"
+                                            data-tooltip="View Invoice">
+                                            <i class="fa-solid fa-eye"></i>
+                                        </a>
+                                    </span>
+                                </div>
+                                <% } %>
+                        </div>
+                    </div>
+
+                    <!-- Items Ordered -->
+                    <div class="view-card">
+                        <div class="view-card-head">
+                            <h3><i class="fa-solid fa-basket-shopping"
+                                    style="color:var(--accent2);margin-right:8px;font-size:13px;"></i>Items Ordered</h3>
+                            <span style="font-size:12px;color:var(--text-muted);">
+                                <%= order.orderItems.length %> item<%= order.orderItems.length !==1 ? 's' : '' %>
+                            </span>
+                        </div>
+                        <div class="view-card-body">
+                            <div class="items-list">
+                                <% order.orderItems.forEach(item=> { %>
+                                    <% const imagePath=item.productId && item.productId.mainImage ?
+                                        item.productId.mainImage : '/assets/Image_deleted_logo.png' ; %>
+                                        <div class="item-card">
+                                            <img src="<%= imagePath %>" alt="<%= item.productName.replace(/'/g, " \\'")
+                                                %>"
+                                            class="item-image"
+                                            onclick="openImageModal('<%= imagePath.replace(/'/g, "\\'" ) %>', '<%=
+                                                    item.productName.replace(/'/g, "\\'" ) %>')"
+                                                    data-tooltip="Click to enlarge"
+                                                    >
+                                                    <div class="item-details">
+                                                        <div class="item-name">
+                                                            <%= item.productName %>
+                                                        </div>
+                                                        <div class="item-meta">
+                                                            <div class="meta-pill">
+                                                                Qty <span>
+                                                                    <%= item.quantity %>
+                                                                </span>
+                                                            </div>
+                                                            <div class="meta-pill">
+                                                                &#8377;<span>
+                                                                    <%= item.price %>
+                                                                </span>
+                                                                <span class="gst-note">
+                                                                    (<%= item.taxType=="Inclusive" ? "Inc." : "Excl." %>
+                                                                        GST@<%= item.taxRate %>%)
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <% if (item.instruction !="" ) { %>
+                                                            <div class="popover-wrap">
+                                                                <button class="instruction-btn">
+                                                                    <i class="fa-solid fa-circle-info"></i> Instruction
+                                                                </button>
+                                                                <div class="popover-box">
+                                                                    <%= item.instruction %>
+                                                                </div>
+                                                            </div>
+                                                            <% } %>
+                                                    </div>
+                                        </div>
+                                        <% }); %>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- ── Right Column: Summary ── -->
+                <div style="display:flex;flex-direction:column;gap:20px;">
+
+                    <!-- Order Summary -->
+                    <div class="view-card">
+                        <div class="view-card-head">
+                            <h3><i class="fa-solid fa-receipt"
+                                    style="color:var(--accent2);margin-right:8px;font-size:13px;"></i>Order Summary</h3>
+                        </div>
+                        <div class="view-card-body">
+                            <div class="summary-card">
+                                <div class="summary-row">
+                                    <span class="summary-label">Grand Total</span>
+                                    <span class="summary-value total">&#8377;<%= order.grandTotal %></span>
+                                </div>
+                                <div class="summary-row">
+                                    <span class="summary-label">Delivery Address</span>
+                                    <span class="summary-value">
+                                        <div class="address-text">
+                                            <%= order.shippingAddress.flatNo %>, <%= order.shippingAddress.streetNo %>
+                                                    ,<br>
+                                                    <%= order.shippingAddress.area %>,<br>
+                                                        <%= order.shippingAddress.state %> - <%=
+                                                                order.shippingAddress.pincode %>
+                                        </div>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="view-card">
+                        <div class="view-card-head">
+                            <h3><i class="fa-solid fa-bolt"
+                                    style="color:var(--accent2);margin-right:8px;font-size:13px;"></i>Actions</h3>
+                        </div>
+                        <div class="view-card-body" style="display:flex;flex-direction:column;gap:10px;">
+                            <% if (!order.isInvoiceCreated) { %>
+                                <a href="/admin/manage/orders/<%= order._id %>/finalize" class="action-btn primary">
+                                    <i class="fa-solid fa-file-invoice"></i> Finalize the Bill
+                                </a>
+                                <% } else { %>
+                                    <button class="action-btn disabled" disabled>
+                                        <i class="fa-solid fa-check"></i> Invoice Created
+                                    </button>
+                                    <% } %>
+                                        <a href="/admin/manage/orders" class="action-btn"
+                                            style="background:var(--bg4);border:1px solid var(--border);color:var(--text-secondary);">
+                                            <i class="fa-solid fa-arrow-left"></i> Back to Orders
+                                        </a>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- ── Image Modal ── -->
+    <div class="modal-overlay" id="imageModal">
+        <div class="modal-box">
+            <div class="modal-head">
+                <h3 id="modalTitle">Product Image</h3>
+                <button class="modal-close" onclick="closeImageModal()">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <img id="modalImage" src="" alt="Product Image">
+            </div>
         </div>
+    </div>
 
-        <!-- Include Admin Sidebar -->
-        <%- include("../includes/admin-sidebar.ejs"); %>
+    <script>
+        // ── Sidebar ──
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('overlay').classList.toggle('open');
+        }
+        function closeSidebar() {
+            document.getElementById('sidebar').classList.remove('open');
+            document.getElementById('overlay').classList.remove('open');
+        }
+        window.addEventListener('resize', () => { if (window.innerWidth > 900) closeSidebar(); });
 
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-            <script>
-                // Initialize Bootstrap tooltips in plain JavaScript
-                document.addEventListener("DOMContentLoaded", () => {
-                    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-                    tooltipTriggerList.forEach((tooltipTriggerEl) => {
-                        new bootstrap.Tooltip(tooltipTriggerEl);
-                    });
-                });
-
-                function openImageModal(imageSrc, productName) {
-                    // Update the modal image source and product name
-                    document.getElementById('modalImage').src = imageSrc;
-                    document.getElementById('imageModalLabel').innerText = productName;
-                }
-
-                // Attach event listeners to all images dynamically
-                document.querySelectorAll('.item-image').forEach(function (image) {
-                    image.addEventListener('click', function () {
-                        const imageSrc = this.getAttribute('src'); // Get the image source from clicked image
-                        const productName = this.getAttribute('alt'); // Get the product name from alt attribute
-                        openImageModal(imageSrc, productName); // Pass the source and name to modal function
-                    });
-                });
-
-                const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]');
-                const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl));
-            </script>
-
-
+        // ── Image Modal ──
+        function openImageModal(src, name) {
+            document.getElementById('modalImage').src = src;
+            document.getElementById('modalTitle').textContent = name;
+            document.getElementById('imageModal').classList.add('open');
+        }
+        function closeImageModal() {
+            document.getElementById('imageModal').classList.remove('open');
+        }
+        document.getElementById('imageModal').addEventListener('click', function (e) {
+            if (e.target === this) closeImageModal();
+        });
+    </script>
 </body>
 
 </html>

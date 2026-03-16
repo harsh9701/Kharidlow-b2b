@@ -2,430 +2,753 @@
 <html lang="en">
 
 <head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SNMCFJBC49"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
-
-        gtag('config', 'G-SNMCFJBC49');
-    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Update Product - KharidLow</title>
+    <title>Update Product - Kharidlow</title>
     <link rel="icon" type="image/x-icon" href="/assets/Kharidlow.ico">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
-    <link rel="stylesheet" href="/styles/adminHeader.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/styles/adminPage.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SNMCFJBC49"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
-
-        gtag('config', 'G-SNMCFJBC49');
-    </script>
     <style>
-        body {
-            background-color: #fff9f9db;
+        /* ── Page-specific only ── */
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            gap: 24px;
+            align-items: start;
         }
 
-        .main-container {
-            max-width: 900px;
-            margin: auto;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            background-color: #fff;
+        /* ── Shared card ── */
+        .view-card {
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            overflow: hidden;
         }
 
-        .image-preview {
-            width: 180px;
-            height: 180px;
-            object-fit: cover;
-            border-radius: 50%;
-            border: 2px solid #ccc;
-            position: relative;
-            margin: 0 auto;
-        }
-
-        .change-image {
-            position: absolute;
-            top: 399px;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            /* Adjust position */
-            background-color: blue;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            cursor: pointer;
-            width: 30px;
-            height: 30px;
+        .view-card-head {
             display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border);
+            gap: 12px;
+        }
+
+        .view-card-head h3 {
+            font-size: 13.5px;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0;
+        }
+
+        .view-card-head h3 i {
+            color: var(--accent2);
+            font-size: 13px;
+        }
+
+        .view-card-body {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        /* ── Form elements ── */
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-label {
+            font-size: 11.5px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            background: var(--bg4);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 9px 14px;
+            color: var(--text-primary);
+            font-size: 13.5px;
+            font-family: 'DM Sans', sans-serif;
+            transition: border-color 0.15s;
+            outline: none;
+            width: 100%;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            border-color: var(--accent);
+        }
+
+        .form-select option {
+            background: var(--bg4);
+            color: var(--text-primary);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-hint {
+            font-size: 11.5px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        /* ── Two-col form row ── */
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        /* ── Main image ── */
+        .main-img-wrap {
+            position: relative;
+            width: 100%;
+            padding-top: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            background: var(--bg4);
+            cursor: pointer;
+        }
+
+        .main-img-wrap img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: opacity 0.15s;
+        }
+
+        .main-img-wrap:hover img {
+            opacity: 0.7;
+        }
+
+        .main-img-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            background: rgba(0, 0, 0, 0.45);
+            opacity: 0;
+            transition: opacity 0.15s;
+            color: #fff;
+            font-size: 13px;
+        }
+
+        .main-img-overlay i {
+            font-size: 20px;
+        }
+
+        .main-img-wrap:hover .main-img-overlay {
+            opacity: 1;
+        }
+
+        .img-placeholder {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        .img-placeholder i {
+            font-size: 28px;
+            opacity: 0.4;
+        }
+
+        /* ── Additional images ── */
+        .add-images-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+            gap: 10px;
+        }
+
+        .add-img-item {
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            background: var(--bg4);
+            aspect-ratio: 1;
+        }
+
+        .add-img-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .remove-img-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 22px;
+            height: 22px;
+            border-radius: 6px;
+            background: rgba(248, 113, 113, 0.85);
+            border: none;
+            color: #fff;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        .remove-img-btn:hover {
+            background: var(--danger);
+        }
+
+        /* ── Action buttons ── */
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            padding: 16px 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .btn-submit {
+            flex: 1;
+            padding: 10px 20px;
+            border-radius: 10px;
+            background: var(--accent);
+            border: none;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 500;
+            font-family: 'DM Sans', sans-serif;
+            cursor: pointer;
+            transition: background 0.15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-submit:hover {
+            background: #5a52e0;
+        }
+
+        .btn-back {
+            padding: 10px 18px;
+            border-radius: 10px;
+            background: var(--bg4);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 500;
+            font-family: 'DM Sans', sans-serif;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.15s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-back:hover {
+            border-color: var(--border-hover);
+            color: var(--text-primary);
+        }
+
+        /* ── Loader ── */
+        .spinner-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.55);
+            z-index: 300;
             align-items: center;
             justify-content: center;
         }
 
-        .main-image-container {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .additional-images {
+        .spinner-overlay.show {
             display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
         }
 
-        .image-list-item {
-            position: relative;
-            width: calc(25% - 10px);
-        }
-
-        .remove-image {
-            background-color: #e40c0c;
-            color: #fff;
-            border: none;
+        .spinner {
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
-            position: absolute;
-            top: 8px;
-            left: 125px;
+            border: 3px solid var(--border-hover);
+            border-top-color: var(--accent2);
+            animation: spin 0.7s linear infinite;
         }
 
-        #loadingSpinner {
-            display: none;
-        }
-
-        @media (max-width: 768px) {
-            .image-list-item {
-                width: calc(50% - 10px);
-                /* 2 images in a row on smaller screens */
-            }
-
-            .main-container {
-                margin: 20px;
-            }
-
-            .change-image {
-                top: 388px;
-                left: 50%;
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
             }
         }
 
-        @media (max-width: 480px) {
-            .image-preview {
-                width: 120px;
-                height: 120px;
+        /* ── Responsive ── */
+        @media (max-width: 900px) {
+            .form-grid {
+                grid-template-columns: 1fr;
             }
 
-            .remove-image {
-                font-size: 0.8rem;
-                top: 8px;
-                left: 100px;
+            .main-img-wrap {
+                width: 180px;
+                padding-top: 180px;
+                margin: 0 auto;
             }
 
-            .image-list-item {
-                text-align: center;
-                width: calc(50% - 10px);
+            .page-sub {
+                display: none;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .form-row {
+                grid-template-columns: 1fr;
             }
 
-            .change-image {
-                top: 323px;
-                left: 50%;
-                font-size: 0.8rem;
-                width: 23px;
-                height: 23px;
+            .content {
+                padding: 16px 12px;
+            }
+
+            .topbar {
+                height: 56px;
+                padding: 0 16px;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .topbar {
+                padding: 0 12px;
+            }
+
+            .icon-btn {
+                width: 32px;
+                height: 32px;
             }
         }
     </style>
 </head>
 
 <body>
-    <%- include("../includes/admin-header.ejs"); %>
-        <div class="main-container my-4">
-            <h1 class="text-center mb-4">Update Product</h1>
 
-            <form id="updateProductForm" enctype="multipart/form-data">
-                <!-- Main Image Section -->
-                <div class="main-image-container mb-4">
-                    <% if (product.mainImage) { %>
-                        <img src="<%= product.mainImage %>" alt="Main Image" class="image-preview">
-                        <input type="file" id="mainImage" name="mainImage" style="display:none;"
-                            onchange="updateMainImage(event)">
-                        <button type="button" class="change-image"
-                            onclick="document.getElementById('mainImage').click();">✎</button>
-                        <% } %>
-                </div>
+    <!-- Loading Spinner -->
+    <div class="spinner-overlay" id="loadingSpinner">
+        <div class="spinner"></div>
+    </div>
 
-                <div class="mb-3">
-                    <label for="productName" class="form-label">Product Name</label>
-                    <input type="text" class="form-control" id="productName" name="productName"
-                        value="<%= product.productName %>" required>
-                </div>
+    <!-- Mobile Sidebar Overlay -->
+    <div class="sidebar-overlay" id="overlay" onclick="closeSidebar()"></div>
 
-                <div class="mb-3">
-                    <label for="description" class="form-label">Description</label>
-                    <textarea class="form-control" id="description" name="description" rows="4"
-                        required><%= product.description %></textarea>
-                </div>
-
-                <div class="mb-3">
-                    <label for="price" class="form-label">Price</label>
-                    <input type="number" class="form-control" id="price" name="price" value="<%= product.price %>"
-                        required>
-                </div>
-
-                <div class="mb-3">
-                    <label for="stock" class="form-label">Stock</label>
-                    <input type="number" class="form-control" id="stock" name="stock" value="<%= product.stock %>"
-                        required>
-                </div>
-
-                <div class="mb-3">
-                    <label for="moq" class="form-label">Minimum Order Quantity (MOQ)</label>
-                    <input type="number" class="form-control" id="moq" name="moq" value="<%= product.moq %>" required>
-                </div>
-
-                <div class="mb-3">
-                    <label for="discount" class="form-label">Discount (%)</label>
-                    <input type="number" class="form-control" id="discount" name="discount"
-                        value="<%= product.discount %>" required>
-                </div>
-
-                <div class="mb-3">
-                    <label for="taxType" class="form-label">Tax Type</label>
-                    <select class="form-select" id="taxType" name="taxType" required>
-                        <option value="inclusive" <%=product.taxType==='inclusive' ? 'selected' : '' %>>Inclusive
-                        </option>
-                        <option value="exclusive" <%=product.taxType==='exclusive' ? 'selected' : '' %>>Exclusive
-                        </option>
-                    </select>
-                </div>
-
-                <div class="mb-3">
-                    <label for="taxRate" class="form-label">Tax Rate (%)</label>
-                    <select class="form-select" id="taxRate" name="taxRate" required>
-                        <option value="0" <%=product.taxRate==0 ? 'selected' : '' %>>0%</option>
-                        <option value="5" <%=product.taxRate==5 ? 'selected' : '' %>>5%</option>
-                        <option value="12" <%=product.taxRate==12 ? 'selected' : '' %>>12%</option>
-                        <option value="18" <%=product.taxRate==18 ? 'selected' : '' %>>18%</option>
-                    </select>
-                </div>
-
-                <div class="mb-3">
-                    <label for="sameDayDispatch" class="form-label">Same Day Dispatch</label>
-                    <select class="form-select" id="sameDayDispatch" name="sameDayDispatch" required>
-                        <option value="yes" <%=product.sameDayDispatch==true ? 'selected' : '' %>>Yes</option>
-                        <option value="no" <%=product.sameDayDispatch==false ? 'selected' : '' %>>No</option>
-                    </select>
-                </div>
-
-                <div class="mb-3">
-                    <label for="tags" class="form-label">Tags (comma separated)</label>
-                    <input type="text" class="form-control" id="tags" name="tags"
-                        value="<%= product.tags.join(', ') %>">
-                </div>
-
-                <div class="mb-3">
-                    <label for="productImages" class="form-label">Additional Product Images</label>
-                    <input type="file" class="form-control" id="productImages" name="productImages" multiple
-                        onchange="checkImageLimit(this)" accept="image/*">
-                    <small class="text-muted">You can upload up to 5 images.</small>
-
-                    <div class="additional-images mt-2">
-                        <% if (product.productImages.length> 0) { %>
-                            <% product.productImages.forEach(image=> { %>
-                                <div class="image-list-item" data-image="<%= image %>">
-                                    <img src="<%= image %>" alt="Product Image" class="image-preview">
-                                    <button type="button" class="remove-image"
-                                        onclick="removeProductImage('<%= image %>')">
-                                        <i class="fa-regular fa-trash-can"></i>
-                                    </button>
-                                </div>
-                                <% }); %>
-                                    <% } else { %>
-                                        <p>No additional images uploaded.</p>
-                                        <% } %>
-                    </div>
-                </div>
-
-                <div class="text-center mt-4">
-                    <button type="submit" class="btn btn-primary">Update Product</button>
-                    <a href="/admin/manage/products" class="btn btn-secondary">Back to Products</a>
-                </div>
-            </form>
+    <!-- ── Sidebar ── -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <div class="logo-icon"><img src="/assets/Kharidlow.png" alt="logo" width="45"></div>
+            <div class="logo-text">Kharid<span>low</span></div>
         </div>
 
-        <div id="loadingSpinner"
-            class="d-none position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center"
-            style="background: rgba(0, 0, 0, 0.5); z-index: 1050;">
-            <div class="spinner-border text-light" role="status">
-                <span class="visually-hidden">Loading...</span>
+        <nav class="sidebar-nav">
+            <div class="nav-label">Overview</div>
+            <a href="/admin/manage" class="nav-link">
+                <i class="fa-solid fa-chart-pie"></i> Dashboard
+            </a>
+
+            <div class="nav-label">Manage</div>
+            <a href="/admin/manage/orders" class="nav-link">
+                <i class="fa-solid fa-box"></i> Orders
+            </a>
+            <a href="/admin/manage/customers" class="nav-link">
+                <i class="fa-solid fa-users"></i> Customers
+            </a>
+            <a href="/admin/manage/products" class="nav-link active">
+                <i class="fa-solid fa-tags"></i> Products
+            </a>
+
+            <div class="nav-label">Store</div>
+            <a href="/product/new" class="nav-link">
+                <i class="fa-solid fa-plus-circle"></i> Add Product
+            </a>
+            <a href="/admin/cartanalysis" class="nav-link">
+                <i class="fa-solid fa-cart-arrow-down"></i> Cart Insights
+            </a>
+            <a href="/" class="nav-link">
+                <i class="fa-solid fa-store"></i> Store
+            </a>
+
+            <div class="nav-label">User</div>
+            <a href="/admin/add-user" class="nav-link">
+                <i class="fa-solid fa-user-plus"></i> Add User
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-card">
+                <div class="avatar">AD</div>
+                <div class="user-info">
+                    <div class="user-name">Admin</div>
+                    <div class="user-role">Super Admin</div>
+                </div>
+                <a href="/logout" style="color:var(--text-muted);font-size:13px;margin-left:2px;" title="Logout">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                </a>
             </div>
         </div>
+    </aside>
 
-        <!-- Include Admin Sidebar -->
-        <%- include("../includes/admin-sidebar.ejs"); %>
+    <!-- ── Main Wrapper ── -->
+    <div class="main-wrap">
 
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-            <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+        <!-- Topbar -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="hamburger" onclick="toggleSidebar()" aria-label="Toggle Menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <div>
+                    <div class="page-title">Update Product</div>
+                    <div class="page-sub">
+                        <%= product.productName %>
+                    </div>
+                </div>
+            </div>
+            <div class="topbar-right">
+                <a href="/admin/manage/products" class="icon-btn" data-tooltip="Back to Products">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </a>
+                <div class="icon-btn" data-tooltip="Notifications">
+                    <i class="fa-solid fa-bell"></i>
+                    <span class="notif-dot"></span>
+                </div>
+                <div class="avatar" style="width:36px;height:36px;font-size:12px;border-radius:10px;cursor:pointer;">AD
+                </div>
+            </div>
+        </header>
 
-            <script>
+        <!-- Content -->
+        <main class="content">
+            <form id="updateProductForm" enctype="multipart/form-data">
+                <div class="form-grid">
 
-                const maxImagesAllowed = 5;
-                let existingImagesCount = "<%= product.productImages.length %>";
+                    <!-- ── Left: Images ── -->
+                    <div style="display:flex;flex-direction:column;gap:16px;">
 
-                function checkImageLimit(input) {
-                    const selectedFiles = input.files.length;
-                    const totalImagesCount = Number(existingImagesCount) + Number(selectedFiles);
+                        <!-- Main image -->
+                        <div class="view-card">
+                            <div class="view-card-head">
+                                <h3><i class="fa-solid fa-image"></i> Main Image</h3>
+                            </div>
+                            <div class="view-card-body" style="gap:12px;">
+                                <div class="main-img-wrap" onclick="document.getElementById('mainImage').click();">
+                                    <% if (product.mainImage) { %>
+                                        <img src="<%= product.mainImage %>" alt="Main Image" id="mainImagePreview">
+                                        <div class="main-img-overlay">
+                                            <i class="fa-solid fa-camera"></i>
+                                            Change Image
+                                        </div>
+                                        <% } else { %>
+                                            <div class="img-placeholder">
+                                                <i class="fa-solid fa-image"></i>
+                                                No image
+                                            </div>
+                                            <% } %>
+                                </div>
+                                <input type="file" id="mainImage" name="mainImage" style="display:none;"
+                                    accept="image/*" onchange="updateMainImagePreview(event)">
+                                <p class="form-hint" style="text-align:center;">Click image to change</p>
+                            </div>
+                        </div>
 
-                    if (totalImagesCount > maxImagesAllowed) {
-                        Swal.fire({
-                            icon: 'warning',
-                            title: 'Image Upload Limit',
-                            text: `You can only upload ${maxImagesAllowed - existingImagesCount} more images.`,
-                            confirmButtonText: 'OK',
-                            timer: 4000 // Optional: Auto-close after 4 seconds
-                        });
+                        <!-- Additional images -->
+                        <div class="view-card">
+                            <div class="view-card-head">
+                                <h3><i class="fa-solid fa-images"></i> Additional Images</h3>
+                                <span style="font-size:11px;color:var(--text-muted);">
+                                    <%= product.productImages.length %>/5
+                                </span>
+                            </div>
+                            <div class="view-card-body" style="gap:12px;">
+                                <div class="add-images-grid">
+                                    <% if (product.productImages.length> 0) { %>
+                                        <% product.productImages.forEach(image=> { %>
+                                            <div class="add-img-item" data-image="<%= image %>">
+                                                <img src="<%= image %>" alt="Product Image">
+                                                <button type="button" class="remove-img-btn"
+                                                    onclick="removeProductImage('<%= image %>')" data-tooltip="Remove">
+                                                    <i class="fa-solid fa-xmark"></i>
+                                                </button>
+                                            </div>
+                                            <% }); %>
+                                                <% } else { %>
+                                                    <p
+                                                        style="font-size:12.5px;color:var(--text-muted);grid-column:1/-1;">
+                                                        No additional images.</p>
+                                                    <% } %>
+                                </div>
+                                <div class="form-group">
+                                    <input type="file" class="form-input" id="productImages" name="productImages"
+                                        multiple accept="image/*" onchange="checkImageLimit(this)"
+                                        style="padding:6px 10px;cursor:pointer;">
+                                    <span class="form-hint">Max 5 images total</span>
+                                </div>
+                            </div>
+                        </div>
 
-                        input.value = '';  // Clear the file input to prevent the excess images from being uploaded
-                    }
+                    </div>
+
+                    <!-- ── Right: Form fields ── -->
+                    <div class="view-card">
+                        <div class="view-card-head">
+                            <h3><i class="fa-solid fa-pen-to-square"></i> Product Details</h3>
+                        </div>
+                        <div class="view-card-body">
+
+                            <div class="form-group">
+                                <label class="form-label">Product Name</label>
+                                <input type="text" class="form-input" id="productName" name="productName"
+                                    value="<%= product.productName %>" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Description</label>
+                                <textarea class="form-textarea" id="description" name="description"
+                                    required><%= product.description %></textarea>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Price (₹)</label>
+                                    <input type="number" class="form-input" id="price" name="price"
+                                        value="<%= product.price %>" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Stock</label>
+                                    <input type="number" class="form-input" id="stock" name="stock"
+                                        value="<%= product.stock %>" required>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">MOQ</label>
+                                    <input type="number" class="form-input" id="moq" name="moq"
+                                        value="<%= product.moq %>" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Discount (%)</label>
+                                    <input type="number" class="form-input" id="discount" name="discount"
+                                        value="<%= product.discount %>" required>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Tax Type</label>
+                                    <select class="form-select" id="taxType" name="taxType" required>
+                                        <option value="inclusive" <%=product.taxType==='inclusive' ? 'selected' : '' %>
+                                            >Inclusive</option>
+                                        <option value="exclusive" <%=product.taxType==='exclusive' ? 'selected' : '' %>
+                                            >Exclusive</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Tax Rate (%)</label>
+                                    <select class="form-select" id="taxRate" name="taxRate" required>
+                                        <option value="0" <%=product.taxRate==0 ? 'selected' : '' %>>0%</option>
+                                        <option value="5" <%=product.taxRate==5 ? 'selected' : '' %>>5%</option>
+                                        <option value="12" <%=product.taxRate==12 ? 'selected' : '' %>>12%</option>
+                                        <option value="18" <%=product.taxRate==18 ? 'selected' : '' %>>18%</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Same Day Dispatch</label>
+                                    <select class="form-select" id="sameDayDispatch" name="sameDayDispatch" required>
+                                        <option value="yes" <%=product.sameDayDispatch==true ? 'selected' : '' %>>Yes
+                                        </option>
+                                        <option value="no" <%=product.sameDayDispatch==false ? 'selected' : '' %>>No
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Tags (comma separated)</label>
+                                    <input type="text" class="form-input" id="tags" name="tags"
+                                        value="<%= product.tags.join(', ') %>">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Actions inside the card -->
+                        <div class="form-actions">
+                            <a href="/admin/manage/products" class="btn-back">
+                                <i class="fa-solid fa-arrow-left"></i> Back
+                            </a>
+                            <button type="submit" class="btn-submit">
+                                <i class="fa-solid fa-floppy-disk"></i> Update Product
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+        </main>
+    </div>
+
+    <script>
+        // ── Sidebar ──
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('overlay').classList.toggle('open');
+        }
+        function closeSidebar() {
+            document.getElementById('sidebar').classList.remove('open');
+            document.getElementById('overlay').classList.remove('open');
+        }
+        window.addEventListener('resize', () => { if (window.innerWidth > 900) closeSidebar(); });
+
+        // ── Loader ──
+        function showLoader() { document.getElementById('loadingSpinner').classList.add('show'); }
+        function hideLoader() { document.getElementById('loadingSpinner').classList.remove('show'); }
+
+        // ── Swal theme ──
+        const swalDark = { background: '#1e2028', color: '#f0f0f4', confirmButtonColor: '#6c63ff', cancelButtonColor: '#f87171' };
+
+        // ── Main image preview ──
+        function updateMainImagePreview(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = e => {
+                let img = document.getElementById('mainImagePreview');
+                if (!img) {
+                    // No existing image — create one
+                    const wrap = document.querySelector('.main-img-wrap');
+                    wrap.innerHTML = `<img src="${e.target.result}" id="mainImagePreview" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
+                        <div class="main-img-overlay"><i class="fa-solid fa-camera"></i> Change Image</div>`;
+                } else {
+                    img.src = e.target.result;
                 }
+            };
+            reader.readAsDataURL(file);
+        }
 
-                function updateMainImage(event) {
-                    const file = event.target.files[0];
-                    if (file) {
-                        const reader = new FileReader();
-                        reader.onload = function (e) {
-                            document.querySelector('.image-preview').src = e.target.result; // Update the image preview
-                        }
-                        reader.readAsDataURL(file); // Read the image as a data URL
-                    }
-                }
+        // ── Image limit check ──
+        const maxImagesAllowed = 5;
+        let existingImagesCount = <%= product.productImages.length %>;
 
-                function showLoader() {
-                    $("#loadingSpinner").removeClass('d-none').show();
-                }
-
-                function hideLoader() {
-                    $("#loadingSpinner").hide();
-                }
-
-                function removeProductImage(image) {
-                    const productId = "<%= product._id %>"; // Replace with your actual product ID
-
-                    // SweetAlert confirmation dialog
-                    Swal.fire({
-                        title: 'Are you sure?',
-                        text: "You won't be able to revert this!",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Yes, delete it!',
-                        cancelButtonText: 'Cancel'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            showLoader();
-                            $.ajax({
-                                url: `/admin/delete/productimage/${productId}`,
-                                type: 'DELETE',
-                                data: JSON.stringify({ imageName: image }),
-                                contentType: 'application/json',
-                                success: function (response) {
-                                    hideLoader();
-                                    if (response.success) {
-                                        Swal.fire(
-                                            'Deleted!',
-                                            'Your image has been deleted.',
-                                            'success'
-                                        ).then(() => {
-                                            location.reload(); // Reload the page
-                                        });;
-
-                                        // Remove the image element from the DOM & hide Spinner
-                                        // $(`[data-image="${image}"]`).remove();
-                                    } else {
-                                        Swal.fire(
-                                            'Error!',
-                                            response.message,
-                                            'error'
-                                        );
-                                    }
-                                },
-                                error: function (xhr, status, error) {
-                                    hideLoader();
-                                    console.error('Error deleting image:', error);
-                                    Swal.fire(
-                                        'Error!',
-                                        'An error occurred while deleting the image.',
-                                        'error'
-                                    );
-                                }
-                            });
-                        }
-                    });
-                }
-
-                $(document).ready(function () {
-                    $('#updateProductForm').on('submit', function (event) {
-                        event.preventDefault();
-
-                        let formData = new FormData(this);
-
-                        showLoader();
-                        $.ajax({
-                            url: '/admin/update/product/<%= product._id %>',
-                            type: 'PUT',
-                            data: formData,
-                            processData: false,
-                            contentType: false,
-                            success: function (response) {
-                                hideLoader();
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Product Updated',
-                                    text: 'Product updated successfully!',
-                                    confirmButtonText: 'OK',
-                                    timer: 4000 // Optional: Auto-close after 4 seconds
-                                }).then(() => {
-                                    window.location.href = '/admin/manage/products/<%= product._id %>';
-                                });
-                            },
-                            error: function (xhr, status, error) {
-                                const response = JSON.parse(xhr.responseText);
-                                const errorMessage = response.message || "An error occurred while updating the product. Please try again.";
-                                hideLoader();
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Error',
-                                    text: errorMessage,
-                                    confirmButtonText: 'OK'
-                                }).then(() => {
-                                    window.location.href = '/admin/manage/products/<%= product._id %>';
-                                });
-                            }
-                        });
-                    });
+        function checkImageLimit(input) {
+            const total = existingImagesCount + input.files.length;
+            if (total > maxImagesAllowed) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Too many images',
+                    text: `You can only upload ${maxImagesAllowed - existingImagesCount} more image(s).`,
+                    confirmButtonText: 'OK',
+                    ...swalDark
                 });
+                input.value = '';
+            }
+        }
 
-
-                function updateMainImage(event) {
-                    const file = event.target.files[0];
-                    if (file) {
-                        const reader = new FileReader();
-                        reader.onload = function (e) {
-                            document.querySelector('.image-preview').src = e.target.result; // Update the image preview
-                        }
-                        reader.readAsDataURL(file); // Read the image as a data URL
-                    }
+        // ── Remove additional image ──
+        function removeProductImage(image) {
+            const productId = '<%= product._id %>';
+            Swal.fire({
+                title: 'Remove this image?',
+                text: "This cannot be undone.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, remove it!',
+                cancelButtonText: 'Cancel',
+                ...swalDark
+            }).then(result => {
+                if (result.isConfirmed) {
+                    showLoader();
+                    fetch(`/admin/delete/productimage/${productId}`, {
+                        method: 'DELETE',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ imageName: image })
+                    })
+                        .then(res => res.json())
+                        .then(response => {
+                            hideLoader();
+                            if (response.success) {
+                                Swal.fire({ icon: 'success', title: 'Removed!', text: 'Image has been removed.', ...swalDark })
+                                    .then(() => location.reload());
+                            } else {
+                                Swal.fire({ icon: 'error', title: 'Error!', text: response.message, ...swalDark });
+                            }
+                        })
+                        .catch(() => {
+                            hideLoader();
+                            Swal.fire({ icon: 'error', title: 'Error!', text: 'An error occurred while removing the image.', ...swalDark });
+                        });
                 }
-            </script>
+            });
+        }
+
+        // ── Form submit ──
+        document.getElementById('updateProductForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            showLoader();
+
+            fetch('/admin/update/product/<%= product._id %>', {
+                method: 'PUT',
+                body: formData
+            })
+                .then(res => res.json())
+                .then(response => {
+                    hideLoader();
+                    if (response.success !== false) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Product Updated!',
+                            text: 'Product has been updated successfully.',
+                            confirmButtonText: 'OK',
+                            timer: 4000,
+                            ...swalDark
+                        }).then(() => {
+                            window.location.href = '/admin/manage/products/<%= product._id %>';
+                        });
+                    } else {
+                        Swal.fire({ icon: 'error', title: 'Error', text: response.message || 'Update failed.', ...swalDark });
+                    }
+                })
+                .catch(() => {
+                    hideLoader();
+                    Swal.fire({ icon: 'error', title: 'Error', text: 'An error occurred. Please try again.', ...swalDark });
+                });
+        });
+    </script>
 </body>
 
 </html>

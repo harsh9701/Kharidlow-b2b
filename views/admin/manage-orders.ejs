@@ -6,277 +6,735 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Orders - Kharidlow</title>
     <link rel="icon" type="image/x-icon" href="/assets/Kharidlow.ico">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css" />
-    <link rel="stylesheet" href="/styles/adminHeader.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <!-- Link your shared admin dashboard CSS here -->
+    <link rel="stylesheet" href="/styles/adminPage.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="stylesheet" href="/styles/tableStructure.css">
+
     <style>
-        .custom-close {
-            background-color: #e2e2e2 !important;
-            color: #fff !important;
-            border: 1px solid transparent !important;
+        /* ── Page-specific only ── */
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg4);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 7px 14px;
+            transition: border-color 0.15s;
         }
 
-        .custom-close:hover {
-            background-color: #0056b3 !important;
-            border: 1px solid #0056b3 !important;
+        .search-box:focus-within {
+            border-color: var(--accent);
         }
 
-        .custom-close:focus {
-            outline: none !important;
-            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5) !important;
+        .search-box i {
+            color: var(--text-muted);
+            font-size: 13px;
+            flex-shrink: 0;
+        }
+
+        .search-box input {
+            background: none;
+            border: none;
+            outline: none;
+            color: var(--text-primary);
+            font-size: 13.5px;
+            font-family: 'DM Sans', sans-serif;
+            width: 200px;
+        }
+
+        .search-box input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .table-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 20px;
+            border-top: 1px solid var(--border);
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .table-info {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .pagination {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+        }
+
+        .page-btn {
+            min-width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            background: var(--bg4);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.15s;
+            font-family: 'DM Mono', monospace;
+            padding: 0 8px;
+        }
+
+        .page-btn:hover {
+            border-color: var(--border-hover);
+            color: var(--text-primary);
+        }
+
+        .page-btn.active {
+            background: var(--accent-glow);
+            color: var(--accent2);
+            border-color: rgba(108, 99, 255, 0.3);
+        }
+
+        .page-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .no-data {
+            padding: 60px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .no-data i {
+            font-size: 32px;
+            margin-bottom: 12px;
+            display: block;
+            opacity: 0.4;
+        }
+
+        /* ── Modal ── */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.65);
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .modal-box {
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            width: 100%;
+            max-width: 440px;
+            overflow: hidden;
+            animation: modalIn 0.2s ease;
+        }
+
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: scale(0.96) translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .modal-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 22px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .modal-head h3 {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .modal-close {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            background: var(--bg4);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .modal-close:hover {
+            color: var(--text-primary);
+            border-color: var(--border-hover);
+        }
+
+        .modal-body {
+            padding: 22px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-label {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            letter-spacing: 0.3px;
+        }
+
+        .form-select,
+        .form-input,
+        .form-textarea {
+            background: var(--bg4);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 9px 14px;
+            color: var(--text-primary);
+            font-size: 13.5px;
+            font-family: 'DM Sans', sans-serif;
+            transition: border-color 0.15s;
+            outline: none;
+            width: 100%;
+        }
+
+        .form-select:focus,
+        .form-input:focus,
+        .form-textarea:focus {
+            border-color: var(--accent);
+        }
+
+        .form-select option {
+            background: var(--bg4);
+            color: var(--text-primary);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .conditional-field {
+            display: none;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .conditional-field.visible {
+            display: flex;
+        }
+
+        .modal-foot {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 10px;
+            padding: 16px 22px;
+            border-top: 1px solid var(--border);
+        }
+
+        .btn-cancel {
+            padding: 8px 18px;
+            border-radius: 10px;
+            background: var(--bg4);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            font-size: 13.5px;
+            font-family: 'DM Sans', sans-serif;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .btn-cancel:hover {
+            color: var(--text-primary);
+            border-color: var(--border-hover);
+        }
+
+        .btn-submit {
+            padding: 8px 20px;
+            border-radius: 10px;
+            background: var(--accent);
+            border: none;
+            color: #fff;
+            font-size: 13.5px;
+            font-weight: 500;
+            font-family: 'DM Sans', sans-serif;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        .btn-submit:hover {
+            background: #5a52e0;
+        }
+
+        @media (max-width: 640px) {
+            .search-box input {
+                width: 140px;
+            }
+
+            .page-sub {
+                display: none;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .search-box input {
+                width: 110px;
+            }
         }
     </style>
-
 </head>
 
 <body>
 
-    <%- include("../includes/admin-header.ejs"); %>
+    <!-- Mobile Sidebar Overlay -->
+    <div class="sidebar-overlay" id="overlay" onclick="closeSidebar()"></div>
 
-        <div class="container p-30">
-            <div class="row">
-                <div class="col-md-12 main-datatable">
-                    <div class="card_body">
-                        <div class="row d-flex">
-                            <div class="col-sm-4 createSegment">
-                                <!-- <a class="btn dim_button create_new"><span class="glyphicon glyphicon-plus"></span>Create
-                                New</a> -->
-                            </div>
-                            <div class="col-sm-8 add_flex">
-                                <div class="form-group searchInput">
-                                    <label>Search:</label>
-                                    <input type="search" class="form-control" name="" id="filterbox"
-                                        placeholder="Search Order">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="overflow-x">
-                            <table style="width: 100%;" id="filtertable"
-                                class="table cust-datatable dataTable no-footer">
-                                <thead>
-                                    <tr>
-                                        <th style="min-width: 50px;">S. No.</th>
-                                        <th style="min-width: 50px;">Order Number</th>
-                                        <th style="min-width: 50px;">Customer Name</th>
-                                        <th style="min-width: 50px;">Date</th>
-                                        <th style="min-width: 50px;">Status</th>
-                                        <th style="min-width: 50px;">Total Amount</th>
-                                        <th style="min-width: 50px;">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <% if(allOrders.length> 0) { %>
-                                        <% allOrders.forEach((order, index)=> { %>
-                                            <tr>
-                                                <td>
-                                                    <%= index+1 %>
-                                                </td>
-                                                <td>
-                                                    <%= order.orderNumber %>
-                                                </td>
-                                                <td>
-                                                    <%= order.userId.fullName.charAt(0).toUpperCase() +
-                                                        order.userId.fullName.slice(1).toLowerCase(); %>
-                                                </td>
-                                                <td>
-                                                    <%= order.createdAt.toDateString() %>
-                                                </td>
-                                                <td>
-                                                    <% if(order.status=="pending" ) { %>
-                                                        <span class="badge bg-warning">
-                                                            <%= order.status %>
-                                                        </span>
-                                                        <% } else if(order.status=="delivered" ) { %>
-                                                            <span class="badge bg-success">
-                                                                <%= order.status %>
-                                                            </span>
-                                                            <% } else if(order.status=="canceled" ) { %>
-                                                                <span class="badge bg-danger" data-bs-toggle="tooltip"
-                                                                    data-bs-placement="top"
-                                                                    title="<%= order.cancellationReason %>">
-                                                                    <%= order.status %>
-                                                                </span>
-                                                                <% } else { %>
-                                                                    <span class="badge bg-info">
-                                                                        <%= order.status %>
-                                                                    </span>
-                                                                    <% } %>
-                                                </td>
-                                                <td>&#8377;<%= order.grandTotal %>
-                                                </td>
-                                                <td style="min-width: 200px;">
-                                                    <div class="btn-group" role="group">
-                                                        <a href="/admin/manage/orders/<%= order._id %>"
-                                                            class="btn btn-sm btn-info" data-bs-toggle="tooltip"
-                                                            data-bs-placement="top" title="View">
-                                                            <i class="fa-solid fa-eye"></i>
-                                                        </a>
-                                                        <a class="btn btn-sm btn-primary updateOrderBtn"
-                                                            data-bs-toggle="tooltip" data-bs-placement="top"
-                                                            title="Update" data-order-id="<%= order._id %>">
-                                                            <i class="fa-solid fa-pencil"></i>
-                                                        </a>
-                                                        <a class="btn btn-sm btn-danger disabled" tabindex="-1"
-                                                            aria-disabled="true" data-bs-toggle="tooltip"
-                                                            data-bs-placement="top" title="Delete">
-                                                            <i class="fa-solid fa-trash-can"></i>
-                                                        </a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <% }); %>
-                                                <% } %>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <!-- ── Sidebar ── -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <div class="logo-icon"><img src="/assets/Kharidlow.png" alt="logo" width="45"></div>
+            <div class="logo-text">Kharid<span>low</span></div>
         </div>
 
-        <!-- Include Admin Sidebar -->
-        <%- include("../includes/admin-sidebar.ejs"); %>
+        <nav class="sidebar-nav">
+            <div class="nav-label">Overview</div>
+            <a href="/admin/manage" class="nav-link">
+                <i class="fa-solid fa-chart-pie"></i> Dashboard
+            </a>
 
-            <div class="modal fade" id="updateOrderStatusModal" tabindex="-1"
-                aria-labelledby="updateOrderStatusModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <form id="updateOrderForm">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="updateOrderStatusModalLabel">Update Order Status</h5>
-                                <button type="button" class="btn-close custom-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <div class="mb-3">
-                                    <label for="orderStatus" class="form-label">Order Status</label>
-                                    <select class="form-select" id="orderStatus" name="status" required>
-                                        <option value="accepted">Accepted</option>
-                                        <option value="dispatched">Dispatched</option>
-                                        <option value="delivered">Delivered</option>
-                                        <option value="canceled">Canceled</option>
-                                    </select>
-                                </div>
-                                <!-- Conditional fields -->
-                                <div class="mb-3 d-none" id="trackingInfo">
-                                    <label for="trackingId" class="form-label">Tracking ID</label>
-                                    <input type="text" class="form-control" id="trackingId" name="trackingId">
-                                    <label for="trackingUrl" class="form-label mt-2">Tracking URL</label>
-                                    <input type="url" class="form-control" id="trackingUrl" name="trackingUrl">
-                                </div>
-                                <div class="mb-3 d-none" id="cancelReason">
-                                    <label for="reason" class="form-label">Cancellation Reason</label>
-                                    <textarea class="form-control" id="reason" name="reason" rows="3"></textarea>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <input type="hidden" id="orderId" name="orderId">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Update</button>
-                            </div>
-                        </form>
-                    </div>
+            <div class="nav-label">Manage</div>
+            <a href="/admin/manage/orders" class="nav-link active">
+                <i class="fa-solid fa-box"></i> Orders
+            </a>
+            <a href="/admin/manage/customers" class="nav-link">
+                <i class="fa-solid fa-users"></i> Customers
+            </a>
+            <a href="/admin/manage/products" class="nav-link">
+                <i class="fa-solid fa-tags"></i> Products
+            </a>
+
+            <div class="nav-label">Store</div>
+            <a href="/product/new" class="nav-link">
+                <i class="fa-solid fa-plus-circle"></i> Add Product
+            </a>
+            <a href="/admin/cartanalysis" class="nav-link">
+                <i class="fa-solid fa-cart-arrow-down"></i> Cart Insights
+            </a>
+            <a href="/" class="nav-link">
+                <i class="fa-solid fa-store"></i> Store
+            </a>
+
+            <div class="nav-label">User</div>
+            <a href="/admin/add-user" class="nav-link">
+                <i class="fa-solid fa-user-plus"></i> Add User
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-card">
+                <div class="avatar">AD</div>
+                <div class="user-info">
+                    <div class="user-name">Admin</div>
+                    <div class="user-role">Super Admin</div>
+                </div>
+                <a href="/logout" style="color:var(--text-muted);font-size:13px;margin-left:2px;" title="Logout">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                </a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ── Main Wrapper ── -->
+    <div class="main-wrap">
+
+        <!-- Topbar -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="hamburger" onclick="toggleSidebar()" aria-label="Toggle Menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <div>
+                    <div class="page-title">Manage Orders</div>
+                    <div class="page-sub">View and update all orders</div>
                 </div>
             </div>
+            <div class="topbar-right">
+                <div class="icon-btn" title="Notifications">
+                    <i class="fa-solid fa-bell"></i>
+                    <span class="notif-dot"></span>
+                </div>
+                <div class="avatar" style="width:36px;height:36px;font-size:12px;border-radius:10px;cursor:pointer;">AD
+                </div>
+            </div>
+        </header>
 
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-            <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-            <script src="https://cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
+        <!-- Content -->
+        <main class="content">
+            <div class="section-card">
 
-            <script>
+                <div class="section-head">
+                    <h2><i class="fa-solid fa-box" style="color:var(--accent2);margin-right:8px;font-size:14px;"></i>All
+                        Orders</h2>
+                    <div class="search-box">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="search" id="filterbox" placeholder="Search by ID, name, status…">
+                    </div>
+                </div>
 
-                $(document).ready(function () {
-                    let dataTable = $('#filtertable').DataTable({
-                        "pageLength": 20,
-                        "aoColumnDefs": [{
-                            "nSortable": false,
-                            "aTargets": ['nosort']
-                        }],
-                        columnDefs: [
-                            { type: 'date-dd-mm-yyyy', aTargets: [5] }
-                        ],
-                        "aoColumns": [
-                            null,
-                            null,
-                            null,
-                            null,
-                            null,
-                            null,
-                            null
-                        ],
-                        "order": false,
-                        "bLengthChange": false,
-                        "dom": '<"top">ct<"top"p><"clear">'
-                    });
-                    $("#filterbox").keyup(function () {
-                        dataTable.search(this.value).draw();
+                <div class="table-wrap">
+                    <table id="ordersTable">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Amount</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            <% if (allOrders.length> 0) { %>
+                                <% allOrders.forEach((order, index)=> { %>
+                                    <tr data-index="<%= index %>">
+                                        <td class="sno">
+                                            <%= index + 1 %>
+                                        </td>
+                                        <td><span class="order-id">#<%= order.orderNumber %></span></td>
+                                        <td>
+                                            <%= order.userId.fullName.charAt(0).toUpperCase() +
+                                                order.userId.fullName.slice(1).toLowerCase() %>
+                                        </td>
+                                        <td class="muted">
+                                            <%= order.createdAt.toDateString() %>
+                                        </td>
+                                        <td>
+                                            <% if (order.status=="pending" ) { %>
+                                                <span class="badge badge-warning">
+                                                    <%= order.status %>
+                                                </span>
+                                                <% } else if (order.status=="delivered" ) { %>
+                                                    <span class="badge badge-success">
+                                                        <%= order.status %>
+                                                    </span>
+                                                    <% } else if (order.status=="canceled" ) { %>
+                                                        <span class="badge badge-danger"
+                                                            data-tooltip="<%= order.cancellationReason %>">
+                                                            <%= order.status %>
+                                                        </span>
+                                                        <% } else if (order.status=="dispatched" ) { %>
+                                                            <span class="badge badge-primary">
+                                                                <%= order.status %>
+                                                            </span>
+                                                            <% }else { %>
+                                                                <span class="badge badge-info">
+                                                                    <%= order.status %>
+                                                                </span>
+                                                                <% } %>
+                                        </td>
+                                        <td class="mono">&#8377;<%= order.grandTotal %>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <a href="/admin/manage/orders/<%= order._id %>"
+                                                    class="btn-icon btn-view" title="View">
+                                                    <i class="fa-solid fa-eye"></i>
+                                                </a>
+                                                <button class="btn-icon btn-edit updateOrderBtn"
+                                                    data-order-id="<%= order._id %>" title="Update Status">
+                                                    <i class="fa-solid fa-pencil"></i>
+                                                </button>
+                                                <button class="btn-icon btn-delete" title="Delete (Disabled)" disabled>
+                                                    <i class="fa-solid fa-trash-can"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <% }); %>
+                                        <% } %>
+                        </tbody>
+                    </table>
+
+                    <!-- No results row (shown via JS) -->
+                    <div id="noResults" class="no-data" style="display:none;">
+                        <i class="fa-solid fa-box-open"></i>
+                        No orders match your search
+                    </div>
+
+                    <% if (allOrders.length===0) { %>
+                        <div class="no-data">
+                            <i class="fa-solid fa-box-open"></i>
+                            No orders found
+                        </div>
+                        <% } %>
+                </div>
+
+                <div class="table-footer">
+                    <div class="table-info" id="tableInfo"></div>
+                    <div class="pagination" id="pagination"></div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- ── Update Order Modal ── -->
+    <div class="modal-overlay" id="updateModal">
+        <div class="modal-box">
+            <div class="modal-head">
+                <h3><i class="fa-solid fa-pencil"
+                        style="color:var(--accent2);margin-right:8px;font-size:13px;"></i>Update Order Status</h3>
+                <button class="modal-close" onclick="closeModal()">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <form id="updateOrderForm">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label">ORDER STATUS</label>
+                        <select class="form-select" id="orderStatus" name="status" required>
+                            <option value="accepted">Accepted</option>
+                            <option value="dispatched">Dispatched</option>
+                            <option value="delivered">Delivered</option>
+                            <option value="canceled">Canceled</option>
+                        </select>
+                    </div>
+
+                    <div class="conditional-field" id="trackingInfo">
+                        <div class="form-group">
+                            <label class="form-label">TRACKING ID</label>
+                            <input type="text" class="form-input" id="trackingId" name="trackingId"
+                                placeholder="Enter tracking ID">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">TRACKING URL</label>
+                            <input type="url" class="form-input" id="trackingUrl" name="trackingUrl"
+                                placeholder="https://track.example.com/…">
+                        </div>
+                    </div>
+
+                    <div class="conditional-field" id="cancelReason">
+                        <div class="form-group">
+                            <label class="form-label">CANCELLATION REASON</label>
+                            <textarea class="form-textarea" id="reason" name="reason"
+                                placeholder="Describe the reason for cancellation…"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-foot">
+                    <input type="hidden" id="orderId" name="orderId">
+                    <button type="button" class="btn-cancel" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn-submit">
+                        <i class="fa-solid fa-check" style="margin-right:6px;font-size:12px;"></i>Update
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // ── Sidebar ──
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('overlay').classList.toggle('open');
+        }
+        function closeSidebar() {
+            document.getElementById('sidebar').classList.remove('open');
+            document.getElementById('overlay').classList.remove('open');
+        }
+        window.addEventListener('resize', () => { if (window.innerWidth > 900) closeSidebar(); });
+
+        // ── Modal ──
+        function openModal() { document.getElementById('updateModal').classList.add('open'); }
+        function closeModal() { document.getElementById('updateModal').classList.remove('open'); }
+        document.getElementById('updateModal').addEventListener('click', function (e) {
+            if (e.target === this) closeModal();
+        });
+
+        // ── Table State ──
+        const PAGE_SIZE = 20;
+        const allRows = Array.from(document.querySelectorAll('#tableBody tr'));
+        let filteredRows = [...allRows]; // rows currently matching search
+        let currentPage = 1;
+
+        // Build a searchable text string for each row once
+        allRows.forEach(row => {
+            row._searchText = row.innerText.toLowerCase();
+        });
+
+        // ── Render current page ──
+        function renderPage() {
+            const start = (currentPage - 1) * PAGE_SIZE;
+            const end = start + PAGE_SIZE;
+
+            allRows.forEach(row => row.style.display = 'none'); // hide all first
+
+            const pageRows = filteredRows.slice(start, end);
+            pageRows.forEach(row => row.style.display = '');
+
+            // No results message
+            document.getElementById('noResults').style.display = filteredRows.length === 0 ? 'block' : 'none';
+
+            // Info text
+            const from = filteredRows.length === 0 ? 0 : start + 1;
+            const to = Math.min(end, filteredRows.length);
+            const total = filteredRows.length;
+            document.getElementById('tableInfo').textContent =
+                total === allRows.length
+                    ? `Showing ${from}–${to} of ${total} orders`
+                    : `Showing ${from}–${to} of ${total} results (filtered from ${allRows.length})`;
+
+            renderPagination();
+        }
+
+        // ── Render pagination buttons ──
+        function renderPagination() {
+            const totalPages = Math.ceil(filteredRows.length / PAGE_SIZE);
+            const pag = document.getElementById('pagination');
+            pag.innerHTML = '';
+
+            if (totalPages <= 1) return;
+
+            // Prev button
+            const prev = document.createElement('button');
+            prev.className = 'page-btn';
+            prev.innerHTML = '<i class="fa-solid fa-chevron-left" style="font-size:10px;"></i>';
+            prev.disabled = currentPage === 1;
+            prev.onclick = () => { currentPage--; renderPage(); };
+            pag.appendChild(prev);
+
+            // Page number buttons (show max 5 around current)
+            const range = 2;
+            for (let i = 1; i <= totalPages; i++) {
+                if (
+                    i === 1 || i === totalPages ||
+                    (i >= currentPage - range && i <= currentPage + range)
+                ) {
+                    const btn = document.createElement('button');
+                    btn.className = 'page-btn' + (i === currentPage ? ' active' : '');
+                    btn.textContent = i;
+                    btn.onclick = ((page) => () => { currentPage = page; renderPage(); })(i);
+                    pag.appendChild(btn);
+                } else if (
+                    i === currentPage - range - 1 ||
+                    i === currentPage + range + 1
+                ) {
+                    // Ellipsis
+                    const dots = document.createElement('button');
+                    dots.className = 'page-btn';
+                    dots.textContent = '…';
+                    dots.disabled = true;
+                    pag.appendChild(dots);
+                }
+            }
+
+            // Next button
+            const next = document.createElement('button');
+            next.className = 'page-btn';
+            next.innerHTML = '<i class="fa-solid fa-chevron-right" style="font-size:10px;"></i>';
+            next.disabled = currentPage === totalPages;
+            next.onclick = () => { currentPage++; renderPage(); };
+            pag.appendChild(next);
+        }
+
+        // ── Search ──
+        document.getElementById('filterbox').addEventListener('input', function () {
+            const q = this.value.toLowerCase().trim();
+            filteredRows = q
+                ? allRows.filter(row => row._searchText.includes(q))
+                : [...allRows];
+            currentPage = 1; // always reset to page 1 on new search
+            renderPage();
+        });
+
+        // ── Init ──
+        renderPage();
+
+        // ── Update Order Button ──
+        document.querySelectorAll('.updateOrderBtn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                document.getElementById('orderId').value = this.dataset.orderId;
+                document.getElementById('orderStatus').value = 'accepted';
+                document.getElementById('trackingInfo').classList.remove('visible');
+                document.getElementById('cancelReason').classList.remove('visible');
+                openModal();
+            });
+        });
+
+        // ── Status change → conditional fields ──
+        document.getElementById('orderStatus').addEventListener('change', function () {
+            document.getElementById('trackingInfo').classList.toggle('visible', this.value === 'dispatched');
+            document.getElementById('cancelReason').classList.toggle('visible', this.value === 'canceled');
+        });
+
+        // ── Form Submit ──
+        document.getElementById('updateOrderForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const formData = new URLSearchParams(new FormData(this)).toString();
+
+            fetch('/admin/manage/orders/update', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: formData
+            })
+                .then(res => {
+                    if (!res.ok) throw new Error();
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Order updated!',
+                        text: 'Order status has been updated successfully.',
+                        confirmButtonText: 'Close',
+                        background: '#1e2028',
+                        color: '#f0f0f4',
+                        confirmButtonColor: '#6c63ff'
+                    }).then(() => { closeModal(); location.reload(); });
+                })
+                .catch(() => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: 'Could not update order status. Please try again.',
+                        confirmButtonText: 'Close',
+                        background: '#1e2028',
+                        color: '#f0f0f4',
+                        confirmButtonColor: '#6c63ff'
                     });
                 });
-
-                $(document).ready(function () {
-                    // Initialize Bootstrap tooltips
-                    $('[data-bs-toggle="tooltip"]').tooltip();
-
-                    // When the update button is clicked, trigger the modal
-                    $('.updateOrderBtn').on('click', function (event) {
-                        event.preventDefault(); // Prevent default action
-                        let orderId = $(this).data('order-id'); // Get the order ID from the button
-                        $('#updateOrderStatusModal').modal('show'); // Show the modal
-                        $('#orderId').val(orderId); // Set the order ID in the modal form
-                    });
-
-                    // Show/hide tracking info or cancel reason based on status selection
-                    $('#orderStatus').on('change', function () {
-                        let selectedStatus = $(this).val();
-                        if (selectedStatus === 'dispatched') {
-                            $('#trackingInfo').removeClass('d-none');
-                            $('#cancelReason').addClass('d-none');
-                        } else if (selectedStatus === 'canceled') {
-                            $('#trackingInfo').addClass('d-none');
-                            $('#cancelReason').removeClass('d-none');
-                        } else {
-                            $('#trackingInfo').addClass('d-none');
-                            $('#cancelReason').addClass('d-none');
-                        }
-                    });
-
-                    // Handle the form submission via AJAX
-                    $('#updateOrderForm').submit(function (e) {
-                        e.preventDefault();
-                        let formData = $(this).serialize(); // Serialize form data
-
-                        $.ajax({
-                            type: 'PUT',
-                            url: '/admin/manage/orders/update',
-                            data: formData,
-                            success: function (response) {
-                                // alert('Order status updated successfully!');
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Order status updated successfully!',
-                                    confirmButtonText: 'Close'
-                                }).then(() => {
-                                    $('#updateOrderStatusModal').modal('hide');
-                                    location.reload();
-                                });
-                            },
-                            error: function (err) {
-                                // alert('Error updating order status.');
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Error!',
-                                    text: 'Error updating order status.',
-                                    confirmButtonText: 'Close'
-                                });
-                            }
-                        });
-                    });
-                });
-
-            </script>
+        });
+    </script>
 </body>
 
 </html>
