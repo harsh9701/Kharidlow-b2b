@@ -721,7 +721,7 @@
                     subSel.innerHTML = '<option value="">Select sub category</option>';
                     subs.forEach(sub => {
                         const opt = document.createElement('option');
-                        opt.value = sub._id;
+                        opt.value = sub.name;
                         opt.textContent = sub.name;
                         subSel.appendChild(opt);
                     });
