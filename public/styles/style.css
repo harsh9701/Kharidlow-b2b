@@ -359,27 +359,41 @@ body {
     color: #fff;
 }
 
+/* Shorts Section */
+.product-videos-section {
+    background: #fff;
+}
+
 .videos-scroll-container {
     display: flex;
     overflow-x: auto;
     gap: 15px;
-    scroll-behavior: smooth;
+    padding: 10px 0;
+    scroll-snap-type: x mandatory;
 }
 
+/* Hide scrollbar (optional) */
+.videos-scroll-container::-webkit-scrollbar {
+    display: none;
+}
+
+/* Video Card */
 .video-card {
-    flex: 1 1 calc(33.33% - 15px);
-    /* For 3 videos on large screens */
-    max-width: calc(33.33% - 15px);
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    flex: 0 0 auto;
+    width: 240px;
+    height: 420px;
+    scroll-snap-align: start;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    background: #000;
 }
 
+/* iframe styling */
 .video-card iframe {
     width: 100%;
-    height: 225px;
+    height: 100%;
     border: none;
-    border-radius: 8px;
 }
 
 .tshirt-product {
@@ -416,10 +430,12 @@ body {
         transform: translateY(0) scale(1);
         box-shadow: 0 8px 20px rgba(255, 107, 107, 0.45);
     }
+
     50% {
         transform: translateY(-2px) scale(1.03);
         box-shadow: 0 14px 30px rgba(255, 107, 107, 0.55);
     }
+
     100% {
         transform: translateY(0) scale(1);
         box-shadow: 0 8px 20px rgba(255, 107, 107, 0.45);
@@ -476,7 +492,6 @@ body {
     }
 }
 
-
 @media (max-width: 768px) {
     .carousel-item img {
         height: 250px;
@@ -505,9 +520,8 @@ body {
         font-size: 1.1rem;
     }
 
-    .video-card {
-        flex: 0 0 100%;
-        max-width: 100%;
+    .videos-scroll-container::-webkit-scrollbar {
+        display: block;
     }
 
     .videos-scroll-container {
