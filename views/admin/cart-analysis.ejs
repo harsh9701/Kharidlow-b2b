@@ -676,14 +676,25 @@
                     fetch(`/admin/abandoned-cart-reminder/${userId}`, { method: 'POST' })
                         .then(res => res.json())
                         .then(response => {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Notification Sent',
-                                text: response.message || 'The customer has been notified successfully!',
-                                showConfirmButton: false,
-                                timer: 3000,
-                                ...swalDark
-                            });
+                            if (response.success) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Notification Sent',
+                                    text: response.message || 'The customer has been notified successfully!',
+                                    showConfirmButton: false,
+                                    timer: 3000,
+                                    ...swalDark
+                                });
+                            } else if (response.success === false) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Already Notified',
+                                    text: response.message || 'Already Notified....!',
+                                    showConfirmButton: false,
+                                    timer: 3000,
+                                    ...swalDark
+                                });
+                            }
                         })
                         .catch(() => {
                             Swal.fire({
